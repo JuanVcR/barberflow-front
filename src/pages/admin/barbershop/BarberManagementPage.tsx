@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   fetchAdminBarbers,
+  fetchAdminBarberDay,
   fetchAdminBarbershops,
   fetchAdminServices,
   removeAdminBarber,
@@ -9,7 +10,7 @@ import {
   type AdminService,
 } from '../../../services/backend'
 import type { ToastMessage } from '../../../types/models'
-import { MailIcon, PhoneIcon } from '../../../components/Icons'
+import { CalendarIcon, ClipboardIcon, MailIcon, PhoneIcon, ScissorsIcon } from '../../../components/Icons'
 
 interface BarberManagementPageProps {
   navigate: (path: string) => void
@@ -20,12 +21,19 @@ function getInitials(name: string) {
   return name.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase()
 }
 
+function getLocalDate() {
+  const now = new Date()
+  const offset = now.getTimezoneOffset() * 60_000
+  return new Date(now.getTime() - offset).toISOString().slice(0, 10)
+}
+
 export function BarberManagementPage({ navigate, notify }: BarberManagementPageProps) {
   const [shopId, setShopId] = useState('')
   const [barbers, setBarbers] = useState<AdminBarber[]>([])
   const [services, setServices] = useState<AdminService[]>([])
   const [editing, setEditing] = useState<AdminBarber | null>(null)
   const [selectedServices, setSelectedServices] = useState<string[]>([])
+  const [todayCounts, setTodayCounts] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
 
   const load = async (barbershopId: string) => {
@@ -35,6 +43,18 @@ export function BarberManagementPage({ navigate, notify }: BarberManagementPageP
     ])
     setBarbers(barberData)
     setServices(serviceData)
+
+    const counts = await Promise.all(
+      barberData.map(async (barber) => {
+        try {
+          const bookings = await fetchAdminBarberDay(barbershopId, barber.id, getLocalDate())
+          return [barber.id, bookings.length] as const
+        } catch {
+          return [barber.id, 0] as const
+        }
+      }),
+    )
+    setTodayCounts(Object.fromEntries(counts))
   }
 
   useEffect(() => {
@@ -90,7 +110,7 @@ export function BarberManagementPage({ navigate, notify }: BarberManagementPageP
   }
 
   return (
-    <section className="ops-page ops-page-gold">
+    <section className="ops-page ops-page-gold barber-management-page">
       <div className="ops-workspace compact-list-page">
         <header className="ops-hero ops-hero-gold">
           <div>
@@ -103,67 +123,66 @@ export function BarberManagementPage({ navigate, notify }: BarberManagementPageP
         </header>
 
         {editing ? (
-          <section className="ops-panel">
+          <section className="ops-panel barber-services-panel">
             <h2>Serviços de {editing.name}</h2>
-            <div style={{ display: 'grid', gap: 8, margin: '18px 0' }}>
+            <div className="barber-service-options">
               {services.map((service) => (
-                <label key={service.id}>
+                <label className="barber-service-choice" key={service.id}>
                   <input
                     type="checkbox"
                     checked={selectedServices.includes(service.id)}
                     onChange={() => toggleService(service.id)}
                   />
-                  {' '}{service.name}
+                  <span>{service.name}</span>
                 </label>
               ))}
             </div>
-            <button className="primary-button" onClick={() => void saveServices()}>Salvar serviços</button>
-            <button onClick={() => setEditing(null)}>Cancelar</button>
+            <div className="barber-service-actions">
+              <button className="primary-button" onClick={() => void saveServices()}>Salvar serviços</button>
+              <button className="outline-button" onClick={() => setEditing(null)}>Cancelar</button>
+            </div>
           </section>
         ) : null}
 
         <div className="barber-card-list">
           {barbers.map((barber) => (
-            <article className="barber-list-card" key={barber.id}>
-              <div className="barber-card-column barber-identification">
-                <span className="barber-card-label">Identificação</span>
-                <div className="barber-identity">
-                  <div className="barber-avatar">{getInitials(barber.name)}</div>
-                  <div className="barber-list-name">
-                    <strong>{barber.name}</strong>
-                    <span>
-                      {barber.services.map((service) => service.name).join(', ') ||
-                        'Sem serviços'}
-                    </span>
-                  </div>
+            <article className="barber-overview-card" key={barber.id}>
+              <div className="barber-overview-avatar">{getInitials(barber.name)}</div>
+
+              <div className="barber-overview-info">
+                <div className="barber-overview-title">
+                  <strong>{barber.name}</strong>
+                  <span className="barber-overview-active">Ativo</span>
+                </div>
+                <div className="barber-overview-services">
+                  {barber.services.length
+                    ? barber.services.map((service) => <span key={service.id}><ScissorsIcon /> {service.name}</span>)
+                    : <span>Sem serviços</span>}
+                </div>
+                <div className="barber-overview-contact">
+                  <span><PhoneIcon /> {barber.phone || '-'}</span>
+                  <span><MailIcon /> {barber.email || '-'}</span>
                 </div>
               </div>
 
-              <div className="barber-card-column barber-contact">
-                <span className="barber-card-label">Contato</span>
-                <span><PhoneIcon /> {barber.phone || '-'}</span>
-                <span><MailIcon /> {barber.email || '-'}</span>
+              <div className="barber-overview-today">
+                <small>hoje</small>
+                <strong>{todayCounts[barber.id] ?? 0} atend.</strong>
               </div>
 
-              <div className="barber-card-column">
-                <span className="barber-card-label">Status</span>
-                <span className="barber-status ok">Ativo</span>
-              </div>
-
-              <div className="barber-card-column barber-card-actions">
-                <span className="barber-card-label">Ações</span>
-                <div>
-                  <button className="barber-services-action" onClick={() => startEditing(barber)}>
-                    Serviços
-                  </button>
-                  <button
-                    className="barber-delete-action"
-                    onClick={() => void remove(barber)}
-                    aria-label={'Remover ' + barber.name}
-                  >
-                    Excluir
-                  </button>
-                </div>
+              <div className="barber-overview-actions">
+                <button onClick={() => navigate(`/admin/barbers/${barber.id}/day?barbershopId=${shopId}&name=${encodeURIComponent(barber.name)}`)}>
+                  <CalendarIcon /> Agenda
+                </button>
+                <button onClick={() => navigate(`/admin/barbers/${barber.id}/history?barbershopId=${shopId}&name=${encodeURIComponent(barber.name)}`)}>
+                  <ClipboardIcon /> Histórico
+                </button>
+                <button onClick={() => startEditing(barber)}>
+                  <ScissorsIcon /> Serviços
+                </button>
+                <button className="danger" onClick={() => void remove(barber)} aria-label={'Remover ' + barber.name}>
+                  Excluir
+                </button>
               </div>
             </article>
           ))}

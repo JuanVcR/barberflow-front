@@ -1,4 +1,5 @@
 import type { User } from '../types/models'
+import { ClipboardIcon, SettingsIcon, UsersIcon } from '../components/Icons'
 
 interface AdminDashboardPageProps {
   user: User | null
@@ -38,7 +39,7 @@ export function AdminDashboardPage({ user, navigate }: AdminDashboardPageProps) 
             e.currentTarget.style.backgroundColor = '#f5f5f5'
           }}
         >
-          <h3 style={{ marginTop: 0, marginBottom: '10px' }}>👥 Gerenciar Equipe</h3>
+          <h3 style={{ marginTop: 0, marginBottom: '10px' }}><UsersIcon className="icon-sm" /> Gerenciar Equipe</h3>
           <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
             Adicione, remova e aprove barbeiros
           </p>
@@ -63,7 +64,7 @@ export function AdminDashboardPage({ user, navigate }: AdminDashboardPageProps) 
             e.currentTarget.style.backgroundColor = '#f5f5f5'
           }}
         >
-          <h3 style={{ marginTop: 0, marginBottom: '10px' }}>📊 Relatórios</h3>
+          <h3 style={{ marginTop: 0, marginBottom: '10px' }}><ClipboardIcon className="icon-sm" /> Relatórios</h3>
           <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
             Veja faturamento e performance
           </p>
@@ -88,7 +89,7 @@ export function AdminDashboardPage({ user, navigate }: AdminDashboardPageProps) 
             e.currentTarget.style.backgroundColor = '#f5f5f5'
           }}
         >
-          <h3 style={{ marginTop: 0, marginBottom: '10px' }}>⚙️ Configurações</h3>
+          <h3 style={{ marginTop: 0, marginBottom: '10px' }}><SettingsIcon className="icon-sm" /> Configurações</h3>
           <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
             Altere dados da unidade
           </p>

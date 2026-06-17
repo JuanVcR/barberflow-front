@@ -32,7 +32,7 @@ export function ForgotPasswordPage({ navigate, notify }: ForgotPasswordPageProps
       <div className="login-page-container">
         <div className="login-card">
           <div className="login-header">
-            <h1>Email Enviado ✓</h1>
+            <h1>Email enviado</h1>
           </div>
           <p style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '2rem' }}>
             Verifique seu email para recuperar sua senha

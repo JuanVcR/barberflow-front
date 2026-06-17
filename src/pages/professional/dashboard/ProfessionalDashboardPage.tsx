@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { User, Booking } from '../../../types/models'
 import { getProfessionalStats, getProfessionalAppointments } from '../../../services/backend'
+import { StarIcon } from '../../../components/Icons'
 
 interface ProfessionalDashboardPageProps {
   user: User | null
@@ -65,7 +66,9 @@ export function ProfessionalDashboardPage({ user, navigate }: ProfessionalDashbo
 
         <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
           <h3 style={{ margin: 0, marginBottom: '10px' }}>Avaliação</h3>
-          <div style={{ fontSize: '28px', fontWeight: 'bold' }}>⭐ {todayStats?.avgRating || 0}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '28px', fontWeight: 'bold' }}>
+            <StarIcon className="icon-md" /> {todayStats?.avgRating || 0}
+          </div>
           <p style={{ color: '#666', margin: '10px 0 0 0' }}>Média de clientes</p>
         </div>
 
@@ -125,8 +128,8 @@ export function ProfessionalDashboardPage({ user, navigate }: ProfessionalDashbo
                     fontWeight: 'bold',
                   }}
                 >
-                  {apt.status === 'confirmed' && '✓ Confirmado'}
-                  {apt.status === 'pending' && '▶ Pendente'}
+                  {apt.status === 'confirmed' && 'Confirmado'}
+                  {apt.status === 'pending' && 'Pendente'}
                 </div>
               </div>
             ))

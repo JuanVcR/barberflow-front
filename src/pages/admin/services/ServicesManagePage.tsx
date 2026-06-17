@@ -9,6 +9,7 @@ import {
   type AdminService,
 } from '../../../services/backend'
 import type { ToastMessage } from '../../../types/models'
+import { ClockIcon, ScissorsIcon } from '../../../components/Icons'
 
 interface ServicesManagePageProps {
   barbershopId?: string
@@ -121,7 +122,7 @@ export function ServicesManagePage({ barbershopId, notify }: ServicesManagePageP
   }
 
   return (
-    <section className="ops-page ops-page-gold">
+    <section className="ops-page ops-page-gold service-management-page">
       <div className="ops-workspace services-price-page">
         <header className="ops-hero ops-hero-gold">
           <div>
@@ -133,41 +134,50 @@ export function ServicesManagePage({ barbershopId, notify }: ServicesManagePageP
           </select>
         </header>
 
-        <form className="form-stack ops-panel" onSubmit={submit}>
+        <form className="form-stack ops-panel service-form-panel" onSubmit={submit}>
           <h2>{editingId ? 'Editar serviço' : 'Novo serviço'}</h2>
-          <div className="three-columns">
+          <div className="service-form-grid">
             <label>
               <span>Nome</span>
-              <input
-                value={form.name}
-                minLength={2}
-                required
-                onChange={(event) => setForm({ ...form, name: event.target.value })}
-              />
+              <div className="service-input-shell">
+                <ScissorsIcon />
+                <input
+                  value={form.name}
+                  minLength={2}
+                  required
+                  onChange={(event) => setForm({ ...form, name: event.target.value })}
+                />
+              </div>
             </label>
             <label>
               <span>Preço</span>
-              <input
-                type="number"
-                min="0.01"
-                step="0.01"
-                value={form.price}
-                required
-                onChange={(event) => setForm({ ...form, price: event.target.value })}
-              />
+              <div className="service-input-shell">
+                <b>$</b>
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  value={form.price}
+                  required
+                  onChange={(event) => setForm({ ...form, price: event.target.value })}
+                />
+              </div>
             </label>
             <label>
               <span>Duração (min)</span>
-              <input
-                type="number"
-                min="1"
-                value={form.duration}
-                required
-                onChange={(event) => setForm({ ...form, duration: event.target.value })}
-              />
+              <div className="service-input-shell">
+                <ClockIcon />
+                <input
+                  type="number"
+                  min="1"
+                  value={form.duration}
+                  required
+                  onChange={(event) => setForm({ ...form, duration: event.target.value })}
+                />
+              </div>
             </label>
           </div>
-          <div>
+          <div className="service-form-actions">
             <button className="primary-button" type="submit" disabled={saving}>
               {saving ? 'Salvando...' : editingId ? 'Salvar alterações' : 'Criar serviço'}
             </button>
@@ -185,8 +195,8 @@ export function ServicesManagePage({ barbershopId, notify }: ServicesManagePageP
           </div>
           {services.map((service) => (
             <div className="services-price-row" key={service.id}>
-              <strong>{service.name}</strong>
-              <span>{service.duration} min</span>
+              <strong className="service-name-cell"><ScissorsIcon /> {service.name}</strong>
+              <span className="service-duration-cell"><ClockIcon /> {service.duration} min</span>
               <strong>{formatCurrency(service.price)}</strong>
               <span className="service-status active">Ativo</span>
               <span className="service-actions">

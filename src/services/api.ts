@@ -100,7 +100,7 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest)
       } catch (refreshError) {
         clearAuthToken()
-        window.location.href = '#/auth/login'
+        window.dispatchEvent(new Event('barberflow-auth-expired'))
         return Promise.reject(refreshError)
       }
     }

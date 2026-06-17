@@ -4,6 +4,7 @@ import type { User } from '../types/models'
 export interface AuthContextValue {
   user: User | null
   partnerUser: User | null
+  isAuthReady: boolean
   isAuthenticated: boolean
   isPartnerAuthenticated: boolean
   login: (email: string, password: string) => Promise<User>

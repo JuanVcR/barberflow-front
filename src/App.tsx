@@ -41,6 +41,8 @@ import { SuperAdminPlansPage } from './pages/admin/SuperAdminPlansPage'
 import { SuperAdminUsersPage } from './pages/admin/SuperAdminUsersPage'
 import { RegistrationManagementPage } from './pages/admin/RegistrationManagementPage'
 import { BarberManagementPage } from './pages/admin/barbershop/BarberManagementPage'
+import { AdminBarberDayPage } from './pages/admin/barbershop/AdminBarberDayPage'
+import { AdminBarberHistoryPage } from './pages/admin/barbershop/AdminBarberHistoryPage'
 import { ReportsPage } from './pages/admin/reports/ReportsPage'
 import { SuperAdminBarbershopsPage } from './pages/admin/SuperAdminBarbershopsPage'
 
@@ -121,6 +123,22 @@ function parseRoute(): AppRoute {
       return { name: 'admin-super-section', section: segments[2] as 'barbershops' | 'registrations' | 'plans' | 'financial-reports' | 'users' | 'settings' }
     }
     if (segments[1] === 'barbershop-dashboard') return { name: 'admin-barbershop-dashboard' }
+    if (segments[1] === 'barbers' && segments[2] && segments[3] === 'day') {
+      return {
+        name: 'admin-barber-day',
+        barberId: segments[2],
+        barbershopId: params.get('barbershopId') ?? '',
+        barberName: params.get('name') ?? undefined,
+      }
+    }
+    if (segments[1] === 'barbers' && segments[2] && segments[3] === 'history') {
+      return {
+        name: 'admin-barber-history',
+        barberId: segments[2],
+        barbershopId: params.get('barbershopId') ?? '',
+        barberName: params.get('name') ?? undefined,
+      }
+    }
     if (segments[1] === 'barber-management') return { name: 'admin-barber-management' }
     if (segments[1] === 'barber-invites') return { name: 'admin-barber-invites' }
     if (segments[1] === 'service-management') return { name: 'admin-service-management' }
@@ -153,7 +171,7 @@ function parseRoute(): AppRoute {
 }
 
 function AppShell() {
-  const { user, partnerUser, isAuthenticated, isPartnerAuthenticated } = useAuth()
+  const { user, partnerUser, isAuthReady, isAuthenticated, isPartnerAuthenticated } = useAuth()
   const [route, setRoute] = useState<AppRoute>(() => parseRoute())
   const [toasts, setToasts] = useState<ToastMessage[]>([])
 
@@ -167,10 +185,10 @@ function AppShell() {
     const activeUser = user ?? partnerUser
     const isLogged = isAuthenticated || isPartnerAuthenticated
 
-    if (isLogged && (route.name === 'landing' || route.name === 'home')) {
+    if (isAuthReady && isLogged && route.name === 'landing') {
       navigateTo(getDashboardPathForRole(activeUser?.role, activeUser?.accountRole))
     }
-  }, [isAuthenticated, isPartnerAuthenticated, partnerUser, route.name, user])
+  }, [isAuthReady, isAuthenticated, isPartnerAuthenticated, partnerUser, route.name, user])
 
   const notify = (tone: ToastMessage['tone'], text: string) => {
     const id = window.crypto?.randomUUID?.() ?? String(Date.now())
@@ -191,6 +209,10 @@ function AppShell() {
       isLogged && (accountRole === 'BARBERSHOP_ADMIN' || (activeUser?.role === 'admin' && accountRole !== 'SUPER_ADMIN'))
     const isAnyAdmin = isSuperAdmin || isBarbershopAdmin
 
+    if (!isAuthReady && route.name === 'landing') {
+      return <LandingPage navigate={navigateTo} />
+    }
+
     // Auth Routes
     if (route.name === 'auth-login') return <LoginPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-register') return <RegisterPage navigate={navigateTo} notify={notify} />
@@ -200,7 +222,7 @@ function AppShell() {
     if (route.name === 'auth-professional-register') return <ProfessionalRegisterPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-barber-invite') return <BarberInvitePage token={route.token} navigate={navigateTo} notify={notify} />
 
-    if (isLogged && (route.name === 'landing' || route.name === 'home')) {
+    if (isLogged && route.name === 'landing') {
       return null
     }
 
@@ -296,6 +318,28 @@ function AppShell() {
       if (route.name === 'admin-barber-management') {
         return <BarberManagementPage navigate={navigateTo} notify={notify} />
       }
+      if (route.name === 'admin-barber-day') {
+        return (
+          <AdminBarberDayPage
+            barberId={route.barberId}
+            barbershopId={route.barbershopId}
+            barberName={route.barberName}
+            navigate={navigateTo}
+            notify={notify}
+          />
+        )
+      }
+      if (route.name === 'admin-barber-history') {
+        return (
+          <AdminBarberHistoryPage
+            barberId={route.barberId}
+            barbershopId={route.barbershopId}
+            barberName={route.barberName}
+            navigate={navigateTo}
+            notify={notify}
+          />
+        )
+      }
       if (route.name === 'admin-barber-invites') {
         if (isSuperAdmin) return <RegistrationManagementPage isSuperAdmin notify={notify} />
         return <RegistrationManagementPage isSuperAdmin={false} notify={notify} />
@@ -315,7 +359,7 @@ function AppShell() {
 
     // Default
     return <LandingPage navigate={navigateTo} />
-  }, [isAuthenticated, isPartnerAuthenticated, partnerUser, user, route])
+  }, [isAuthReady, isAuthenticated, isPartnerAuthenticated, partnerUser, user, route])
 
   return (
     <Layout currentRoute={route.name} navigate={navigateTo} toasts={toasts}>

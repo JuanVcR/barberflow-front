@@ -93,7 +93,7 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
   }
 
   const handleConfirm = async () => {
-    // ✅ NOVO: Validação adicional
+    // Validação antes de confirmar
     if (!selectedProfessional) {
       notify('error', 'Selecione um profissional')
       return
@@ -123,7 +123,7 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
       notify('success', 'Agendamento confirmado! Você receberá confirmação por email.')
       navigate('/customer/appointments')
     } catch (err) {
-      // ✅ NOVO: Tratamento de erro melhorado
+      // Tratamento da mensagem retornada pela API
       let message = 'Erro ao confirmar agendamento'
       
       if (err instanceof Error) {

@@ -136,7 +136,7 @@ export function BarberInvitePage({ token = '', navigate, notify }: BarberInviteP
             <label>
               <span>Token do convite</span>
               <div className={'barber-invite-token ' + (invite ? 'valid' : 'invalid')}>
-                <b>{invite ? '✓' : '!'}</b>
+                <b>{invite ? 'OK' : '!'}</b>
                 <input value={token} readOnly />
                 <small>{loadingInvite ? 'Validando' : invite ? 'Válido' : 'Inválido'}</small>
               </div>

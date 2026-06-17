@@ -4,6 +4,30 @@
   color: var(--text);
 }
 
+.page-transition {
+  min-height: 100%;
+  animation: page-enter 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
+  }
+}
+
 .shell {
   width: min(1160px, calc(100% - 32px));
   margin: 0 auto;
@@ -6502,28 +6526,206 @@ body.light-yellow-theme #root .customer-explore-book-button:hover {
 }
 
 .settings-page {
-  width: min(100% - 32px, 700px);
+  width: min(100% - 32px, 540px);
   margin: 0 auto;
-  padding: 24px 0 48px;
+  padding: 18px 0 48px;
+}
+
+body.light-yellow-theme #root .settings-page {
+  color: #111111;
+}
+
+.settings-back-button {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid #d7d7d7;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.settings-page h1 {
+  margin: 0.8rem 0 1.1rem;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  line-height: 1.05;
+}
+
+.settings-content {
+  display: grid;
+  gap: 0.75rem;
 }
 
 .settings-images {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 0.75rem;
 }
 
-.settings-images label {
+.settings-image-card {
   display: grid;
-  gap: 10px;
+  gap: 0.55rem;
+  padding: 0.7rem;
+  border: 1px solid #dedede;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+  cursor: pointer;
 }
 
-.settings-images img {
+.settings-image-card > span:first-child {
+  color: #111111;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.settings-image-preview {
+  display: grid;
+  place-items: center;
   width: 100%;
-  height: 150px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  height: 78px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f4f5f6;
+}
+
+.settings-image-preview img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.settings-image-preview svg {
+  width: 54px;
+  height: 54px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e8eaed;
+  color: #525a63;
+}
+
+.settings-image-card input[type='file'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.settings-upload-button,
+.settings-image-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  border: 1px solid #d7d7d7;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.settings-image-card button {
+  cursor: pointer;
+}
+
+.settings-form-card,
+.settings-summary-card {
+  border: 1px solid #dedede;
+  border-radius: 9px;
+  background: #eef0f2;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+}
+
+.settings-form-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  padding: 0.75rem;
+}
+
+.settings-field {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.settings-field-full {
+  grid-column: 1 / -1;
+}
+
+.settings-field span {
+  color: #111111;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+body.light-yellow-theme #root .settings-field input {
+  min-height: 38px;
+  width: 100%;
+  padding: 0 0.75rem !important;
+  border: 1px solid #d3d5d8 !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  color: #111111 !important;
+}
+
+.settings-summary-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.8rem;
+  background: #ffffff;
+}
+
+.settings-summary-card p {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  color: #111111;
+  font-size: 0.82rem;
+}
+
+.settings-summary-card svg {
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  border: 1px solid #e1e1e1;
+  border-radius: 50%;
+  background: #f6f7f8;
+  color: #59616b;
+}
+
+.settings-summary-card strong {
+  margin-right: 0.25rem;
+}
+
+.settings-progress {
+  height: 6px;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e1e4e8;
+}
+
+.settings-progress span {
+  display: block;
+  width: 68%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #facc15, #d8b84d);
+}
+
+body.light-yellow-theme #root .settings-page .primary-button {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 7px;
+  background: #facc15 !important;
+  border-color: #facc15 !important;
+  color: #111111 !important;
+  box-shadow: 0 10px 22px rgba(250, 204, 21, 0.22);
 }
 
 @media (max-width: 760px) {
@@ -6536,6 +6738,10 @@ body.light-yellow-theme #root .customer-explore-book-button:hover {
   .ops-workspace,
   .registration-page {
     padding-inline: 14px !important;
+  }
+
+  .settings-form-card {
+    grid-template-columns: 1fr;
   }
 
   .ops-hero h1,
@@ -7169,5 +7375,771 @@ body.light-yellow-theme #root .registration-secondary-button {
 
   .barber-invite-content {
     padding: 38px 20px 56px;
+  }
+}
+
+/* Barber management polish */
+body.light-yellow-theme #root .barber-management-page,
+body.light-yellow-theme #root .barber-management-page .ops-workspace {
+  background:
+    radial-gradient(circle at 98% 86%, rgba(255, 255, 255, 0.96) 0 82px, transparent 83px),
+    #f6f7f9;
+}
+
+body.light-yellow-theme #root .barber-management-page .ops-workspace.compact-list-page {
+  width: min(760px, calc(100% - 64px));
+  padding-top: 1.3rem;
+}
+
+body.light-yellow-theme #root .barber-management-page .ops-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+body.light-yellow-theme #root .barber-management-page .ops-hero h1 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+body.light-yellow-theme #root .barber-management-page .ops-hero p {
+  margin-top: 0.15rem;
+}
+
+body.light-yellow-theme #root .barber-management-page .ops-action {
+  min-height: 2.25rem;
+  padding: 0 1rem;
+  border-radius: 7px;
+  box-shadow: 0 7px 16px rgba(250, 204, 21, 0.24);
+}
+
+body.light-yellow-theme #root .barber-services-panel,
+body.light-yellow-theme #root .barber-list-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+body.light-yellow-theme #root .barber-services-panel {
+  margin-bottom: 0.9rem;
+  padding: 1rem 1.1rem;
+}
+
+body.light-yellow-theme #root .barber-services-panel h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+body.light-yellow-theme #root .barber-service-options {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.8rem 0 1rem;
+}
+
+body.light-yellow-theme #root .barber-service-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: fit-content;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+body.light-yellow-theme #root .barber-service-choice input {
+  width: 0.95rem;
+  height: 0.95rem;
+  accent-color: #facc15;
+}
+
+body.light-yellow-theme #root .barber-service-actions {
+  display: flex;
+  gap: 0.55rem;
+}
+
+body.light-yellow-theme #root .barber-service-actions .primary-button,
+body.light-yellow-theme #root .barber-service-actions .outline-button {
+  min-height: 2.45rem;
+  padding: 0 1rem;
+  border-radius: 7px;
+  font-size: 0.8rem;
+}
+
+body.light-yellow-theme #root .barber-service-actions .outline-button,
+body.light-yellow-theme #root .barber-delete-action {
+  border: 1px solid #d7d7d7;
+  background: #ffffff;
+}
+
+body.light-yellow-theme #root .barber-card-list {
+  gap: 0.85rem;
+}
+
+body.light-yellow-theme #root .barber-list-card {
+  grid-template-columns: 1.35fr 1.1fr 0.72fr 0.9fr;
+  min-height: 5.6rem;
+  padding: 0.95rem 1.15rem;
+}
+
+body.light-yellow-theme #root .barber-avatar {
+  display: none;
+}
+
+body.light-yellow-theme #root .barber-identity {
+  gap: 0;
+}
+
+body.light-yellow-theme #root .barber-list-name {
+  padding-left: 3.4rem;
+}
+
+body.light-yellow-theme #root .barber-list-name strong {
+  font-size: 0.98rem;
+}
+
+body.light-yellow-theme #root .barber-list-name span {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #6b7280;
+}
+
+body.light-yellow-theme #root .barber-card-label {
+  color: #6b7280;
+  font-size: 0.72rem;
+}
+
+body.light-yellow-theme #root .barber-contact > span:not(.barber-card-label) {
+  font-size: 0.74rem;
+}
+
+body.light-yellow-theme #root .barber-status {
+  padding: 0.25rem 0.65rem;
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+body.light-yellow-theme #root .barber-card-actions > div {
+  gap: 0.42rem;
+}
+
+body.light-yellow-theme #root .barber-services-action,
+body.light-yellow-theme #root .barber-delete-action {
+  min-height: 1.9rem;
+  padding: 0 0.55rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+}
+
+body.light-yellow-theme #root .barber-services-action {
+  border: 1px solid #d7d7d7;
+  background: #ffffff;
+  text-decoration: none;
+}
+
+@media (max-width: 780px) {
+  body.light-yellow-theme #root .barber-list-card {
+    grid-template-columns: 1fr;
+  }
+
+  body.light-yellow-theme #root .barber-list-name {
+    padding-left: 0;
+  }
+}
+
+/* Service management polish */
+body.light-yellow-theme #root .service-management-page,
+body.light-yellow-theme #root .service-management-page .ops-workspace {
+  background:
+    radial-gradient(circle at 96% 86%, rgba(255, 255, 255, 0.96) 0 82px, transparent 83px),
+    #f6f7f9;
+}
+
+body.light-yellow-theme #root .service-management-page .services-price-page {
+  width: min(720px, calc(100% - 64px)) !important;
+  padding-top: 1.3rem;
+}
+
+body.light-yellow-theme #root .service-management-page .ops-hero {
+  margin-bottom: 1.8rem;
+  padding: 0;
+}
+
+body.light-yellow-theme #root .service-management-page .ops-hero h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+body.light-yellow-theme #root .service-management-page .ops-hero p {
+  margin-top: 0.18rem;
+}
+
+body.light-yellow-theme #root .service-management-page .ops-hero select {
+  min-height: 2.1rem;
+  padding: 0 0.65rem;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #111111;
+}
+
+body.light-yellow-theme #root .service-form-panel,
+body.light-yellow-theme #root .services-price-table {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+body.light-yellow-theme #root .service-form-panel {
+  margin-bottom: 0.95rem;
+  padding: 1rem 1.1rem;
+}
+
+body.light-yellow-theme #root .service-form-panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+body.light-yellow-theme #root .service-form-grid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+body.light-yellow-theme #root .service-form-grid label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+body.light-yellow-theme #root .service-form-grid label > span {
+  color: #111111;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+body.light-yellow-theme #root .service-input-shell {
+  display: flex;
+  align-items: center;
+  min-height: 2.6rem;
+  padding: 0 0.7rem;
+  border: 1px solid #d8d8d8;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+body.light-yellow-theme #root .service-input-shell svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: #6b7280;
+}
+
+body.light-yellow-theme #root .service-input-shell b {
+  width: 0.95rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+body.light-yellow-theme #root .service-input-shell input {
+  flex: 1;
+  min-width: 0;
+  height: 2.5rem;
+  border: 0;
+  background: transparent;
+  padding: 0 0 0 0.55rem;
+  outline: 0;
+}
+
+body.light-yellow-theme #root .service-form-actions {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: 0.95rem;
+}
+
+body.light-yellow-theme #root .service-form-actions .primary-button,
+body.light-yellow-theme #root .service-form-actions button {
+  min-height: 2.55rem;
+  padding: 0 1rem;
+  border-radius: 7px;
+  font-size: 0.82rem;
+}
+
+body.light-yellow-theme #root .services-price-table {
+  overflow: hidden;
+}
+
+body.light-yellow-theme #root .services-price-row {
+  grid-template-columns: minmax(10rem, 1fr) 6.5rem 6rem 5rem 5.6rem;
+  min-height: 2.35rem;
+  padding: 0 0.9rem;
+  gap: 0.8rem;
+  font-size: 0.78rem;
+}
+
+body.light-yellow-theme #root .services-price-row.header {
+  min-height: 2.15rem;
+  background: #ffffff;
+}
+
+body.light-yellow-theme #root .service-name-cell,
+body.light-yellow-theme #root .service-duration-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+body.light-yellow-theme #root .service-name-cell svg,
+body.light-yellow-theme #root .service-duration-cell svg {
+  width: 0.85rem;
+  height: 0.85rem;
+  color: #6b7280;
+}
+
+body.light-yellow-theme #root .service-status.active {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 5px;
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+body.light-yellow-theme #root .service-status.active::before {
+  content: '';
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+body.light-yellow-theme #root .service-actions {
+  gap: 0.55rem;
+}
+
+body.light-yellow-theme #root .service-actions button {
+  padding: 0;
+  color: #111111;
+  font-size: 0.74rem;
+}
+
+body.light-yellow-theme #root .service-actions button:last-child {
+  color: #a73b3b;
+}
+
+@media (max-width: 760px) {
+  body.light-yellow-theme #root .services-price-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Admin barber overview, day and history */
+.barber-overview-card {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 64px auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid #e1e3e6;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 3px 9px rgba(15, 23, 42, 0.08);
+}
+
+.barber-overview-avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #f3cf50;
+  border-radius: 50%;
+  background: #fff8d9;
+  color: #8a6500;
+  font-size: 0.8rem;
+}
+
+.barber-overview-info {
+  display: grid;
+  gap: 0.38rem;
+  min-width: 0;
+}
+
+.barber-overview-title,
+.barber-overview-services,
+.barber-overview-contact,
+.barber-overview-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.barber-overview-title strong {
+  color: #111111;
+  font-size: 0.9rem;
+}
+
+.barber-overview-active {
+  padding: 0.16rem 0.45rem;
+  border-radius: 999px;
+  background: #d9fae9;
+  color: #008b52 !important;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.barber-overview-services span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.14rem 0.38rem;
+  border-radius: 3px;
+  background: #f0f1f2;
+  color: #656b72 !important;
+  font-size: 0.65rem;
+}
+
+.barber-overview-services svg,
+.barber-overview-contact svg,
+.barber-overview-actions svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.barber-overview-contact {
+  gap: 0.8rem;
+}
+
+.barber-overview-contact span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #70767d !important;
+  font-size: 0.68rem;
+}
+
+.barber-overview-today {
+  display: grid;
+  justify-items: end;
+}
+
+.barber-overview-today small {
+  color: #9a9fa5 !important;
+  font-size: 0.6rem;
+}
+
+.barber-overview-today strong {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.barber-overview-actions {
+  justify-content: flex-end;
+}
+
+.barber-overview-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  min-height: 28px;
+  padding: 0 0.55rem;
+  border: 1px solid #facc15;
+  border-radius: 5px;
+  background: #facc15;
+  color: #171717;
+  font-size: 0.67rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.barber-overview-actions button.danger {
+  border-color: #dc2626;
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.barber-overview-actions button:hover {
+  border-color: #eab308;
+  background: #eab308;
+}
+
+.barber-overview-actions button.danger:hover {
+  border-color: #b91c1c;
+  background: #b91c1c;
+}
+
+.customer-favorite {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.customer-favorite svg {
+  width: 20px;
+  height: 20px;
+}
+
+.customer-favorite.active {
+  color: #eab308;
+}
+
+.customer-favorite.active svg {
+  fill: currentColor;
+}
+
+.admin-barber-detail-page {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+  color: #111111;
+}
+
+.admin-barber-detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 1.45rem;
+}
+
+.admin-barber-detail-header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.admin-barber-detail-header p {
+  margin: 0.18rem 0 0;
+  color: #757b82;
+  font-size: 0.82rem;
+}
+
+.admin-barber-back {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #dfe1e4;
+  border-radius: 5px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.admin-barber-day-toolbar,
+.admin-barber-history-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.admin-barber-day-toolbar label {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 0.7rem;
+  border: 1px solid #dfe1e4;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.admin-barber-day-toolbar svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #8a9097;
+}
+
+.admin-barber-day-toolbar input {
+  border: 0;
+  background: transparent;
+  outline: 0;
+}
+
+.admin-barber-summary-badge,
+.admin-barber-status {
+  width: fit-content;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.admin-barber-summary-badge.scheduled,
+.admin-barber-status.scheduled {
+  background: #fff4bc;
+  color: #a06d00;
+}
+
+.admin-barber-summary-badge.completed,
+.admin-barber-status.completed {
+  background: #d9fae9;
+  color: #008b52;
+}
+
+.admin-barber-status.cancelled {
+  background: #ffe0e0;
+  color: #e32636;
+}
+
+.admin-barber-data-card,
+.admin-barber-stat-grid article {
+  border: 1px solid #e1e3e6;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 3px 9px rgba(15, 23, 42, 0.08);
+}
+
+.admin-barber-data-card {
+  overflow: hidden;
+}
+
+.admin-barber-table-row {
+  display: grid;
+  align-items: center;
+  min-height: 46px;
+  gap: 0.7rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid #eceef0;
+  color: #444a50;
+  font-size: 0.75rem;
+}
+
+.admin-barber-day-table .admin-barber-table-row {
+  grid-template-columns: 0.55fr 1fr 1fr 0.65fr 0.8fr 36px;
+}
+
+.admin-barber-history-table .admin-barber-table-row {
+  grid-template-columns: 0.75fr 0.9fr 0.9fr 0.7fr 0.8fr 0.7fr;
+}
+
+.admin-barber-table-row.header {
+  min-height: 38px;
+  color: #93989e;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.admin-barber-table-row strong {
+  color: #111111;
+}
+
+.admin-barber-view {
+  border: 0;
+  background: transparent;
+  color: #777d84;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.admin-barber-table-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  color: #969ba1;
+  font-size: 0.7rem;
+}
+
+.admin-barber-table-footer strong {
+  color: #111111;
+}
+
+.admin-barber-empty {
+  padding: 2rem;
+  color: #777d84;
+  text-align: center;
+}
+
+.admin-barber-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.admin-barber-stat-grid article {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem;
+}
+
+.admin-barber-stat-grid span,
+.admin-barber-stat-grid small {
+  color: #92979d;
+  font-size: 0.66rem;
+}
+
+.admin-barber-stat-grid strong {
+  font-size: 1rem;
+}
+
+.admin-barber-history-toolbar input {
+  flex: 1;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #dfe1e4;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.admin-barber-history-toolbar > div {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.admin-barber-history-toolbar button {
+  min-height: 32px;
+  padding: 0 0.7rem;
+  border: 1px solid #dfe1e4;
+  border-radius: 5px;
+  background: #ffffff;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.admin-barber-history-toolbar button.active {
+  border-color: #facc15;
+  background: #facc15;
+}
+
+@media (max-width: 820px) {
+  .barber-overview-card {
+    grid-template-columns: 42px 1fr;
+  }
+
+  .barber-overview-today {
+    justify-items: start;
+  }
+
+  .barber-overview-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .admin-barber-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-barber-table-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.25rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .admin-barber-table-row.header {
+    display: none;
+  }
+
+  .admin-barber-history-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-barber-history-toolbar > div {
+    flex-wrap: wrap;
   }
 }

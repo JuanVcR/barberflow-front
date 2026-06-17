@@ -69,7 +69,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
       : accountRole === 'BARBERSHOP_ADMIN'
         ? [
             { label: 'Dashboard', path: '/admin/barbershop-dashboard', icon: HomeIcon, active: currentRoute === 'admin-barbershop-dashboard' || currentRoute === 'admin-dashboard' },
-            { label: 'Barbeiros', path: '/admin/barber-management', icon: UsersIcon, active: currentRoute === 'admin-barber-management' },
+            { label: 'Barbeiros', path: '/admin/barber-management', icon: UsersIcon, active: ['admin-barber-management', 'admin-barber-day', 'admin-barber-history'].includes(currentRoute) },
             { label: 'Convidar', path: '/admin/barber-invites', icon: MailIcon, active: currentRoute === 'admin-barber-invites' },
             { label: 'Serviços', path: '/admin/service-management', icon: ScissorsIcon, active: currentRoute === 'admin-service-management' },
             { label: 'Configurações', path: '/admin/settings', icon: SettingsIcon, active: currentRoute === 'admin-settings' },
@@ -95,7 +95,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
   if (currentRoute === 'auth-barber-invite') {
     return (
       <>
-        {children}
+        <div className="page-transition" key={currentPath}>{children}</div>
         <div className="toast-stack" aria-live="polite" aria-atomic="true">
           {toasts.map((toast) => (
             <div key={toast.id} className={'toast toast-' + toast.tone}>
@@ -149,7 +149,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
         </aside>
 
         <main className="role-main" style={{ background: '#ffffff', color: '#111111' }}>
-          {children}
+          <div className="page-transition" key={currentPath}>{children}</div>
         </main>
 
         <div className="toast-stack" aria-live="polite" aria-atomic="true">
@@ -256,7 +256,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
         </div>
       </header>
 
-      <main>{children}</main>
+      <main><div className="page-transition" key={currentPath}>{children}</div></main>
 
       <footer className="site-footer">
         <div className="shell container footer-grid">

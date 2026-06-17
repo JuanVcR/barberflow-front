@@ -48,6 +48,18 @@ type ApiLoginResponse = {
   }
 }
 
+type ApiCurrentAccount = {
+  id: string
+  email: string
+  role: 'CLIENT' | 'BARBER' | 'BARBERSHOP_ADMIN' | 'SUPER_ADMIN'
+  type?: string
+  data?: {
+    id?: string
+    name?: string
+    phone?: string
+  }
+}
+
 /** Referência de barbeiro dentro de um serviço */
 type ApiBarberRef = {
   id?: string
@@ -97,6 +109,30 @@ function getBarbershopCover(identifier: string) {
   return barbershopCovers[index % barbershopCovers.length]
 }
 
+export function resolveMediaUrl(url?: string | null) {
+  if (!url) return ''
+  if (url.startsWith('/uploads/')) return url
+
+  try {
+    const parsed = new URL(url)
+    if (['localhost', '127.0.0.1'].includes(parsed.hostname) && parsed.pathname.startsWith('/uploads/')) {
+      return parsed.pathname
+    }
+  } catch {
+    return url
+  }
+
+  return url
+}
+
+function mapAdminBarbershop(shop: AdminBarbershop): AdminBarbershop {
+  return {
+    ...shop,
+    logoUrl: resolveMediaUrl(shop.logoUrl) || null,
+    coverUrl: resolveMediaUrl(shop.coverUrl) || null,
+  }
+}
+
 /**
  * Agendamento - GET /api/bookings/:bookingId e POST /api/bookings
  * Status possíveis: SCHEDULED | CANCELLED | COMPLETED
@@ -118,6 +154,8 @@ export type ApiBooking = {
     service: {
       id: string
       name: string
+      price?: number
+      duration?: number
     }
   }>
   cancellationReason?: string | null
@@ -311,7 +349,7 @@ export function mapApiBarbershop(apiBarbershop: ApiBarbershop): Barbershop {
     address: apiBarbershop.address ?? '',
     phone: apiBarbershop.phoneOwner ?? '',
     email: '',
-    image: apiBarbershop.coverUrl || apiBarbershop.logoUrl || apiBarbershop.image || getBarbershopCover(apiBarbershop.id),
+    image: resolveMediaUrl(apiBarbershop.coverUrl) || resolveMediaUrl(apiBarbershop.logoUrl) || resolveMediaUrl(apiBarbershop.image) || getBarbershopCover(apiBarbershop.id),
     rating: 0,
     workingHours: {
       start: starts.sort()[0] ?? '',
@@ -414,6 +452,10 @@ export async function logoutUser() {
   return apiRequest<{ message: string }>('/auth/logout', {
     method: 'DELETE',
   })
+}
+
+export async function fetchCurrentAccount() {
+  return apiRequest<ApiCurrentAccount>('/auth/me')
 }
 
 /**
@@ -720,7 +762,8 @@ export async function fetchBarberInvite(token: string) {
 }
 
 export async function fetchAdminBarbershops() {
-  return apiRequest<AdminBarbershop[]>('/admin/barbershops')
+  const data = await apiRequest<AdminBarbershop[]>('/admin/barbershops')
+  return data.map(mapAdminBarbershop)
 }
 
 export async function fetchAdminDashboard() {
@@ -763,12 +806,15 @@ export async function updateAdminBarbershop(
     phoneOwner?: string | null
     plan?: 'FREE' | 'BASIC' | 'PRO'
     setupCompleted?: boolean
+    logoUrl?: string | null
+    coverUrl?: string | null
   },
 ) {
-  return apiRequest<AdminBarbershop>('/admin/barbershops/' + barbershopId, {
+  const data = await apiRequest<AdminBarbershop>('/admin/barbershops/' + barbershopId, {
     method: 'PATCH',
     body: JSON.stringify(payload),
   })
+  return mapAdminBarbershop(data)
 }
 
 export async function uploadBarbershopImage(
@@ -779,10 +825,11 @@ export async function uploadBarbershopImage(
   const formData = new FormData()
   formData.append('file', file)
 
-  return apiRequest<AdminBarbershop>(
+  const data = await apiRequest<AdminBarbershop>(
     `/admin/barbershops/${barbershopId}/images/${type}`,
     { method: 'POST', body: formData },
   )
+  return mapAdminBarbershop(data)
 }
 
 export async function updateBarbershopLocation(
@@ -885,6 +932,38 @@ export async function inviteBarber(
 export async function fetchAdminBarbers(barbershopId: string) {
   return apiRequest<AdminBarber[]>(
     '/admin/barbershops/' + barbershopId + '/barbers',
+  )
+}
+
+export async function createMeAsBarber(
+  barbershopId: string,
+  payload: { name?: string; phone: string; serviceIds?: string[] },
+) {
+  return apiRequest<AdminBarber>(
+    `/admin/barbershops/${barbershopId}/me-as-barber`,
+    {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    },
+  )
+}
+
+export async function fetchAdminBarberDay(
+  barbershopId: string,
+  barberId: string,
+  day: string,
+) {
+  return apiRequest<ApiBooking[]>(
+    `/admin/barbershops/${barbershopId}/barbers/${barberId}/day?day=${day}`,
+  )
+}
+
+export async function fetchAdminBarberHistory(
+  barbershopId: string,
+  barberId: string,
+) {
+  return apiRequest<ApiBooking[]>(
+    `/admin/barbershops/${barbershopId}/barbers/${barberId}/history`,
   )
 }
 
@@ -1038,5 +1117,18 @@ export function buildUserFromLogin(
     phone: '',
     role: mapAccountRole(account?.role),
     accountRole: account?.role,
+  }
+}
+
+export function buildUserFromCurrentAccount(account: ApiCurrentAccount, fallbackName?: string): User {
+  const derivedName = fallbackName || account.data?.name || toTitleSlug(account.email.split('@')[0] || 'Usuario')
+
+  return {
+    id: account.id,
+    name: derivedName,
+    email: account.email,
+    phone: account.data?.phone ?? '',
+    role: mapAccountRole(account.role),
+    accountRole: account.role,
   }
 }

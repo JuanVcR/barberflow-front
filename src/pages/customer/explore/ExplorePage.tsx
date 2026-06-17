@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchBarbershops } from '../../../services/backend'
 import type { Barbershop } from '../../../types/models'
+import { StarIcon } from '../../../components/Icons'
 
 interface ExplorePageProps {
   navigate: (path: string) => void
@@ -98,15 +99,11 @@ export function ExplorePage({ navigate }: ExplorePageProps) {
                     <p style={{ color: '#666', fontSize: '14px' }}>{shop.address}</p>
                   </div>
                   <button
+                    className={favorites.includes(shop.id) ? 'customer-favorite active' : 'customer-favorite'}
                     onClick={() => toggleFavorite(shop.id)}
-                    style={{
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      fontSize: '20px',
-                    }}
+                    aria-label={favorites.includes(shop.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                   >
-                    {favorites.includes(shop.id) ? '❤️' : '🤍'}
+                    <StarIcon />
                   </button>
                 </div>
                 <div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>

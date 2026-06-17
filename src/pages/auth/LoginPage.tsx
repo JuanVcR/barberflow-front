@@ -19,7 +19,7 @@ export function LoginPage({ navigate, notify, onLoginSuccess }: LoginPageProps) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // ✅ NOVO: Validação
+    // Validação dos campos
     if (!email.trim()) {
       notify('error', 'Email é obrigatório')
       return
@@ -37,7 +37,7 @@ export function LoginPage({ navigate, notify, onLoginSuccess }: LoginPageProps) 
       onLoginSuccess?.()
       navigate(getDashboardPathForRole(loggedUser.role, loggedUser.accountRole))
     } catch (error) {
-      // ✅ NOVO: Mensagem de erro melhorada
+      // Exibe a mensagem retornada pela API
       const message = error instanceof Error 
         ? error.message 
         : 'Email ou senha incorretos'

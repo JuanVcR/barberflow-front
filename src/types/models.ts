@@ -137,6 +137,8 @@ export type AppRoute =
   | { name: 'admin-super-section'; section: 'barbershops' | 'registrations' | 'plans' | 'financial-reports' | 'users' | 'settings' }
   | { name: 'admin-barbershop-dashboard' }
   | { name: 'admin-barber-management' }
+  | { name: 'admin-barber-day'; barberId: string; barbershopId: string; barberName?: string }
+  | { name: 'admin-barber-history'; barberId: string; barbershopId: string; barberName?: string }
   | { name: 'admin-barber-invites' }
   | { name: 'admin-service-management' }
   | { name: 'admin-barbershop-section'; section: 'appointments' | 'working-hours' | 'customers' | 'settings' | 'reports' }
