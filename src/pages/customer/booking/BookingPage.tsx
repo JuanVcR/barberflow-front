@@ -36,9 +36,9 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         day: selectedDate,
       })
         .then(setAvailableTimes)
-        .catch(() => {
+        .catch((error) => {
           setAvailableTimes([])
-          notify('error', 'Erro ao consultar horários')
+          notify('error', error instanceof Error ? error.message : 'Erro ao consultar horários')
         })
     }
   }, [selectedProfessional, selectedService, selectedDate, notify])
@@ -51,6 +51,24 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
 
   const selectedServiceObj = services.find((s) => s.id === selectedService)
   const selectedProfObj = professionals.find((p: Barber) => p.id === selectedProfessional)
+  const availableProfessionals = selectedServiceObj?.barberIds?.length
+    ? professionals.filter((professional) => selectedServiceObj.barberIds?.includes(professional.id))
+    : []
+
+  const selectService = (serviceId: string) => {
+    setSelectedService(serviceId)
+    setSelectedProfessional(null)
+    setSelectedDate('')
+    setSelectedTime('')
+    setAvailableTimes([])
+  }
+
+  const formatLocalDate = (date: Date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
 
   // Generate dates for next 7 days
   const generateDates = () => {
@@ -178,7 +196,7 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
               <button
                 key={service.id}
                 className={`service-option ${selectedService === service.id ? 'selected' : ''}`}
-                onClick={() => setSelectedService(service.id)}
+                onClick={() => selectService(service.id)}
               >
                 <div className="service-name">{service.name}</div>
                 <div className="service-details">R$ {service.price} • {service.duration} min</div>
@@ -197,7 +215,7 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
           </div>
           <h2>Passo 2: Barbeiro</h2>
           <div className="professional-options">
-            {professionals.map((prof: Barber) => (
+            {availableProfessionals.map((prof: Barber) => (
               <button
                 key={prof.id}
                 className={`professional-option ${selectedProfessional === prof.id ? 'selected' : ''}`}
@@ -207,6 +225,9 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
                 <div>{prof.name}</div>
               </button>
             ))}
+            {selectedService && availableProfessionals.length === 0 ? (
+              <p>Nenhum barbeiro atende este serviço.</p>
+            ) : null}
           </div>
         </div>
       )}
@@ -227,7 +248,7 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
             <h3>{new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</h3>
             <div className="calendar-dates">
               {generateDates().map((date, idx) => {
-                const dateStr = date.toISOString().split('T')[0]
+                const dateStr = formatLocalDate(date)
                 const dayName = date.toLocaleDateString('pt-BR', { weekday: 'short' }).toUpperCase()
                 const dayNum = date.getDate()
                 
