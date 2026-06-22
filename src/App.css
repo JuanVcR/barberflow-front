@@ -3547,29 +3547,60 @@ body,
   grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: end;
   gap: 0.72rem;
-  height: 12rem;
+  height: 11rem;
   padding: 1.1rem 0.35rem 0;
 }
 
 .week-bar {
   display: grid;
-  align-content: end;
-  gap: 0.55rem;
+  grid-template-rows: auto 1fr auto;
+  align-items: end;
+  gap: 0.45rem;
   height: 100%;
   text-align: center;
 }
 
-.week-bar span {
-  display: block;
-  width: 1.15rem;
+.week-bar > strong {
+  color: #35383c;
+  font-size: 0.78rem;
+}
+
+.week-bar-track {
+  position: relative;
+  width: 1.35rem;
+  height: 100%;
+  min-height: 5.5rem;
   margin: 0 auto;
+  overflow: hidden;
+  border-radius: 4px 4px 2px 2px;
+  background: #f0f1f2;
+}
+
+.week-bar-track span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
   border-radius: 3px 3px 0 0;
-  background: #d5b64b;
+  background: #d8dadd;
+  transition: height 0.6s ease;
+}
+
+.week-bar-track span.has-bookings {
+  background: #f5c400;
 }
 
 .week-bar small {
   color: #80888d;
   font-size: 0.7rem;
+}
+
+.week-total {
+  margin: 0.8rem 0 0;
+  color: #7a8087;
+  font-size: 0.75rem;
+  text-align: center;
 }
 
 .dashboard-month-bars {

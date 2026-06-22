@@ -70,6 +70,7 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
 
   const weekCounts = dashboard?.weeklyBookings.map((item) => item.count) ?? []
   const maxWeekCount = Math.max(...weekCounts, 1)
+  const weekTotal = weekCounts.reduce((total, count) => total + count, 0)
 
   if (!loading && !dashboard) {
     return (
@@ -166,16 +167,26 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
               </div>
             </div>
             <div className="week-bars" aria-label="Agendamentos por dia">
-              {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day, index) => (
-                <div className="week-bar" key={day}>
-                  <span
-                    title={`${weekCounts[index] ?? 0} agendamentos`}
-                    style={{ height: `${((weekCounts[index] ?? 0) / maxWeekCount) * 100}%` }}
-                  />
-                  <small>{day}</small>
-                </div>
-              ))}
+              {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day, index) => {
+                const count = weekCounts[index] ?? 0
+
+                return (
+                  <div className="week-bar" key={day}>
+                    <strong>{count}</strong>
+                    <div className="week-bar-track" title={`${count} agendamento(s)`}>
+                      <span
+                        className={count ? 'has-bookings' : ''}
+                        style={{ height: count ? `${Math.max((count / maxWeekCount) * 100, 14)}%` : '4%' }}
+                      />
+                    </div>
+                    <small>{day}</small>
+                  </div>
+                )
+              })}
             </div>
+            <p className="week-total">
+              {weekTotal ? `${weekTotal} agendamento(s) nesta semana` : 'Nenhum agendamento nesta semana'}
+            </p>
           </section>
         </div>
       </div>
