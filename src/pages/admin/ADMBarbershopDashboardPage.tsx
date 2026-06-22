@@ -40,6 +40,12 @@ function formatWeekDay(day: string) {
   return label.replace('.', '').replace(/^./, (letter) => letter.toUpperCase())
 }
 
+function formatAppointmentStatus(status: string) {
+  if (status === 'CANCELLED') return 'Cancelado'
+  if (status === 'COMPLETED') return 'Concluído'
+  return 'Agendado'
+}
+
 export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDashboardPageProps) {
   const today = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -162,7 +168,9 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
                     <div>
                       <b>{barber}</b>
                       <span>{service}</span>
-                      <small>{appointment.client?.name ?? 'Cliente'}</small>
+                      <small>
+                        {appointment.client?.name ?? 'Cliente'} · {formatAppointmentStatus(appointment.status)}
+                      </small>
                     </div>
                     <span className={`dashboard-day-pill color-${index % 5}`}>{formatWeekDay(appointment.day)}</span>
                   </article>
