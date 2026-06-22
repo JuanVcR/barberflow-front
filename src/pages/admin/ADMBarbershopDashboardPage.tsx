@@ -15,12 +15,29 @@ interface ADMBarbershopDashboardPageProps {
 const formatCurrency = (value: number) =>
   value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
-function getStatusLabel(status: string) {
-  if (status === 'SCHEDULED') return 'Confirmado'
-  if (status === 'COMPLETED') return 'Concluído'
-  if (status === 'CANCELLED') return 'Cancelado'
-  if (status === 'IN_PROGRESS') return 'Em atendimento'
-  return 'Pendente'
+function getInitials(name: string) {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((part) => part.charAt(0))
+    .join('')
+    .toUpperCase()
+}
+
+function formatShortDay(day: string) {
+  const [year, month, date] = day.split('-').map(Number)
+  return new Date(year, month - 1, date).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+  })
+}
+
+function formatWeekDay(day: string) {
+  const [year, month, date] = day.split('-').map(Number)
+  const label = new Date(year, month - 1, date).toLocaleDateString('pt-BR', {
+    weekday: 'short',
+  })
+  return label.replace('.', '').replace(/^./, (letter) => letter.toUpperCase())
 }
 
 export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDashboardPageProps) {
@@ -67,10 +84,6 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
       mounted = false
     }
   }, [notify])
-
-  const weekCounts = dashboard?.weeklyBookings.map((item) => item.count) ?? []
-  const maxWeekCount = Math.max(...weekCounts, 1)
-  const weekTotal = weekCounts.reduce((total, count) => total + count, 0)
 
   if (!loading && !dashboard) {
     return (
@@ -124,69 +137,65 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
         </div>
 
         <div className="ops-two-columns wide-left">
-          <section className="ops-panel agenda-panel">
+          <section className="ops-panel dashboard-list-panel">
             <div className="ops-panel-header compact">
-              <h2>Agenda de hoje</h2>
+              <div>
+                <h2>Agenda da semana</h2>
+                <span>Próximos agendamentos</span>
+              </div>
             </div>
-            <div className="ops-timeline">
-              {dashboard?.appointmentsToday.slice(0, 5).map((appointment) => {
+            <div className="dashboard-compact-list">
+              {dashboard?.upcomingWeekAppointments.map((appointment, index) => {
                 const service = appointment.services?.map((item) => item.service?.name).filter(Boolean).join(', ') || 'Serviço'
                 const barber = appointment.barber?.name ?? 'Barbeiro'
-                const label = getStatusLabel(appointment.status)
 
                 return (
                   <article
-                    className="ops-timeline-item"
+                    className="dashboard-appointment-row"
                     key={appointment.id}
                     onClick={() => navigate('/booking-detail/' + appointment.id)}
                     role="button"
                     tabIndex={0}
                   >
                     <strong>{appointment.startTime}</strong>
+                    <span className={`dashboard-avatar color-${index % 5}`}>{getInitials(barber)}</span>
                     <div>
-                      <b>{appointment.client?.name ?? 'Cliente'}</b>
-                      <span>{service} · {barber}</span>
+                      <b>{barber}</b>
+                      <span>{service}</span>
+                      <small>{appointment.client?.name ?? 'Cliente'}</small>
                     </div>
-                    <span className={'ops-badge ' + (label === 'Confirmado' ? 'ok' : label === 'Em atendimento' ? 'warn' : 'info')}>
-                      {label}
-                    </span>
+                    <span className={`dashboard-day-pill color-${index % 5}`}>{formatWeekDay(appointment.day)}</span>
                   </article>
                 )
               })}
-              {!loading && dashboard?.appointmentsToday.length === 0 ? (
-                <div className="ops-empty-row">Nenhum agendamento para hoje.</div>
+              {!loading && dashboard?.upcomingWeekAppointments.length === 0 ? (
+                <div className="ops-empty-row">Nenhum agendamento para o restante desta semana.</div>
               ) : null}
             </div>
           </section>
 
-          <section className="ops-panel week-panel">
+          <section className="ops-panel dashboard-list-panel">
             <div className="ops-panel-header compact">
               <div>
-                <h2>Esta semana</h2>
-                <span>Agendamentos por dia</span>
+                <h2>Clientes ativos</h2>
+                <span>Clientes da barbearia</span>
               </div>
             </div>
-            <div className="week-bars" aria-label="Agendamentos por dia">
-              {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day, index) => {
-                const count = weekCounts[index] ?? 0
-
-                return (
-                  <div className="week-bar" key={day}>
-                    <strong>{count}</strong>
-                    <div className="week-bar-track" title={`${count} agendamento(s)`}>
-                      <span
-                        className={count ? 'has-bookings' : ''}
-                        style={{ height: count ? `${Math.max((count / maxWeekCount) * 100, 14)}%` : '4%' }}
-                      />
-                    </div>
-                    <small>{day}</small>
+            <div className="dashboard-compact-list">
+              {dashboard?.activeClients.map((client, index) => (
+                <article className="dashboard-client-row" key={client.id}>
+                  <span className={`dashboard-avatar color-${index % 5}`}>{getInitials(client.name)}</span>
+                  <div>
+                    <b>{client.name}</b>
+                    <span>{client.lastVisit ? `Última ${formatShortDay(client.lastVisit)}` : 'Sem visita concluída'}</span>
                   </div>
-                )
-              })}
+                  <strong>{client.visits}<small>visitas</small></strong>
+                </article>
+              ))}
+              {!loading && dashboard?.activeClients.length === 0 ? (
+                <div className="ops-empty-row">Nenhum cliente vinculado à barbearia.</div>
+              ) : null}
             </div>
-            <p className="week-total">
-              {weekTotal ? `${weekTotal} agendamento(s) nesta semana` : 'Nenhum agendamento nesta semana'}
-            </p>
           </section>
         </div>
       </div>

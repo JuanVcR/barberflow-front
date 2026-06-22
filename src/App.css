@@ -3603,6 +3603,138 @@ body,
   text-align: center;
 }
 
+.dashboard-list-panel {
+  min-height: 20rem;
+}
+
+.dashboard-compact-list {
+  display: grid;
+}
+
+.dashboard-appointment-row,
+.dashboard-client-row {
+  display: grid;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.85rem;
+  border-top: 1px solid #e8e8e8;
+}
+
+.dashboard-appointment-row {
+  grid-template-columns: 3.2rem 2.25rem minmax(0, 1fr) auto;
+  cursor: pointer;
+}
+
+.dashboard-client-row {
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+}
+
+.dashboard-appointment-row:hover {
+  background: #fffdf2;
+}
+
+.dashboard-appointment-row > strong {
+  font-size: 0.86rem;
+}
+
+.dashboard-appointment-row > div,
+.dashboard-client-row > div {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.dashboard-appointment-row b,
+.dashboard-client-row b {
+  color: #111;
+  font-size: 0.82rem;
+}
+
+.dashboard-appointment-row div > span,
+.dashboard-client-row div > span,
+.dashboard-appointment-row small {
+  color: #737980;
+  font-size: 0.7rem;
+}
+
+.dashboard-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: #fff4cc;
+  color: #b77b00;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.dashboard-avatar.color-1 {
+  background: #eef1ff;
+  color: #4c5bdc;
+}
+
+.dashboard-avatar.color-2 {
+  background: #eaf9ef;
+  color: #16834b;
+}
+
+.dashboard-avatar.color-3 {
+  background: #faedff;
+  color: #9a3bb7;
+}
+
+.dashboard-avatar.color-4 {
+  background: #e7f8fb;
+  color: #12768a;
+}
+
+.dashboard-day-pill {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid #a9b9ff;
+  border-radius: 999px;
+  background: #f2f4ff;
+  color: #4454c7;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.dashboard-day-pill.color-1 {
+  border-color: #a9e6c0;
+  background: #effcf3;
+  color: #16834b;
+}
+
+.dashboard-day-pill.color-2 {
+  border-color: #ffd09b;
+  background: #fff8ee;
+  color: #b66a09;
+}
+
+.dashboard-day-pill.color-3 {
+  border-color: #e4b0ef;
+  background: #fcf3ff;
+  color: #9a3bb7;
+}
+
+.dashboard-day-pill.color-4 {
+  border-color: #9bdde8;
+  background: #eefbfc;
+  color: #12768a;
+}
+
+.dashboard-client-row > strong {
+  display: grid;
+  justify-items: end;
+  color: #111;
+  font-size: 0.9rem;
+}
+
+.dashboard-client-row > strong small {
+  color: #737980;
+  font-size: 0.62rem;
+  font-weight: 500;
+}
+
 .dashboard-month-bars {
   display: grid;
   grid-template-columns: repeat(12, minmax(24px, 1fr));

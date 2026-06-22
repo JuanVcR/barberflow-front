@@ -263,6 +263,14 @@ export type AdminBarbershopDashboard = {
       phone?: string
     }
   }>
+  upcomingWeekAppointments: ApiBooking[]
+  activeClients: Array<{
+    id: string
+    name: string
+    phone: string
+    visits: number
+    lastVisit: string | null
+  }>
 }
 
 export type AdminUserRow = {
