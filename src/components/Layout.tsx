@@ -69,6 +69,8 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
       : accountRole === 'BARBERSHOP_ADMIN'
         ? [
             { label: 'Dashboard', path: '/admin/barbershop-dashboard', icon: HomeIcon, active: currentRoute === 'admin-barbershop-dashboard' || currentRoute === 'admin-dashboard' },
+            { label: 'Agenda', path: '/admin/appointments', icon: CalendarIcon, active: currentRoute === 'admin-week-agenda' },
+            { label: 'Cadastrar cliente', path: '/admin/quick-booking', icon: UserIcon, active: currentRoute === 'admin-quick-booking' },
             { label: 'Barbeiros', path: '/admin/barber-management', icon: UsersIcon, active: ['admin-barber-management', 'admin-barber-day', 'admin-barber-history'].includes(currentRoute) },
             { label: 'Convidar', path: '/admin/barber-invites', icon: MailIcon, active: currentRoute === 'admin-barber-invites' },
             { label: 'Serviços', path: '/admin/service-management', icon: ScissorsIcon, active: currentRoute === 'admin-service-management' },
@@ -82,6 +84,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
             ]
           : [
             { label: 'Agenda', path: '/professional/agenda', icon: CalendarIcon, active: currentRoute === 'professional-agenda' || currentRoute === 'professional-dashboard' },
+            { label: 'Cadastrar cliente', path: '/professional/quick-booking', icon: UserIcon, active: currentRoute === 'professional-quick-booking' },
             { label: 'Histórico', path: '/professional/history', icon: ClipboardIcon, active: currentRoute === 'professional-history' },
             { label: 'Disponibilidade', path: '/professional/availability-new', icon: ClockIcon, active: currentRoute === 'professional-availability-new' || currentRoute === 'professional-availability' },
             { label: 'Perfil', path: '/professional/profile', icon: UserIcon, active: currentRoute === 'professional-profile' },

@@ -375,7 +375,13 @@ export function mapApiBooking(apiBooking: ApiBooking): Booking {
     barbershopId: apiBooking.barbershopId,
     barbershopName: apiBooking.barbershop.name,
     serviceId: firstService?.id ?? '',
-    serviceName: firstService?.name ?? 'Servico',
+    serviceName: apiBooking.services.map((item) => item.service.name).join(', ') || 'Servico',
+    services: apiBooking.services.map(({ service }) => ({
+      id: service.id,
+      name: service.name,
+      price: service.price ?? 0,
+      duration: service.duration ?? 0,
+    })),
     barberId: apiBooking.barberId,
     barberName: apiBooking.barber.name,
     clientName: apiBooking.client?.name,
@@ -586,6 +592,45 @@ export async function cancelBooking(bookingId: string, reason?: string) {
   })
 }
 
+export async function fetchWeeklyBookings(startDay: string, barbershopId?: string) {
+  const query = new URLSearchParams({ startDay })
+  if (barbershopId) query.set('barbershopId', barbershopId)
+
+  const data = await apiRequest<{
+    startDay: string
+    endDay: string
+    bookings: ApiBooking[]
+  }>('/bookings/week?' + query.toString())
+
+  return {
+    ...data,
+    bookings: data.bookings.map(mapApiBooking),
+  }
+}
+
+export async function createQuickBooking(payload: {
+  client: { name: string; phone: string; email?: string }
+  barberId: string
+  serviceId: string
+  barbershopId: string
+  day: string
+  time: string
+}) {
+  const data = await apiRequest<ApiBooking>('/bookings/quick', {
+    method: 'POST',
+    body: JSON.stringify({
+      client: payload.client,
+      barberId: payload.barberId,
+      serviceIds: [payload.serviceId],
+      barbershopId: payload.barbershopId,
+      day: payload.day,
+      startTime: payload.time,
+    }),
+  })
+
+  return mapApiBooking(data)
+}
+
 /**
  * Obter estatísticas do profissional para hoje
  * GET /api/professionals/:id/stats/today
@@ -727,7 +772,7 @@ export async function loginProfessional(payload: { email: string; password: stri
 }
 
 export async function requestPasswordReset(email: string) {
-  return apiRequest<{ message: string }>('/auth/forgot-password/user', {
+  return apiRequest<{ message: string }>('/auth/forgot-password', {
     method: 'POST',
     body: JSON.stringify({ email }),
   })
@@ -1025,6 +1070,15 @@ export async function completeBooking(bookingId: string) {
   const data = await apiRequest<ApiBooking>('/bookings/' + bookingId + '/status', {
     method: 'PATCH',
     body: JSON.stringify({ status: 'COMPLETED' }),
+  })
+
+  return mapApiBooking(data)
+}
+
+export async function updateBookingServices(bookingId: string, serviceIds: string[]) {
+  const data = await apiRequest<ApiBooking>('/bookings/' + bookingId + '/services', {
+    method: 'PATCH',
+    body: JSON.stringify({ serviceIds }),
   })
 
   return mapApiBooking(data)

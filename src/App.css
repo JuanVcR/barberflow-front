@@ -8390,3 +8390,254 @@ body.light-yellow-theme #root .service-actions button:last-child {
     grid-column: 1 / -1;
   }
 }
+
+.staff-week-page,
+.quick-booking-page {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 38px 0 64px;
+}
+
+.staff-week-header,
+.quick-booking-page > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.staff-week-header h1,
+.quick-booking-page h1 {
+  margin: 4px 0;
+  font-size: 2rem;
+}
+
+.staff-week-header p,
+.quick-booking-page p {
+  margin: 0;
+  color: #70757c;
+}
+
+.staff-week-header > div > span {
+  color: #b98500;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.staff-week-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.staff-week-toolbar div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+}
+
+.staff-week-toolbar svg {
+  width: 18px;
+  color: #c59100;
+}
+
+.staff-week-toolbar button,
+.quick-booking-page > header > button,
+.staff-week-actions button {
+  padding: 9px 12px;
+  border: 1px solid #d8dadd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.staff-week-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.staff-week-stats article {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.staff-week-stats span {
+  color: #777d84;
+  font-size: 0.78rem;
+}
+
+.staff-week-stats strong {
+  font-size: 1.25rem;
+}
+
+.staff-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(155px, 1fr));
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.staff-week-day {
+  min-height: 300px;
+  padding: 12px;
+  border: 1px solid #e3e5e8;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.staff-week-day > header {
+  display: grid;
+  gap: 3px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.staff-week-day > header span {
+  color: #b98500;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.staff-week-day > header small,
+.staff-week-booking small {
+  color: #858b92;
+}
+
+.staff-week-booking {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #e2e3e5;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.staff-week-booking > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.staff-week-booking span {
+  font-size: 0.76rem;
+}
+
+.staff-week-status {
+  width: fit-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #fff2ae;
+  font-size: 0.65rem !important;
+}
+
+.staff-week-status.completed {
+  background: #d6f8e7;
+  color: #087847;
+}
+
+.staff-week-status.cancelled {
+  background: #ffe0e0;
+  color: #b42323;
+}
+
+.staff-week-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.staff-week-actions button {
+  flex: 1;
+  padding: 6px;
+  font-size: 0.7rem;
+}
+
+.staff-week-actions .danger {
+  border-color: #efb5b5;
+  color: #b42323;
+}
+
+.staff-week-empty {
+  color: #8a9096;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.quick-booking-page {
+  max-width: 760px;
+}
+
+.quick-booking-page > header {
+  justify-content: flex-start;
+}
+
+.quick-booking-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid #e0e2e5;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.quick-booking-card label {
+  display: grid;
+  gap: 7px;
+  color: #252525;
+  font-weight: 700;
+}
+
+.quick-booking-card input,
+.quick-booking-card select {
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid #d6d9dd;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+}
+
+.quick-booking-card small {
+  color: #858b92;
+  font-weight: 400;
+}
+
+.quick-booking-card .wide {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+  .staff-week-page,
+  .quick-booking-page {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .staff-week-header,
+  .staff-week-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .staff-week-stats,
+  .quick-booking-card {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-booking-card .wide {
+    grid-column: auto;
+  }
+}

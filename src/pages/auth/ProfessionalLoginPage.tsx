@@ -75,6 +75,9 @@ export function ProfessionalLoginPage({
         </form>
 
         <div className="login-footer">
+          <a className="forgot-link" onClick={() => navigate('/auth/forgot-password')}>
+            Esqueci minha senha
+          </a>
           <p>
             Não tem conta? <a onClick={() => navigate('/auth/professional-register')}>Criar conta</a>
           </p>

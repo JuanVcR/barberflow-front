@@ -53,6 +53,8 @@ import { BarberHistoryPage } from './pages/professional/history/BarberHistoryPag
 import { BarberProfilePage } from './pages/professional/profile/BarberProfilePage'
 
 import { BookingDetailsPage } from './pages/BookingDetailsPage'
+import { StaffWeekAgendaPage } from './pages/shared/StaffWeekAgendaPage'
+import { QuickBookingPage } from './pages/shared/QuickBookingPage'
 
 function parseRoute(): AppRoute {
   const segments = getPathSegments()
@@ -102,6 +104,7 @@ function parseRoute(): AppRoute {
     if (segments[1] === 'availability') return { name: 'professional-availability' }
     if (segments[1] === 'blocking') return { name: 'professional-blocking' }
     if (segments[1] === 'agenda') return { name: 'professional-agenda' }
+    if (segments[1] === 'quick-booking') return { name: 'professional-quick-booking' }
     if (segments[1] === 'reports') return { name: 'professional-reports' }
     if (segments[1] === 'history') return { name: 'professional-history' }
     if (segments[1] === 'current') return { name: 'professional-current' }
@@ -123,6 +126,8 @@ function parseRoute(): AppRoute {
       return { name: 'admin-super-section', section: segments[2] as 'barbershops' | 'registrations' | 'plans' | 'financial-reports' | 'users' | 'settings' }
     }
     if (segments[1] === 'barbershop-dashboard') return { name: 'admin-barbershop-dashboard' }
+    if (segments[1] === 'appointments') return { name: 'admin-week-agenda' }
+    if (segments[1] === 'quick-booking') return { name: 'admin-quick-booking' }
     if (segments[1] === 'barbers' && segments[2] && segments[3] === 'day') {
       return {
         name: 'admin-barber-day',
@@ -142,8 +147,8 @@ function parseRoute(): AppRoute {
     if (segments[1] === 'barber-management') return { name: 'admin-barber-management' }
     if (segments[1] === 'barber-invites') return { name: 'admin-barber-invites' }
     if (segments[1] === 'service-management') return { name: 'admin-service-management' }
-    if (['appointments', 'working-hours', 'customers'].includes(segments[1])) {
-      return { name: 'admin-barbershop-section', section: segments[1] as 'appointments' | 'working-hours' | 'customers' }
+    if (['working-hours', 'customers'].includes(segments[1])) {
+      return { name: 'admin-barbershop-section', section: segments[1] as 'working-hours' | 'customers' }
     }
   }
 
@@ -279,6 +284,7 @@ function AppShell() {
       if (route.name === 'professional-availability') return <AvailabilityPage navigate={navigateTo} notify={notify} />
       if (route.name === 'professional-blocking') return <BlockingPage navigate={navigateTo} notify={notify} />
       if (route.name === 'professional-agenda') return <BarberAgendaPage navigate={navigateTo} notify={notify} />
+      if (route.name === 'professional-quick-booking') return <QuickBookingPage mode="barber" navigate={navigateTo} notify={notify} />
       if (route.name === 'professional-reports') return <BarberReportsPage navigate={navigateTo} notify={notify} />
       if (route.name === 'professional-history') return <BarberHistoryPage navigate={navigateTo} notify={notify} />
       if (route.name === 'professional-current') return <BarberAgendaPage navigate={navigateTo} notify={notify} />
@@ -315,6 +321,8 @@ function AppShell() {
         if (isSuperAdmin) return <SuperADMDashboardPage navigate={navigateTo} notify={notify} />
         return <ADMBarbershopDashboardPage navigate={navigateTo} notify={notify} />
       }
+      if (route.name === 'admin-week-agenda') return <StaffWeekAgendaPage mode="admin" navigate={navigateTo} notify={notify} />
+      if (route.name === 'admin-quick-booking') return <QuickBookingPage mode="admin" navigate={navigateTo} notify={notify} />
       if (route.name === 'admin-barber-management') {
         return <BarberManagementPage navigate={navigateTo} notify={notify} />
       }

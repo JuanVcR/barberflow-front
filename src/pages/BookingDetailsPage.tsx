@@ -4,10 +4,13 @@ import {
   cancelBooking,
   completeBooking,
   fetchAvailableTimes,
+  fetchBarbershopById,
   fetchBookingDetails,
   registerBookingPayment,
   rescheduleBooking,
+  updateBookingServices,
 } from '../services/backend'
+import type { Service } from '../types/models'
 import { useAuth } from '../context/useAuth'
 
 interface BookingDetailsPageProps {
@@ -29,10 +32,12 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
   const [amountPaid, setAmountPaid] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<'DEBIT' | 'CREDIT' | 'PIX' | 'CASH'>('PIX')
   const [availableTimes, setAvailableTimes] = useState<string[]>([])
+  const [shopServices, setShopServices] = useState<Service[]>([])
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
   const backPath = isClient
     ? '/customer/appointments'
     : isAdmin
-      ? '/admin/dashboard'
+      ? '/admin/appointments'
       : '/professional/agenda'
 
   const load = useCallback(() => {
@@ -41,9 +46,17 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
         setBooking(data)
         setDay(data.date)
         setStartTime(data.time)
+        setSelectedServiceIds(data.services?.map((service) => service.id) ?? [data.serviceId])
+        if (!isClient) {
+          fetchBarbershopById(data.barbershopId)
+            .then((shop) => setShopServices(
+              shop?.services.filter((service) => !service.barberIds?.length || service.barberIds.includes(data.barberId)) ?? [],
+            ))
+            .catch(() => setShopServices([]))
+        }
       })
       .catch((error) => notify('error', error instanceof Error ? error.message : 'Agendamento nao encontrado'))
-  }, [bookingId, notify])
+  }, [bookingId, isClient, notify])
 
   useEffect(() => {
     load()
@@ -105,6 +118,16 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
     }
   }
 
+  const saveServices = async () => {
+    try {
+      const updated = await updateBookingServices(bookingId, selectedServiceIds)
+      setBooking(updated)
+      notify('success', 'Serviços atualizados')
+    } catch (error) {
+      notify('error', error instanceof Error ? error.message : 'Erro ao atualizar serviços')
+    }
+  }
+
   if (!booking) {
     return (
       <div style={{ padding: 32 }}>
@@ -142,6 +165,22 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
 
           {!isClient ? (
             <section style={{ display: 'grid', gap: 10 }}>
+              <h2>Serviços realizados</h2>
+              {shopServices.map((service) => (
+                <label key={service.id}>
+                  <input
+                    type="checkbox"
+                    checked={selectedServiceIds.includes(service.id)}
+                    onChange={(event) => setSelectedServiceIds((current) => event.target.checked
+                      ? [...current, service.id]
+                      : current.filter((id) => id !== service.id))}
+                  />
+                  {' '}{service.name}
+                </label>
+              ))}
+              <button onClick={saveServices} disabled={!selectedServiceIds.length}>
+                Salvar serviços
+              </button>
               <h2>Pagamento e conclusão</h2>
               <select
                 value={paymentMethod}

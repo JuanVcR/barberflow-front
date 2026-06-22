@@ -69,6 +69,12 @@ export interface Booking {
   barbershopName: string
   serviceId: string
   serviceName: string
+  services?: Array<{
+    id: string
+    name: string
+    price: number
+    duration: number
+  }>
   barberId: string
   barberName: string
   clientName?: string
@@ -120,6 +126,7 @@ export type AppRoute =
   | { name: 'professional-availability' }
   | { name: 'professional-blocking' }
   | { name: 'professional-agenda' }
+  | { name: 'professional-quick-booking' }
   | { name: 'professional-reports' }
   | { name: 'professional-history' }
   | { name: 'professional-availability-new' }
@@ -136,6 +143,8 @@ export type AppRoute =
   | { name: 'admin-super' }
   | { name: 'admin-super-section'; section: 'barbershops' | 'registrations' | 'plans' | 'financial-reports' | 'users' | 'settings' }
   | { name: 'admin-barbershop-dashboard' }
+  | { name: 'admin-week-agenda' }
+  | { name: 'admin-quick-booking' }
   | { name: 'admin-barber-management' }
   | { name: 'admin-barber-day'; barberId: string; barbershopId: string; barberName?: string }
   | { name: 'admin-barber-history'; barberId: string; barbershopId: string; barberName?: string }
