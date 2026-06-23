@@ -9117,3 +9117,330 @@ body.light-yellow-theme #root .service-actions button:last-child {
     grid-column: auto;
   }
 }
+
+/* Responsive hardening: tablets and phones */
+@media (max-width: 1024px) {
+  html,
+  body,
+  #root {
+    overflow-x: hidden;
+  }
+
+  .role-app-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .role-sidebar {
+    position: sticky !important;
+    top: 0;
+    z-index: 80;
+    width: 100%;
+    min-height: auto !important;
+    padding: 12px 14px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #ececec !important;
+  }
+
+  .role-brand {
+    min-height: 36px;
+    justify-content: flex-start;
+  }
+
+  .role-access {
+    margin: 8px 0 !important;
+    padding: 8px 0 !important;
+  }
+
+  .role-nav {
+    display: flex !important;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 0 8px;
+    scrollbar-width: thin;
+  }
+
+  .role-nav-link {
+    flex: 0 0 auto;
+    min-height: 40px;
+    white-space: nowrap;
+  }
+
+  .role-logout {
+    min-height: 38px;
+    margin-top: 4px !important;
+  }
+
+  .role-main {
+    min-width: 0;
+    padding: 0 !important;
+  }
+
+  .role-main .ops-workspace,
+  .role-main .ops-workspace.compact-list-page,
+  .ops-workspace,
+  .dashboard-container,
+  .dashboard-content,
+  .registration-workspace,
+  .services-price-page,
+  .settings-page,
+  .barber-management-page,
+  .admin-barber-detail-page,
+  .staff-week-page,
+  .quick-booking-page,
+  .booking-detail-page {
+    width: min(100% - 32px, 920px) !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .ops-stat-grid,
+  .role-main .ops-stat-grid,
+  .dashboard-cards,
+  .admin-barber-stat-grid,
+  .staff-week-stats,
+  .registration-summary,
+  .settings-images,
+  .landing-benefits-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .ops-two-columns,
+  .ops-two-columns.wide-left,
+  .role-main .ops-two-columns.wide-left,
+  .admin-barber-day-layout,
+  .registration-grid,
+  .settings-content,
+  .service-management-page .ops-workspace,
+  .service-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .staff-week-grid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr)) !important;
+    overflow: visible;
+  }
+
+  .ops-table,
+  .services-price-table,
+  .super-users-table,
+  .admin-barber-data-card {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .toast-stack {
+    top: 0.75rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-header .header-row,
+  .staff-week-header,
+  .quick-booking-page > header,
+  .admin-barber-detail-header,
+  .registration-header,
+  .ops-panel-header.compact,
+  .settings-content,
+  .staff-week-toolbar,
+  .admin-barber-day-toolbar,
+  .admin-barber-history-toolbar {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .role-main .ops-page,
+  .ops-page,
+  .dashboard-content,
+  .settings-page,
+  .registration-page,
+  .staff-week-page,
+  .quick-booking-page,
+  .admin-barber-detail-page,
+  .booking-detail-page {
+    padding-top: 22px !important;
+    padding-bottom: 42px !important;
+  }
+
+  .role-main .ops-hero h1,
+  .dashboard-content h1,
+  .settings-page h1,
+  .registration-header h1,
+  .staff-week-header h1,
+  .quick-booking-page h1,
+  .admin-barber-detail-header h1,
+  .booking-detail-page h1,
+  .landing-hero-content h1 {
+    font-size: clamp(1.65rem, 9vw, 2.35rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  .ops-stat-grid,
+  .role-main .ops-stat-grid,
+  .dashboard-cards,
+  .admin-barber-stat-grid,
+  .staff-week-stats,
+  .registration-summary,
+  .settings-images,
+  .quick-booking-card,
+  .booking-detail-grid,
+  .booking-detail-payment-grid,
+  .register-form-grid,
+  .info-grid,
+  .booking-grid,
+  .details-info-grid,
+  .footer-grid,
+  .landing-benefits-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .staff-week-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .staff-week-day {
+    min-height: auto;
+  }
+
+  .ops-table-row,
+  .ops-table-five .ops-table-row,
+  .services-price-row,
+  body.light-yellow-theme #root .services-price-row,
+  .super-users-table > *,
+  .dashboard-item,
+  .registration-list-item,
+  .admin-barber-table-row,
+  .admin-barber-day-table .admin-barber-table-row,
+  .admin-barber-history-table .admin-barber-table-row,
+  .barber-overview-card,
+  .dashboard-appointment-row,
+  .dashboard-client-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .ops-table-row.header,
+  .services-price-row.header,
+  .admin-barber-table-row.header {
+    display: none !important;
+  }
+
+  .barber-overview-actions,
+  .staff-week-actions,
+  .service-form-actions,
+  .appointment-actions {
+    flex-wrap: wrap;
+  }
+
+  .barber-overview-actions button,
+  .staff-week-actions button,
+  .service-form-actions button,
+  .appointment-actions button {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .settings-form-card,
+  .service-form-grid,
+  .quick-booking-card,
+  .booking-detail-card {
+    padding: 16px !important;
+  }
+
+  .settings-image-preview,
+  .settings-image-preview img {
+    max-width: 100%;
+  }
+
+  input,
+  select,
+  textarea,
+  button,
+  .primary-button,
+  .outline-button,
+  .danger-button {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .role-sidebar {
+    padding: 10px 12px !important;
+  }
+
+  .role-access {
+    display: none !important;
+  }
+
+  .role-nav-link {
+    min-height: 38px;
+    padding: 0 10px !important;
+    font-size: 0.86rem;
+  }
+
+  .role-main .ops-workspace,
+  .role-main .ops-workspace.compact-list-page,
+  .ops-workspace,
+  .dashboard-container,
+  .dashboard-content,
+  .registration-workspace,
+  .services-price-page,
+  .settings-page,
+  .barber-management-page,
+  .admin-barber-detail-page,
+  .staff-week-page,
+  .quick-booking-page,
+  .booking-detail-page {
+    width: min(100% - 24px, 520px) !important;
+  }
+
+  .ops-panel,
+  .ops-stat-card,
+  .dashboard-card,
+  .dashboard-list-panel,
+  .settings-form-card,
+  .settings-summary-card,
+  .registration-card,
+  .service-form-panel,
+  .services-price-table,
+  .barber-overview-card,
+  .admin-barber-data-card,
+  .quick-booking-card,
+  .booking-detail-summary,
+  .booking-detail-card {
+    border-radius: 12px !important;
+  }
+
+  .landing-hero {
+    min-height: auto;
+    padding: 96px 16px 56px !important;
+  }
+
+  .landing-search-container,
+  .header-actions,
+  .admin-barber-day-toolbar,
+  .admin-barber-history-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .landing-search-box,
+  .landing-search-container button,
+  .header-actions button,
+  .staff-week-toolbar button,
+  .quick-booking-page > header > button,
+  .admin-barber-day-toolbar button,
+  .admin-barber-history-toolbar button,
+  .booking-detail-button {
+    width: 100%;
+  }
+
+  .toast {
+    grid-template-columns: 34px 1fr 20px;
+    gap: 0.6rem;
+    padding: 0.75rem;
+  }
+}
