@@ -91,8 +91,11 @@ export interface Booking {
  */
 export interface ToastMessage {
   id: string
-  tone: 'success' | 'error' | 'info'
+  tone: 'success' | 'error' | 'info' | 'warning' | 'loading'
+  title?: string
   text: string
+  actionLabel?: string
+  actionPath?: string
 }
 
 /**

@@ -3,13 +3,13 @@ import { useState } from 'react'
 export interface Toast {
   id: string
   message: string
-  type: 'success' | 'error' | 'info'
+  type: 'success' | 'error' | 'info' | 'warning' | 'loading'
 }
 
 export function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([])
 
-  const add = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+  const add = (message: string, type: Toast['type'] = 'info') => {
     const id = Date.now().toString()
     const toast = { id, message, type }
     setToasts(prev => [...prev, toast])

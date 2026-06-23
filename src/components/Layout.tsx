@@ -21,9 +21,42 @@ interface LayoutProps extends PropsWithChildren {
   currentRoute: AppRoute['name']
   navigate: (path: string) => void
   toasts: ToastMessage[]
+  dismissToast: (id: string) => void
 }
 
-export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps) {
+function ToastStack({
+  toasts,
+  dismissToast,
+  navigate,
+}: {
+  toasts: ToastMessage[]
+  dismissToast: (id: string) => void
+  navigate: (path: string) => void
+}) {
+  return (
+    <div className="toast-stack" aria-live="polite" aria-atomic="true">
+      {toasts.map((toast) => (
+        <div key={toast.id} className={'toast toast-' + toast.tone}>
+          <span className="toast-icon" aria-hidden="true" />
+          <div className="toast-content">
+            <strong>{toast.title ?? toast.text}</strong>
+            {toast.title ? <p>{toast.text}</p> : null}
+            {toast.actionLabel && toast.actionPath ? (
+              <button className="toast-action" onClick={() => navigate(toast.actionPath ?? '/')}>
+                {toast.actionLabel}
+              </button>
+            ) : null}
+          </div>
+          <button className="toast-close" onClick={() => dismissToast(toast.id)} aria-label="Fechar aviso">
+            x
+          </button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export function Layout({ children, currentRoute, navigate, toasts, dismissToast }: LayoutProps) {
   const { user, partnerUser, isAuthenticated, isPartnerAuthenticated, logout } = useAuth()
   const activeUser = user ?? partnerUser
   const accountRole = activeUser?.accountRole
@@ -99,13 +132,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
     return (
       <>
         <div className="page-transition" key={currentPath}>{children}</div>
-        <div className="toast-stack" aria-live="polite" aria-atomic="true">
-          {toasts.map((toast) => (
-            <div key={toast.id} className={'toast toast-' + toast.tone}>
-              {toast.text}
-            </div>
-          ))}
-        </div>
+        <ToastStack toasts={toasts} dismissToast={dismissToast} navigate={navigate} />
       </>
     )
   }
@@ -155,13 +182,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
           <div className="page-transition" key={currentPath}>{children}</div>
         </main>
 
-        <div className="toast-stack" aria-live="polite" aria-atomic="true">
-          {toasts.map((toast) => (
-            <div key={toast.id} className={'toast toast-' + toast.tone}>
-              {toast.text}
-            </div>
-          ))}
-        </div>
+        <ToastStack toasts={toasts} dismissToast={dismissToast} navigate={navigate} />
       </div>
     )
   }
@@ -295,13 +316,7 @@ export function Layout({ children, currentRoute, navigate, toasts }: LayoutProps
         <div className="footer-bottom">{'(c) 2026 BarberFlow. Todos os direitos reservados.'}</div>
       </footer>
 
-      <div className="toast-stack" aria-live="polite" aria-atomic="true">
-        {toasts.map((toast) => (
-          <div key={toast.id} className={'toast toast-' + toast.tone}>
-            {toast.text}
-          </div>
-        ))}
-      </div>
+      <ToastStack toasts={toasts} dismissToast={dismissToast} navigate={navigate} />
     </div>
   )
 }

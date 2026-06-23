@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 export interface ToastProps {
   message: string
-  type: 'success' | 'error' | 'info'
+  type: 'success' | 'error' | 'info' | 'warning' | 'loading'
   duration?: number
   onClose?: () => void
 }
@@ -24,7 +24,9 @@ export function Toast({ message, type, duration = 3000, onClose }: ToastProps) {
   const colors = {
     success: '#4CAF50',
     error: '#f44336',
-    info: '#2196F3'
+    info: '#2196F3',
+    warning: '#f59e0b',
+    loading: '#64748b',
   }
 
   return (

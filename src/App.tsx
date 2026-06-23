@@ -195,12 +195,16 @@ function AppShell() {
     }
   }, [isAuthReady, isAuthenticated, isPartnerAuthenticated, partnerUser, route.name, user])
 
+  const dismissToast = (id: string) => {
+    setToasts((current) => current.filter((toast) => toast.id !== id))
+  }
+
   const notify = (tone: ToastMessage['tone'], text: string) => {
     const id = window.crypto?.randomUUID?.() ?? String(Date.now())
     setToasts((current) => [...current, { id, tone, text }])
-    window.setTimeout(() => {
-      setToasts((current) => current.filter((toast) => toast.id !== id))
-    }, 3200)
+    if (tone !== 'loading') {
+      window.setTimeout(() => dismissToast(id), 4200)
+    }
   }
 
   const page = useMemo(() => {
@@ -370,7 +374,7 @@ function AppShell() {
   }, [isAuthReady, isAuthenticated, isPartnerAuthenticated, partnerUser, user, route])
 
   return (
-    <Layout currentRoute={route.name} navigate={navigateTo} toasts={toasts}>
+    <Layout currentRoute={route.name} navigate={navigateTo} toasts={toasts} dismissToast={dismissToast}>
       {page}
     </Layout>
   )
