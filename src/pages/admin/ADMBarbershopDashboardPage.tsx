@@ -94,7 +94,7 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
   if (!loading && !dashboard) {
     return (
       <section className="ops-page ops-page-gold">
-        <div className="ops-workspace">
+        <div className="ops-workspace adm-dashboard-workspace">
           <div className="ops-empty-state">
             <h1>Dashboard</h1>
             <p>Nenhuma barbearia vinculada a esta conta.</p>
@@ -108,7 +108,7 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
 
   return (
     <section className="ops-page ops-page-gold">
-      <div className="ops-workspace">
+      <div className="ops-workspace adm-dashboard-workspace">
         <header className="ops-hero ops-hero-gold">
           <div>
             <h1>{barbershopName}</h1>

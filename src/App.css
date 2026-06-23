@@ -3921,6 +3921,32 @@ body,
   min-height: 20rem;
 }
 
+.role-main .adm-dashboard-workspace,
+.adm-dashboard-workspace {
+  width: min(1240px, calc(100% - 72px)) !important;
+}
+
+.adm-dashboard-workspace .ops-stat-card {
+  min-height: 7.1rem;
+  padding: 1.15rem;
+}
+
+.adm-dashboard-workspace .ops-stat-card span {
+  font-size: 1rem;
+}
+
+.adm-dashboard-workspace .ops-stat-card strong {
+  font-size: 1.25rem;
+}
+
+.adm-dashboard-workspace .ops-two-columns.wide-left {
+  grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.95fr);
+}
+
+.adm-dashboard-workspace .dashboard-list-panel {
+  min-height: 24rem;
+}
+
 .dashboard-compact-list {
   display: grid;
 }
@@ -9177,6 +9203,8 @@ body.light-yellow-theme #root .service-actions button:last-child {
 
   .role-main .ops-workspace,
   .role-main .ops-workspace.compact-list-page,
+  .role-main .adm-dashboard-workspace,
+  .adm-dashboard-workspace,
   .ops-workspace,
   .dashboard-container,
   .dashboard-content,
@@ -9207,6 +9235,7 @@ body.light-yellow-theme #root .service-actions button:last-child {
 
   .ops-two-columns,
   .ops-two-columns.wide-left,
+  .adm-dashboard-workspace .ops-two-columns.wide-left,
   .role-main .ops-two-columns.wide-left,
   .admin-barber-day-layout,
   .registration-grid,
@@ -9383,6 +9412,8 @@ body.light-yellow-theme #root .service-actions button:last-child {
 
   .role-main .ops-workspace,
   .role-main .ops-workspace.compact-list-page,
+  .role-main .adm-dashboard-workspace,
+  .adm-dashboard-workspace,
   .ops-workspace,
   .dashboard-container,
   .dashboard-content,
