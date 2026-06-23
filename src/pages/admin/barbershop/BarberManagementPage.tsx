@@ -111,7 +111,7 @@ export function BarberManagementPage({ navigate, notify }: BarberManagementPageP
 
   return (
     <section className="ops-page ops-page-gold barber-management-page">
-      <div className="ops-workspace compact-list-page">
+      <div className="ops-workspace compact-list-page barber-management-workspace">
         <header className="ops-hero ops-hero-gold">
           <div>
             <h1>Barbeiros</h1>

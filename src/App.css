@@ -7889,8 +7889,12 @@ body.light-yellow-theme #root .barber-management-page .ops-workspace {
 }
 
 body.light-yellow-theme #root .barber-management-page .ops-workspace.compact-list-page {
-  width: min(980px, calc(100% - 64px));
-  padding-top: 1.3rem;
+  width: min(1240px, calc(100% - 72px));
+  padding-top: 1.8rem;
+}
+
+body.light-yellow-theme #root .barber-management-page .barber-management-workspace {
+  width: min(1240px, calc(100% - 72px)) !important;
 }
 
 body.light-yellow-theme #root .barber-management-page .ops-hero {
@@ -7903,7 +7907,7 @@ body.light-yellow-theme #root .barber-management-page .ops-hero {
 
 body.light-yellow-theme #root .barber-management-page .ops-hero h1 {
   margin: 0;
-  font-size: 1.45rem;
+  font-size: 1.8rem;
 }
 
 body.light-yellow-theme #root .barber-management-page .ops-hero p {
@@ -7911,8 +7915,8 @@ body.light-yellow-theme #root .barber-management-page .ops-hero p {
 }
 
 body.light-yellow-theme #root .barber-management-page .ops-action {
-  min-height: 2.25rem;
-  padding: 0 1rem;
+  min-height: 2.8rem;
+  padding: 0 1.35rem;
   border-radius: 7px;
   box-shadow: 0 7px 16px rgba(250, 204, 21, 0.24);
 }
@@ -8239,12 +8243,13 @@ body.light-yellow-theme #root .service-actions button:last-child {
 /* Admin barber overview, day and history */
 .barber-overview-card {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 64px auto;
+  grid-template-columns: 52px minmax(0, 1fr) 84px auto;
   align-items: center;
-  gap: 0.8rem;
-  padding: 0.8rem 1rem;
+  gap: 1.15rem;
+  min-height: 6.7rem;
+  padding: 1.05rem 1.25rem;
   border: 1px solid #e1e3e6;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 3px 9px rgba(15, 23, 42, 0.08);
 }
@@ -8252,13 +8257,13 @@ body.light-yellow-theme #root .service-actions button:last-child {
 .barber-overview-avatar {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 46px;
+  height: 46px;
   border: 1px solid #f3cf50;
   border-radius: 50%;
   background: #fff8d9;
   color: #8a6500;
-  font-size: 0.8rem;
+  font-size: 0.92rem;
 }
 
 .barber-overview-info {
@@ -8279,15 +8284,15 @@ body.light-yellow-theme #root .service-actions button:last-child {
 
 .barber-overview-title strong {
   color: #111111;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
 }
 
 .barber-overview-active {
-  padding: 0.16rem 0.45rem;
+  padding: 0.18rem 0.55rem;
   border-radius: 999px;
   background: #d9fae9;
   color: #008b52 !important;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
@@ -8299,14 +8304,14 @@ body.light-yellow-theme #root .service-actions button:last-child {
   border-radius: 3px;
   background: #f0f1f2;
   color: #656b72 !important;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .barber-overview-services svg,
 .barber-overview-contact svg,
 .barber-overview-actions svg {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 0.85rem;
+  height: 0.85rem;
 }
 
 .barber-overview-contact {
@@ -8318,7 +8323,7 @@ body.light-yellow-theme #root .service-actions button:last-child {
   align-items: center;
   gap: 0.25rem;
   color: #70767d !important;
-  font-size: 0.68rem;
+  font-size: 0.78rem;
 }
 
 .barber-overview-today {
@@ -8328,11 +8333,11 @@ body.light-yellow-theme #root .service-actions button:last-child {
 
 .barber-overview-today small {
   color: #9a9fa5 !important;
-  font-size: 0.6rem;
+  font-size: 0.68rem;
 }
 
 .barber-overview-today strong {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   white-space: nowrap;
 }
 
@@ -8344,13 +8349,13 @@ body.light-yellow-theme #root .service-actions button:last-child {
   display: inline-flex;
   align-items: center;
   gap: 0.28rem;
-  min-height: 28px;
-  padding: 0 0.55rem;
+  min-height: 34px;
+  padding: 0 0.75rem;
   border: 1px solid #facc15;
   border-radius: 5px;
   background: #facc15;
   color: #171717;
-  font-size: 0.67rem;
+  font-size: 0.76rem;
   font-weight: 700;
   cursor: pointer;
 }
