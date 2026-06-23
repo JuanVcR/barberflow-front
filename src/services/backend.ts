@@ -780,7 +780,7 @@ export async function loginProfessional(payload: { email: string; password: stri
 }
 
 export async function requestPasswordReset(email: string) {
-  return apiRequest<{ message: string }>('/auth/forgot-password', {
+  return apiRequest<{ message: string; emailSent?: boolean; resetUrl?: string }>('/auth/forgot-password', {
     method: 'POST',
     body: JSON.stringify({ email }),
   })

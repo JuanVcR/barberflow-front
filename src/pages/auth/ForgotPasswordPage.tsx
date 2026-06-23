@@ -11,14 +11,16 @@ export function ForgotPasswordPage({ navigate, notify }: ForgotPasswordPageProps
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [resetUrl, setResetUrl] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      await requestPasswordReset(email)
-      notify('success', 'Email de recuperação enviado')
+      const result = await requestPasswordReset(email)
+      setResetUrl(result.resetUrl ?? '')
+      notify('success', result.emailSent === false ? 'Link de teste gerado' : 'Email de recuperação enviado')
       setSubmitted(true)
     } catch {
       notify('error', 'Erro ao enviar email de recuperação')
@@ -35,8 +37,13 @@ export function ForgotPasswordPage({ navigate, notify }: ForgotPasswordPageProps
             <h1>Email enviado</h1>
           </div>
           <p style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '2rem' }}>
-            Verifique seu email para recuperar sua senha
+            {resetUrl ? 'SMTP não enviou o email. Use o link abaixo para testar localmente.' : 'Verifique seu email para recuperar sua senha'}
           </p>
+          {resetUrl ? (
+            <a className="login-button" href={resetUrl} style={{ display: 'block', textAlign: 'center', marginBottom: '0.75rem' }}>
+              Abrir link de recuperação
+            </a>
+          ) : null}
           <button onClick={() => navigate('/auth/login')} className="login-button">
             Voltar ao Login
           </button>
