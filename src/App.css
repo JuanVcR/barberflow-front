@@ -2602,7 +2602,7 @@
 }
 
 .booking-detail-page {
-  width: min(760px, calc(100% - 48px));
+  width: min(940px, calc(100% - 64px));
   margin: 0 auto;
   padding: 2rem 0 4rem;
   color: #111111;
@@ -7002,7 +7002,7 @@ body.light-yellow-theme #root .customer-explore-book-button:hover {
 }
 
 .settings-page {
-  width: min(100% - 32px, 540px);
+  width: min(100% - 48px, 820px);
   margin: 0 auto;
   padding: 18px 0 48px;
 }
@@ -7863,7 +7863,7 @@ body.light-yellow-theme #root .barber-management-page .ops-workspace {
 }
 
 body.light-yellow-theme #root .barber-management-page .ops-workspace.compact-list-page {
-  width: min(760px, calc(100% - 64px));
+  width: min(980px, calc(100% - 64px));
   padding-top: 1.3rem;
 }
 
@@ -8370,7 +8370,7 @@ body.light-yellow-theme #root .service-actions button:last-child {
 }
 
 .admin-barber-detail-page {
-  width: min(760px, calc(100% - 48px));
+  width: min(980px, calc(100% - 64px));
   margin: 0 auto;
   padding: 2rem 0 4rem;
   color: #111111;
@@ -9052,7 +9052,7 @@ body.light-yellow-theme #root .service-actions button:last-child {
 }
 
 .quick-booking-page {
-  max-width: 760px;
+  max-width: 920px;
 }
 
 .quick-booking-page > header {
@@ -9188,7 +9188,7 @@ body.light-yellow-theme #root .service-actions button:last-child {
   .staff-week-page,
   .quick-booking-page,
   .booking-detail-page {
-    width: min(100% - 32px, 920px) !important;
+    width: min(100% - 40px, 1180px) !important;
     max-width: none !important;
     margin-left: auto !important;
     margin-right: auto !important;
@@ -9394,7 +9394,7 @@ body.light-yellow-theme #root .service-actions button:last-child {
   .staff-week-page,
   .quick-booking-page,
   .booking-detail-page {
-    width: min(100% - 24px, 520px) !important;
+    width: min(100% - 20px, 680px) !important;
   }
 
   .ops-panel,
