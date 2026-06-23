@@ -39,6 +39,13 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
     : isAdmin
       ? '/admin/appointments'
       : '/professional/agenda'
+  const statusLabel = {
+    pending: 'Pendente',
+    confirmed: 'Confirmado',
+    SCHEDULED: 'Agendado',
+    CANCELLED: 'Cancelado',
+    COMPLETED: 'Concluído',
+  }[booking?.status ?? 'SCHEDULED']
 
   const load = useCallback(() => {
     fetchBookingDetails(bookingId)
@@ -130,87 +137,122 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
 
   if (!booking) {
     return (
-      <div style={{ padding: 32 }}>
-        <button onClick={() => navigate(backPath)}>Voltar</button>
+      <div className="booking-detail-page">
+        <button className="booking-detail-back" onClick={() => navigate(backPath)}>← Voltar</button>
         <p>Carregando agendamento...</p>
       </div>
     )
   }
 
   return (
-    <div style={{ padding: 24, maxWidth: 720, margin: '0 auto' }}>
-      <button onClick={() => navigate(backPath)}>Voltar</button>
+    <div className="booking-detail-page">
+      <button className="booking-detail-back" onClick={() => navigate(backPath)}>← Voltar</button>
       <h1>Detalhe do agendamento</h1>
 
-      <section style={{ padding: 16, border: '1px solid #ddd', borderRadius: 4, margin: '20px 0' }}>
-        <h2>{booking.barbershopName}</h2>
-        <p>Servico: {booking.serviceName}</p>
-        <p>Barbeiro: {booking.barberName}</p>
-        <p>Status: {booking.status}</p>
+      <section className="booking-detail-summary">
+        <div className="booking-detail-icon">⌂</div>
+        <div>
+          <h2>{booking.barbershopName}</h2>
+          <p>Serviço: {booking.serviceName}</p>
+          <p>Barbeiro: {booking.barberName}</p>
+          <span className={'booking-detail-status ' + booking.status.toLowerCase()}>
+            {statusLabel}
+          </span>
+        </div>
       </section>
 
       {booking.status === 'SCHEDULED' ? (
         <>
-          <section style={{ display: 'grid', gap: 10, marginBottom: 20 }}>
-            <h2>Reagendar</h2>
-            <input type="date" value={day} onChange={(e) => setDay(e.target.value)} />
-            <select value={startTime} onChange={(e) => setStartTime(e.target.value)}>
-              <option value="">Selecione um horário</option>
-              {availableTimes.map((time) => <option key={time}>{time}</option>)}
-            </select>
-            <button onClick={reschedule} disabled={!day || !startTime}>
-              Salvar novo horário
-            </button>
-          </section>
+          <div className="booking-detail-grid">
+            <section className="booking-detail-card">
+              <h2>Reagendar</h2>
+              <label>
+                Nova data
+                <input type="date" value={day} onChange={(e) => setDay(e.target.value)} />
+              </label>
+              <label>
+                Novo horário
+                <select value={startTime} onChange={(e) => setStartTime(e.target.value)}>
+                  <option value="">Selecione um horário</option>
+                  {availableTimes.map((time) => <option key={time}>{time}</option>)}
+                </select>
+              </label>
+              <button className="booking-detail-button" onClick={reschedule} disabled={!day || !startTime}>
+                Salvar novo horário
+              </button>
+            </section>
+
+            {!isClient ? (
+              <section className="booking-detail-card">
+                <h2>Serviços realizados</h2>
+                <div className="booking-detail-checks">
+                  {shopServices.map((service) => (
+                    <label key={service.id}>
+                      <input
+                        type="checkbox"
+                        checked={selectedServiceIds.includes(service.id)}
+                        onChange={(event) => setSelectedServiceIds((current) => event.target.checked
+                          ? [...current, service.id]
+                          : current.filter((id) => id !== service.id))}
+                      />
+                      {service.name}
+                    </label>
+                  ))}
+                </div>
+                <button className="booking-detail-button" onClick={saveServices} disabled={!selectedServiceIds.length}>
+                  Salvar serviços
+                </button>
+              </section>
+            ) : null}
+          </div>
 
           {!isClient ? (
-            <section style={{ display: 'grid', gap: 10 }}>
-              <h2>Serviços realizados</h2>
-              {shopServices.map((service) => (
-                <label key={service.id}>
-                  <input
-                    type="checkbox"
-                    checked={selectedServiceIds.includes(service.id)}
-                    onChange={(event) => setSelectedServiceIds((current) => event.target.checked
-                      ? [...current, service.id]
-                      : current.filter((id) => id !== service.id))}
-                  />
-                  {' '}{service.name}
-                </label>
-              ))}
-              <button onClick={saveServices} disabled={!selectedServiceIds.length}>
-                Salvar serviços
-              </button>
+            <section className="booking-detail-card booking-detail-payment">
               <h2>Pagamento e conclusão</h2>
-              <select
-                value={paymentMethod}
-                onChange={(event) => setPaymentMethod(event.target.value as typeof paymentMethod)}
-              >
-                <option value="PIX">PIX</option>
-                <option value="CASH">Dinheiro</option>
-                <option value="DEBIT">Débito</option>
-                <option value="CREDIT">Crédito</option>
-              </select>
-              <input
-                type="number"
-                min="0.01"
-                step="0.01"
-                placeholder="Valor pago"
-                value={amountPaid}
-                onChange={(e) => setAmountPaid(e.target.value)}
-              />
-              <button className="primary-button" onClick={payAndComplete}>
+              <div className="booking-detail-payment-grid">
+                <label>
+                  Forma de pagamento
+                  <select
+                    value={paymentMethod}
+                    onChange={(event) => setPaymentMethod(event.target.value as typeof paymentMethod)}
+                  >
+                    <option value="PIX">PIX</option>
+                    <option value="CASH">Dinheiro</option>
+                    <option value="DEBIT">Débito</option>
+                    <option value="CREDIT">Crédito</option>
+                  </select>
+                </label>
+                <label>
+                  Valor pago (R$)
+                  <input
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="0,00"
+                    value={amountPaid}
+                    onChange={(e) => setAmountPaid(e.target.value)}
+                  />
+                </label>
+              </div>
+              <button className="booking-detail-button" onClick={payAndComplete}>
                 Registrar e concluir
+              </button>
+              <button className="booking-detail-button danger" onClick={cancel}>
+                Cancelar agendamento
               </button>
             </section>
           ) : null}
 
-          <button onClick={cancel} style={{ marginTop: 16 }}>
-            Cancelar agendamento
-          </button>
+          {isClient ? (
+            <button className="booking-detail-button danger wide" onClick={cancel}>
+              Cancelar agendamento
+            </button>
+          ) : null}
         </>
       ) : (
-        <p>Este agendamento já foi finalizado e não aceita novas alterações.</p>
+        <section className="booking-detail-card">
+          <p>Este agendamento já foi finalizado e não aceita novas alterações.</p>
+        </section>
       )}
     </div>
   )
