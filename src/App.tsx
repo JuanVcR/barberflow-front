@@ -179,12 +179,62 @@ function AppShell() {
   const { user, partnerUser, isAuthReady, isAuthenticated, isPartnerAuthenticated } = useAuth()
   const [route, setRoute] = useState<AppRoute>(() => parseRoute())
   const [toasts, setToasts] = useState<ToastMessage[]>([])
+  const touchDebugEnabled = window.location.href.includes('debugTouch=1')
+  const [touchDebugEvents, setTouchDebugEvents] = useState<string[]>([])
 
   useEffect(() => {
     const syncRoute = () => setRoute(parseRoute())
     window.addEventListener('hashchange', syncRoute)
     return () => window.removeEventListener('hashchange', syncRoute)
   }, [])
+
+  useEffect(() => {
+    if (!touchDebugEnabled) return
+
+    const describeElement = (element: Element | null) => {
+      if (!element) return 'none'
+      const tag = element.tagName.toLowerCase()
+      const id = element.id ? '#' + element.id : ''
+      const className =
+        typeof element.className === 'string' && element.className
+          ? '.' + element.className.trim().replace(/\s+/g, '.')
+          : ''
+      return tag + id + className
+    }
+
+    const logEvent = (event: Event) => {
+      const touchEvent = event as globalThis.TouchEvent
+      const mouseEvent = event as globalThis.MouseEvent
+      const touch = touchEvent.changedTouches?.[0]
+      const x = touch?.clientX ?? mouseEvent.clientX
+      const y = touch?.clientY ?? mouseEvent.clientY
+      const topElement =
+        typeof x === 'number' && typeof y === 'number' ? document.elementFromPoint(x, y) : null
+      const line =
+        new Date().toLocaleTimeString() +
+        ' ' +
+        event.type +
+        ' target=' +
+        describeElement(event.target instanceof Element ? event.target : null) +
+        ' top=' +
+        describeElement(topElement)
+
+      setTouchDebugEvents((current) => [line, ...current].slice(0, 8))
+    }
+
+    const options: AddEventListenerOptions = { capture: true, passive: true }
+    window.addEventListener('touchstart', logEvent, options)
+    window.addEventListener('touchend', logEvent, options)
+    window.addEventListener('pointerdown', logEvent, options)
+    window.addEventListener('click', logEvent, options)
+
+    return () => {
+      window.removeEventListener('touchstart', logEvent, options)
+      window.removeEventListener('touchend', logEvent, options)
+      window.removeEventListener('pointerdown', logEvent, options)
+      window.removeEventListener('click', logEvent, options)
+    }
+  }, [touchDebugEnabled])
 
   useEffect(() => {
     const activeUser = user ?? partnerUser
@@ -374,9 +424,17 @@ function AppShell() {
   }, [isAuthReady, isAuthenticated, isPartnerAuthenticated, partnerUser, user, route])
 
   return (
-    <Layout currentRoute={route.name} navigate={navigateTo} toasts={toasts} dismissToast={dismissToast}>
-      {page}
-    </Layout>
+    <>
+      <Layout currentRoute={route.name} navigate={navigateTo} toasts={toasts} dismissToast={dismissToast}>
+        {page}
+      </Layout>
+      {touchDebugEnabled ? (
+        <div className="touch-debug-panel">
+          <strong>Touch debug ativo</strong>
+          {touchDebugEvents.length ? touchDebugEvents.join('\n') : 'Toque em algum lugar da tela...'}
+        </div>
+      ) : null}
+    </>
   )
 }
 
