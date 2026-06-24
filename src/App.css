@@ -9480,3 +9480,60 @@ body.light-yellow-theme #root .service-actions button:last-child {
     padding: 0.75rem;
   }
 }
+
+/* Mobile public header touch fix */
+@media (max-width: 768px) {
+  .app-shell .site-header {
+    z-index: 1000;
+    pointer-events: auto;
+  }
+
+  .app-shell .site-header *,
+  .app-shell .landing-hero-content,
+  .app-shell .landing-search-container,
+  .app-shell .landing-search-box,
+  .app-shell .landing-search-button,
+  .app-shell .landing-cta-button {
+    pointer-events: auto;
+  }
+
+  .app-shell .header-row {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 0.75rem;
+    min-height: auto;
+    padding: 0.7rem 0;
+  }
+
+  .app-shell .brand {
+    justify-content: flex-start;
+  }
+
+  .app-shell .header-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    width: 100%;
+  }
+
+  .app-shell .header-actions button {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 12px;
+  }
+
+  .app-shell .mobile-nav {
+    display: none !important;
+  }
+
+  .app-shell .landing-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+@media (max-width: 420px) {
+  .app-shell .header-actions {
+    grid-template-columns: 1fr;
+  }
+}
