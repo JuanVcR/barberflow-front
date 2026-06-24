@@ -1480,6 +1480,7 @@
   display: grid;
   gap: 0.65rem;
   width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
 }
 
 .toast {
@@ -1496,6 +1497,7 @@
   color: #171717;
   box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
   animation: toastSlideUp 0.28s ease-out both;
+  pointer-events: auto;
 }
 
 .toast-icon {
