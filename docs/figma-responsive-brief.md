@@ -1,6 +1,6 @@
 # BarberFlow - Brief para Layout Responsivo
 
-Objetivo: redesenhar todas as telas do sistema BarberFlow para ficarem bonitas, consistentes e totalmente responsivas em celular, tablet e desktop.
+Objetivo: redesenhar todas as telas do sistema BarberFlow para ficarem bonitas, consistentes e totalmente responsivas apenas em celular e tablet.
 
 ## Identidade visual
 
@@ -15,19 +15,15 @@ Objetivo: redesenhar todas as telas do sistema BarberFlow para ficarem bonitas, 
 - Mobile pequeno: 320px a 390px.
 - Mobile grande: 391px a 767px.
 - Tablet: 768px a 1024px.
-- Desktop: 1025px+.
 
 ## Estrutura global
 
 ### Área pública
 
-No desktop:
-- Header horizontal com logo, Início, Barbearias, Entrar e Criar conta.
-
-No mobile/tablet:
 - Header compacto.
 - Botões grandes e fáceis de tocar.
 - Conteúdo em coluna única.
+- No tablet, pode usar duas colunas quando houver espaço.
 
 ### Área logada
 
@@ -37,10 +33,6 @@ Perfis:
 - Barbeiro.
 - Cliente.
 
-No desktop:
-- Sidebar lateral fixa.
-
-No mobile/tablet:
 - Transformar sidebar em barra superior ou menu inferior.
 - Evitar conteúdo espremido.
 - Cards em uma coluna no celular e duas colunas no tablet.
@@ -323,7 +315,7 @@ Rota: `/admin/barbers/:barberId/day`
 Conteúdo:
 - Nome do barbeiro.
 - Input de data.
-- Calendário lateral no desktop.
+- Calendário em card separado no tablet e recolhível/empilhado no celular.
 - Tabela/lista de atendimentos do dia.
 - Total do dia.
 - Status dos atendimentos.
@@ -553,13 +545,11 @@ Criar telas responsivas para:
 
 - Mobile: 390x844.
 - Tablet: 768x1024.
-- Desktop: 1440x900.
 
 Para cada tela principal, criar:
 
 - versão mobile;
 - versão tablet;
-- versão desktop;
 - componentes reutilizáveis;
 - estados vazio, carregando, erro e sucesso.
 
@@ -569,6 +559,6 @@ Crie um redesign responsivo do sistema BarberFlow usando este brief. O produto �
 
 Use uma estética minimalista, limpa, moderna, com amarelo `#facc15` como cor principal, branco como fundo principal e cinzas suaves para textos secundários. Evite emojis e use ícones lineares.
 
-Crie layouts para mobile `390x844`, tablet `768x1024` e desktop `1440x900`. Priorize usabilidade mobile: botões grandes, cards empilhados, navegação simplificada, formulários em uma coluna e tabelas convertidas em cards.
+Crie layouts apenas para mobile `390x844` e tablet `768x1024`. Priorize usabilidade mobile: botões grandes, cards empilhados, navegação simplificada, formulários em uma coluna e tabelas convertidas em cards. No tablet, use melhor o espaço com duas colunas quando fizer sentido, mas sem criar uma terceira versão.
 
 As telas obrigatórias estão listadas neste documento. Cada tela deve ter estados de carregamento, vazio, erro e sucesso quando fizer sentido.
