@@ -1,4 +1,4 @@
-﻿import type { PropsWithChildren } from 'react'
+﻿import type { MouseEvent, PropsWithChildren } from 'react'
 import { useAuth } from '../context/useAuth'
 import type { AppRoute, ToastMessage } from '../types/models'
 import { getDashboardPathForRole } from '../utils/navigation'
@@ -128,6 +128,11 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
     navigate('/')
   }
 
+  const goTo = (path: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    navigate(path)
+  }
+
   if (currentRoute === 'auth-barber-invite') {
     return (
       <>
@@ -191,92 +196,98 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
     <div className="app-shell">
       <header className="site-header">
         <div className="shell container header-row">
-          <button className="brand" onClick={() => navigate('/')}>
+          <a className="brand" href="#/" onClick={goTo('/')}>
             <ScissorsIcon className="icon-lg" />
             <span>{'BarberFlow'}</span>
-          </button>
+          </a>
 
           <nav className="desktop-nav" aria-label="Primary">
-            <button
+            <a
               className={'nav-link ' + (currentRoute === 'home' ? 'active' : '')}
-              onClick={() => navigate('/')}
+              href="#/"
+              onClick={goTo('/')}
             >
               <HomeIcon className="icon-sm" />
               {'In\u00edcio'}
-            </button>
-            <button
+            </a>
+            <a
               className={'nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
-              onClick={() => navigate('/barbershops')}
+              href="#/barbershops"
+              onClick={goTo('/barbershops')}
             >
               {'Barbearias'}
-            </button>
+            </a>
             {activeUser && (
-              <button
+              <a
                 className={'nav-link ' + (currentRoute === 'account' ? 'active' : '')}
-                onClick={() => navigate(dashboardPath)}
+                href={'#' + dashboardPath}
+                onClick={goTo(dashboardPath)}
               >
                 <CalendarIcon className="icon-sm" />
                 {dashboardLabel}
-              </button>
+              </a>
             )}
           </nav>
 
           <div className="header-actions">
             {isAuthenticated ? (
               <>
-                <button className="ghost-button" onClick={() => navigate(dashboardPath)}>
+                <a className="ghost-button" href={'#' + dashboardPath} onClick={goTo(dashboardPath)}>
                   <UserIcon className="icon-sm" />
                   <span className="header-user-name">{user?.name}</span>
-                </button>
+                </a>
                 <button className="ghost-button icon-only" onClick={handleLogout} aria-label="Sair">
                   <LogoutIcon className="icon-sm" />
                 </button>
               </>
             ) : isPartnerAuthenticated ? (
               <>
-                <button className="ghost-button" onClick={() => navigate(dashboardPath)}>
+                <a className="ghost-button" href={'#' + dashboardPath} onClick={goTo(dashboardPath)}>
                   <StoreIcon className="icon-sm" />
                   <span className="header-user-name">{partnerUser?.name}</span>
-                </button>
+                </a>
                 <button className="ghost-button icon-only" onClick={handleLogout} aria-label="Sair">
                   <LogoutIcon className="icon-sm" />
                 </button>
               </>
             ) : (
               <>
-                <button className="ghost-button" onClick={() => navigate('/login')}>
+                <a className="ghost-button" href="#/login" onClick={goTo('/login')}>
                   {'Entrar'}
-                </button>
-                <button className="primary-button" onClick={() => navigate('/register')}>
+                </a>
+                <a className="primary-button" href="#/register" onClick={goTo('/register')}>
                   {'Criar conta'}
-                </button>
+                </a>
               </>
             )}
           </div>
         </div>
 
         <div className="shell mobile-nav" aria-label="Mobile navigation">
-          <button
+          <a
             className={'mobile-nav-link ' + (currentRoute === 'home' ? 'active' : '')}
-            onClick={() => navigate('/')}
+            href="#/"
+            onClick={goTo('/')}
           >
             <HomeIcon className="icon-sm" />
             <span>{'In\u00edcio'}</span>
-          </button>
-          <button
+          </a>
+          <a
             className={'mobile-nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
-            onClick={() => navigate('/barbershops')}
+            href="#/barbershops"
+            onClick={goTo('/barbershops')}
           >
             <ScissorsIcon className="icon-sm" />
             <span>{'Barbearias'}</span>
-          </button>
-          <button
+          </a>
+          <a
             className={'mobile-nav-link ' + (currentRoute === 'account' ? 'active' : '')}
-            onClick={() => navigate(activeUser ? dashboardPath : '/login')}
+            href={'#' + (activeUser ? dashboardPath : '/login')}
+            onClick={goTo(activeUser ? dashboardPath : '/login')}
           >
             {activeUser ? <CalendarIcon className="icon-sm" /> : <UserIcon className="icon-sm" />}
             <span>{activeUser ? dashboardLabel : 'Entrar'}</span>
-          </button>
+          </a>
         </div>
       </header>
 

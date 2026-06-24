@@ -8,9 +8,13 @@ interface LandingPageProps {
 export function LandingPage({ navigate }: LandingPageProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const handleSearch = () => {
+  const getSearchPath = () => {
     const trimmed = searchTerm.trim()
-    navigate(trimmed ? '/public/barbershops?search=' + encodeURIComponent(trimmed) : '/public/barbershops')
+    return trimmed ? '/public/barbershops?search=' + encodeURIComponent(trimmed) : '/public/barbershops'
+  }
+
+  const handleSearch = () => {
+    navigate(getSearchPath())
   }
 
   return (
@@ -35,18 +39,29 @@ export function LandingPage({ navigate }: LandingPageProps) {
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
             </div>
-            <button onClick={handleSearch} className="landing-search-button">
+            <a
+              href={'#' + getSearchPath()}
+              onClick={(event) => {
+                event.preventDefault()
+                handleSearch()
+              }}
+              className="landing-search-button"
+            >
               Buscar
-            </button>
+            </a>
           </div>
 
           {/* CTA Button */}
-          <button
-            onClick={() => navigate('/public/barbershops')}
+          <a
+            href="#/public/barbershops"
+            onClick={(event) => {
+              event.preventDefault()
+              navigate('/public/barbershops')
+            }}
             className="landing-cta-button"
           >
             Explorar Todas as Barbearias
-          </button>
+          </a>
         </div>
       </section>
     </div>
