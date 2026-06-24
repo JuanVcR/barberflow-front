@@ -9554,3 +9554,57 @@ body.light-yellow-theme #root .service-actions button:last-child {
     grid-template-columns: 1fr;
   }
 }
+
+/* Mobile touch hardening */
+@media (hover: none), (max-width: 768px) {
+  html,
+  body,
+  #root {
+    touch-action: pan-y;
+  }
+
+  .app-shell::before,
+  .app-shell::after,
+  .app-shell *::before,
+  .app-shell *::after,
+  .role-app-shell::before,
+  .role-app-shell::after,
+  .role-app-shell *::before,
+  .role-app-shell *::after {
+    pointer-events: none !important;
+  }
+
+  .app-shell main,
+  .app-shell .page-transition,
+  .app-shell .landing-page,
+  .app-shell .landing-hero {
+    pointer-events: none;
+  }
+
+  .app-shell .site-header,
+  .app-shell .site-header *,
+  .app-shell a,
+  .app-shell button,
+  .app-shell input,
+  .app-shell select,
+  .app-shell textarea,
+  .app-shell label,
+  .role-app-shell a,
+  .role-app-shell button,
+  .role-app-shell input,
+  .role-app-shell select,
+  .role-app-shell textarea,
+  .role-app-shell label {
+    pointer-events: auto !important;
+    touch-action: manipulation;
+  }
+
+  .app-shell a,
+  .app-shell button,
+  .role-app-shell a,
+  .role-app-shell button {
+    position: relative;
+    z-index: 1001;
+    -webkit-tap-highlight-color: rgba(250, 204, 21, 0.25);
+  }
+}
