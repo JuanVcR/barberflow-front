@@ -1,4 +1,4 @@
-﻿import type { MouseEvent, PropsWithChildren } from 'react'
+﻿import type { MouseEvent, PropsWithChildren, TouchEvent } from 'react'
 import { useAuth } from '../context/useAuth'
 import type { AppRoute, ToastMessage } from '../types/models'
 import { getDashboardPathForRole } from '../utils/navigation'
@@ -133,6 +133,11 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
     navigate(path)
   }
 
+  const goToOnTouch = (path: string) => (event: TouchEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    navigate(path)
+  }
+
   if (currentRoute === 'auth-barber-invite') {
     return (
       <>
@@ -196,7 +201,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
     <div className="app-shell">
       <header className="site-header">
         <div className="shell container header-row">
-          <a className="brand" href="#/" onClick={goTo('/')}>
+          <a className="brand" href="#/" onClick={goTo('/')} onTouchEnd={goToOnTouch('/')}>
             <ScissorsIcon className="icon-lg" />
             <span>{'BarberFlow'}</span>
           </a>
@@ -206,6 +211,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
               className={'nav-link ' + (currentRoute === 'home' ? 'active' : '')}
               href="#/"
               onClick={goTo('/')}
+              onTouchEnd={goToOnTouch('/')}
             >
               <HomeIcon className="icon-sm" />
               {'In\u00edcio'}
@@ -214,6 +220,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
               className={'nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
               href="#/barbershops"
               onClick={goTo('/barbershops')}
+              onTouchEnd={goToOnTouch('/barbershops')}
             >
               {'Barbearias'}
             </a>
@@ -222,6 +229,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
                 className={'nav-link ' + (currentRoute === 'account' ? 'active' : '')}
                 href={'#' + dashboardPath}
                 onClick={goTo(dashboardPath)}
+                onTouchEnd={goToOnTouch(dashboardPath)}
               >
                 <CalendarIcon className="icon-sm" />
                 {dashboardLabel}
@@ -232,7 +240,12 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
           <div className="header-actions">
             {isAuthenticated ? (
               <>
-                <a className="ghost-button" href={'#' + dashboardPath} onClick={goTo(dashboardPath)}>
+                <a
+                  className="ghost-button"
+                  href={'#' + dashboardPath}
+                  onClick={goTo(dashboardPath)}
+                  onTouchEnd={goToOnTouch(dashboardPath)}
+                >
                   <UserIcon className="icon-sm" />
                   <span className="header-user-name">{user?.name}</span>
                 </a>
@@ -242,7 +255,12 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
               </>
             ) : isPartnerAuthenticated ? (
               <>
-                <a className="ghost-button" href={'#' + dashboardPath} onClick={goTo(dashboardPath)}>
+                <a
+                  className="ghost-button"
+                  href={'#' + dashboardPath}
+                  onClick={goTo(dashboardPath)}
+                  onTouchEnd={goToOnTouch(dashboardPath)}
+                >
                   <StoreIcon className="icon-sm" />
                   <span className="header-user-name">{partnerUser?.name}</span>
                 </a>
@@ -252,10 +270,15 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
               </>
             ) : (
               <>
-                <a className="ghost-button" href="#/login" onClick={goTo('/login')}>
+                <a className="ghost-button" href="#/login" onClick={goTo('/login')} onTouchEnd={goToOnTouch('/login')}>
                   {'Entrar'}
                 </a>
-                <a className="primary-button" href="#/register" onClick={goTo('/register')}>
+                <a
+                  className="primary-button"
+                  href="#/register"
+                  onClick={goTo('/register')}
+                  onTouchEnd={goToOnTouch('/register')}
+                >
                   {'Criar conta'}
                 </a>
               </>
@@ -268,6 +291,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
             className={'mobile-nav-link ' + (currentRoute === 'home' ? 'active' : '')}
             href="#/"
             onClick={goTo('/')}
+            onTouchEnd={goToOnTouch('/')}
           >
             <HomeIcon className="icon-sm" />
             <span>{'In\u00edcio'}</span>
@@ -276,6 +300,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
             className={'mobile-nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
             href="#/barbershops"
             onClick={goTo('/barbershops')}
+            onTouchEnd={goToOnTouch('/barbershops')}
           >
             <ScissorsIcon className="icon-sm" />
             <span>{'Barbearias'}</span>
@@ -284,6 +309,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
             className={'mobile-nav-link ' + (currentRoute === 'account' ? 'active' : '')}
             href={'#' + (activeUser ? dashboardPath : '/login')}
             onClick={goTo(activeUser ? dashboardPath : '/login')}
+            onTouchEnd={goToOnTouch(activeUser ? dashboardPath : '/login')}
           >
             {activeUser ? <CalendarIcon className="icon-sm" /> : <UserIcon className="icon-sm" />}
             <span>{activeUser ? dashboardLabel : 'Entrar'}</span>

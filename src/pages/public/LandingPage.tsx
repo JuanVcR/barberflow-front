@@ -45,6 +45,10 @@ export function LandingPage({ navigate }: LandingPageProps) {
                 event.preventDefault()
                 handleSearch()
               }}
+              onTouchEnd={(event) => {
+                event.preventDefault()
+                handleSearch()
+              }}
               className="landing-search-button"
             >
               Buscar
@@ -55,6 +59,10 @@ export function LandingPage({ navigate }: LandingPageProps) {
           <a
             href="#/public/barbershops"
             onClick={(event) => {
+              event.preventDefault()
+              navigate('/public/barbershops')
+            }}
+            onTouchEnd={(event) => {
               event.preventDefault()
               navigate('/public/barbershops')
             }}
