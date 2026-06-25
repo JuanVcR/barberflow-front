@@ -7,6 +7,29 @@ interface AppointmentsPageProps {
   notify: (tone: ToastMessage['tone'], text: string) => void
 }
 
+function parseBookingDateTime(appointment: Booking) {
+  const [year, month, day] = appointment.date.split('-').map(Number)
+  const time = appointment.endTime || appointment.time
+  const [hour, minute] = time.split(':').map(Number)
+
+  if (!year || !month || !day || Number.isNaN(hour) || Number.isNaN(minute)) {
+    return null
+  }
+
+  return new Date(year, month - 1, day, hour, minute)
+}
+
+function isPastAppointment(appointment: Booking) {
+  if (appointment.status === 'COMPLETED' || appointment.status === 'CANCELLED') {
+    return true
+  }
+
+  const dateTime = parseBookingDateTime(appointment)
+  if (!dateTime) return false
+
+  return dateTime.getTime() < Date.now()
+}
+
 export function AppointmentsPage({ navigate, notify }: AppointmentsPageProps) {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'history'>('upcoming')
   const [appointments, setAppointments] = useState<Booking[]>([])
@@ -31,8 +54,20 @@ export function AppointmentsPage({ navigate, notify }: AppointmentsPageProps) {
     }
   }, [notify])
 
-  const upcomingAppointments = appointments.filter((apt) => apt.status === 'confirmed' || apt.status === 'pending' || apt.status === 'SCHEDULED')
-  const historyAppointments = appointments.filter((apt) => apt.status === 'COMPLETED' || apt.status === 'CANCELLED')
+  const upcomingAppointments = appointments
+    .filter((apt) => !isPastAppointment(apt))
+    .sort((first, second) => {
+      const firstDate = parseBookingDateTime(first)?.getTime() ?? 0
+      const secondDate = parseBookingDateTime(second)?.getTime() ?? 0
+      return firstDate - secondDate
+    })
+  const historyAppointments = appointments
+    .filter(isPastAppointment)
+    .sort((first, second) => {
+      const firstDate = parseBookingDateTime(first)?.getTime() ?? 0
+      const secondDate = parseBookingDateTime(second)?.getTime() ?? 0
+      return secondDate - firstDate
+    })
 
   const handleCancel = async (id: string) => {
     if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
