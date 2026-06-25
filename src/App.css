@@ -9556,27 +9556,3 @@ body.light-yellow-theme #root .service-actions button:last-child {
     grid-template-columns: 1fr;
   }
 }
-
-.touch-debug-panel {
-  position: fixed;
-  right: 12px;
-  bottom: 12px;
-  z-index: 99999;
-  width: min(340px, calc(100vw - 24px));
-  max-height: 44vh;
-  overflow: auto;
-  padding: 12px;
-  border: 2px solid #facc15;
-  border-radius: 12px;
-  background: rgba(17, 17, 17, 0.94);
-  color: #ffffff;
-  font: 12px/1.4 monospace;
-  white-space: pre-wrap;
-  pointer-events: none;
-}
-
-.touch-debug-panel strong {
-  display: block;
-  margin-bottom: 8px;
-  color: #facc15;
-}
