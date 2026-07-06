@@ -12,6 +12,7 @@ export function ForgotPasswordPage({ navigate, notify }: ForgotPasswordPageProps
   const [isLoading, setIsLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [resetUrl, setResetUrl] = useState('')
+  const [previewUrl, setPreviewUrl] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,6 +21,7 @@ export function ForgotPasswordPage({ navigate, notify }: ForgotPasswordPageProps
     try {
       const result = await requestPasswordReset(email)
       setResetUrl(result.resetUrl ?? '')
+      setPreviewUrl((result as any).previewUrl ?? '')
       notify('success', result.emailSent === false ? 'Link de teste gerado' : 'Email de recuperação enviado')
       setSubmitted(true)
     } catch {
@@ -40,8 +42,13 @@ export function ForgotPasswordPage({ navigate, notify }: ForgotPasswordPageProps
             {resetUrl ? 'SMTP não enviou o email. Use o link abaixo para testar localmente.' : 'Verifique seu email para recuperar sua senha'}
           </p>
           {resetUrl ? (
-            <a className="login-button" href={resetUrl} style={{ display: 'block', textAlign: 'center', marginBottom: '0.75rem' }}>
+            <a className="login-button" href={resetUrl} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', marginBottom: '0.75rem' }}>
               Abrir link de recuperação
+            </a>
+          ) : null}
+          {previewUrl ? (
+            <a className="login-button preview-button" href={previewUrl} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', marginBottom: '0.75rem' }}>
+              Abrir pré-visualização do e-mail (dev)
             </a>
           ) : null}
           <button onClick={() => navigate('/auth/login')} className="login-button">

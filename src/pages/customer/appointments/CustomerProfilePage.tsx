@@ -49,44 +49,68 @@ export function CustomerProfilePage({ navigate, notify }: CustomerProfilePagePro
 
   if (!profile) return <div className="profile-page">Carregando perfil...</div>
 
+  const mainBarbershop = favorites[0]
+
   return (
     <div className="profile-page">
-      <button className="back-button" onClick={() => navigate('/customer/explore')}>Voltar</button>
-      <div className="profile-header">
-        <div className="profile-info">
-          <div className="profile-avatar">{profile.name.charAt(0)}</div>
-          <div className="profile-details"><h1>{profile.name}</h1><p>{profile.email}</p></div>
+      <button className="back-button" onClick={() => navigate('/customer/explore')}>← Voltar</button>
+
+      <div className="profile-top">
+        <div className="profile-avatar-large">{profile.name.charAt(0)}</div>
+        <div className="profile-title">
+          <h1>{profile.name}</h1>
+          <div className="profile-subtitle">Cliente{mainBarbershop ? ` · ${mainBarbershop.name}` : ''}</div>
         </div>
         <button className="edit-button" onClick={() => editing ? save() : setEditing(true)}>
           {editing ? 'Salvar' : 'Editar'}
         </button>
       </div>
 
-      <div className="profile-section">
-        <h2>Informações pessoais</h2>
-        <div className="info-grid">
-          <label>Nome<input disabled={!editing} value={profile.name} onChange={(event) => setProfile({ ...profile, name: event.target.value })} /></label>
-          <label>CPF<input disabled={!editing} value={profile.cpf ?? ''} onChange={(event) => setProfile({ ...profile, cpf: event.target.value })} /></label>
-          <label>E-mail<input disabled value={profile.email ?? ''} /></label>
-          <label>Telefone<input disabled={!editing} value={profile.phone} onChange={(event) => setProfile({ ...profile, phone: event.target.value })} /></label>
+      <div className="card personal-card">
+        <div className="card-header">INFORMAÇÕES PESSOAIS</div>
+        <div className="card-body two-columns">
+          <div>
+            <div className="label">Nome completo</div>
+            <div className="value">{profile.name}</div>
+
+            <div className="label">E-mail</div>
+            <div className="value muted">{profile.email ?? 'Não informado'}</div>
+          </div>
+
+          <div>
+            <div className="label">CPF</div>
+            <div className="value">{profile.cpf ? profile.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : 'Não informado'}</div>
+
+            <div className="label">Telefone</div>
+            <div className="value">{profile.phone ? `(${profile.phone.slice(0,2)}) ${profile.phone.slice(2,7)}-${profile.phone.slice(7)}` : 'Não informado'}</div>
+          </div>
         </div>
       </div>
 
-      <div className="profile-section">
-        <h2>Barbearias vinculadas</h2>
-        <div className="favorite-list">
+      <div className="card favorites-card">
+        <div className="card-header">BARBEARIAS VINCULADAS</div>
+        <div className="card-body">
           {favorites.map((shop) => (
-            <div key={shop.id} className="favorite-item">
-              <div className="favorite-avatar">{shop.name.charAt(0)}</div>
-              <div className="favorite-info"><h3>{shop.name}</h3><p>{shop.address || 'Endereço não informado'}</p></div>
+            <div key={shop.id} className="favorite-row">
+              <div className="favorite-avatar small">{shop.name.charAt(0)}</div>
+              <div className="favorite-info"><div className="fav-name">{shop.name}</div><div className="fav-address">{shop.address || 'Endereço não informado'}</div></div>
+              <div className="fav-badge">Vinculada</div>
             </div>
           ))}
           {!favorites.length ? <p>Nenhuma barbearia vinculada.</p> : null}
         </div>
       </div>
 
-      <div className="profile-section danger">
-        <button className="logout-button" onClick={() => { logout(); navigate('/') }}>Sair</button>
+      <div className="card logout-card">
+        <div className="card-body logout-body">
+          <div>
+            <div className="label strong">Encerrar sessão</div>
+            <div className="muted">Você será desconectado da sua conta.</div>
+          </div>
+          <div>
+            <button className="logout-button" onClick={() => { logout(); navigate('/') }}>Sair</button>
+          </div>
+        </div>
       </div>
     </div>
   )
