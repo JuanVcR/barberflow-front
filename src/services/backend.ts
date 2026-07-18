@@ -747,6 +747,7 @@ export async function fetchClientProfile() {
 
 export async function updateClientProfile(payload: {
   name?: string
+  email?: string
   phone?: string
   cpf?: string
 }) {

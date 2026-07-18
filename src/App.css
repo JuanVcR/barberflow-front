@@ -444,6 +444,22 @@
 .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem }
 .label { font-size: 0.8rem; color: #6b6156; margin-top: 0.35rem }
 .value { font-weight: 700; margin-bottom: 0.6rem }
+.profile-input {
+  width: 100%;
+  max-width: 260px;
+  margin: 0.35rem 0 0.75rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #ddd6c8;
+  border-radius: 8px;
+  background: #fff;
+  color: #171717;
+  font-size: 0.95rem;
+}
+.profile-input:focus {
+  outline: none;
+  border-color: #f1c40f;
+  box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.18);
+}
 .muted { color: #8d857b }
 .favorites-card .favorite-row { display:flex; align-items:center; gap:1rem; padding:0.6rem; border-radius:8px; background:#fbf9f6; margin-bottom:0.6rem }
 .favorite-avatar.small { width:44px; height:44px; border-radius:8px; display:grid; place-items:center; background:#fff3d6; color:#c18300; font-weight:800; border:1px solid rgba(241,196,15,0.12) }

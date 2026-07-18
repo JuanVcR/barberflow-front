@@ -20,11 +20,23 @@ export function CustomerProfilePage({ navigate, notify }: CustomerProfilePagePro
   const [profile, setProfile] = useState<ClientProfile | null>(null)
   const [favorites, setFavorites] = useState<FavoriteBarbershop[]>([])
   const [editing, setEditing] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    cpf: '',
+  })
 
   useEffect(() => {
     Promise.all([fetchClientProfile(), fetchFavoriteBarbershops()])
       .then(([profileData, favoriteData]) => {
         setProfile(profileData)
+        setFormData({
+          name: profileData.name ?? '',
+          email: profileData.email ?? '',
+          phone: profileData.phone ?? '',
+          cpf: profileData.cpf ?? '',
+        })
         setFavorites(favoriteData)
       })
       .catch((error) => notify('error', error instanceof Error ? error.message : 'Erro ao carregar perfil'))
@@ -34,11 +46,18 @@ export function CustomerProfilePage({ navigate, notify }: CustomerProfilePagePro
     if (!profile) return
     try {
       const updated = await updateClientProfile({
-        name: profile.name,
-        phone: profile.phone,
-        cpf: profile.cpf || undefined,
+        name: formData.name,
+        email: formData.email || undefined,
+        phone: formData.phone,
+        cpf: formData.cpf || undefined,
       })
       setProfile(updated)
+      setFormData({
+        name: updated.name ?? '',
+        email: updated.email ?? '',
+        phone: updated.phone ?? '',
+        cpf: updated.cpf ?? '',
+      })
       updateSessionProfile({ name: updated.name, email: updated.email ?? '', phone: updated.phone })
       setEditing(false)
       notify('success', 'Perfil atualizado')
@@ -71,18 +90,51 @@ export function CustomerProfilePage({ navigate, notify }: CustomerProfilePagePro
         <div className="card-body two-columns">
           <div>
             <div className="label">Nome completo</div>
-            <div className="value">{profile.name}</div>
+            {editing ? (
+              <input
+                className="profile-input"
+                value={formData.name}
+                onChange={(event) => setFormData((current) => ({ ...current, name: event.target.value }))}
+              />
+            ) : (
+              <div className="value">{profile.name}</div>
+            )}
 
             <div className="label">E-mail</div>
-            <div className="value muted">{profile.email ?? 'Não informado'}</div>
+            {editing ? (
+              <input
+                className="profile-input"
+                type="email"
+                value={formData.email}
+                onChange={(event) => setFormData((current) => ({ ...current, email: event.target.value }))}
+              />
+            ) : (
+              <div className="value muted">{profile.email ?? 'Não informado'}</div>
+            )}
           </div>
 
           <div>
             <div className="label">CPF</div>
-            <div className="value">{profile.cpf ? profile.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : 'Não informado'}</div>
+            {editing ? (
+              <input
+                className="profile-input"
+                value={formData.cpf}
+                onChange={(event) => setFormData((current) => ({ ...current, cpf: event.target.value }))}
+              />
+            ) : (
+              <div className="value">{profile.cpf ? profile.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : 'Não informado'}</div>
+            )}
 
             <div className="label">Telefone</div>
-            <div className="value">{profile.phone ? `(${profile.phone.slice(0,2)}) ${profile.phone.slice(2,7)}-${profile.phone.slice(7)}` : 'Não informado'}</div>
+            {editing ? (
+              <input
+                className="profile-input"
+                value={formData.phone}
+                onChange={(event) => setFormData((current) => ({ ...current, phone: event.target.value }))}
+              />
+            ) : (
+              <div className="value">{profile.phone ? `(${profile.phone.slice(0,2)}) ${profile.phone.slice(2,7)}-${profile.phone.slice(7)}` : 'Não informado'}</div>
+            )}
           </div>
         </div>
       </div>
