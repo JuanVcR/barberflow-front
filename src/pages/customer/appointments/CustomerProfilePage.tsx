@@ -37,7 +37,7 @@ export function CustomerProfilePage({ navigate, notify }: CustomerProfilePagePro
           phone: profileData.phone ?? '',
           cpf: profileData.cpf ?? '',
         })
-        setFavorites(favoriteData)
+        setFavorites([...favoriteData].sort((a, b) => a.name.localeCompare(b.name)))
       })
       .catch((error) => notify('error', error instanceof Error ? error.message : 'Erro ao carregar perfil'))
   }, [notify])
