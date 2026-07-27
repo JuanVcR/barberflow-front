@@ -15,10 +15,25 @@ export function ResetPasswordPage({
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const isStrongPassword = (value: string) => {
+    return (
+      value.length >= 8 &&
+      /[A-Z]/.test(value) &&
+      /[a-z]/.test(value) &&
+      /[0-9]/.test(value) &&
+      /[^A-Za-z0-9]/.test(value)
+    )
+  }
+
   const submit = async (event: React.FormEvent) => {
     event.preventDefault()
     if (!token) return notify('error', 'Link inválido')
-    if (password.length < 8) return notify('error', 'A senha deve ter pelo menos 8 caracteres')
+    if (!isStrongPassword(password)) {
+      return notify(
+        'error',
+        'A senha deve ter pelo menos 8 caracteres, incluir letra maiúscula, letra minúscula, número e símbolo.'
+      )
+    }
     if (password !== confirmPassword) return notify('error', 'As senhas não coincidem')
 
     try {

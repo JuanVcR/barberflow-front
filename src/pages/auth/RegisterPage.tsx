@@ -55,7 +55,6 @@ export function RegisterPage({ navigate, notify }: RegisterPageProps) {
       notify('success', 'Cadastro realizado com sucesso')
       navigate('/customer/explore')
     } catch (error) {
-      // NOVO: Mensagem detalhada
       const message = error instanceof Error 
         ? error.message 
         : 'Erro ao realizar cadastro'

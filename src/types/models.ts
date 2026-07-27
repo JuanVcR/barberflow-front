@@ -1,11 +1,3 @@
-/**
- * @file Type Definitions for Barbershop API Models
- * @description Tipos TypeScript para os modelos de dados da API
- */
-
-/**
- * Usuário autenticado
- */
 export interface User {
   id: string
   name: string
@@ -15,31 +7,22 @@ export interface User {
   accountRole?: 'CLIENT' | 'BARBER' | 'BARBERSHOP_ADMIN' | 'SUPER_ADMIN'
 }
 
-/**
- * Barbeiro (prestador de serviço)
- */
 export interface Barber {
   id: string
   name: string
   photo?: string
 }
 
-/**
- * Serviço oferecido pela barbearia
- */
 export interface Service {
   id: string
   name: string
   description: string
-  price: number // em reais
-  duration: number // em minutos
+  price: number
+  duration: number
   image: string
   barberIds?: string[]
 }
 
-/**
- * Barbearia
- */
 export interface Barbershop {
   id: string
   slug: string
@@ -59,10 +42,6 @@ export interface Barbershop {
   barbers: Barber[]
 }
 
-/**
- * Agendamento de cliente
- * Status possíveis: 'pending' | 'confirmed'
- */
 export interface Booking {
   id: string
   barbershopId: string
@@ -80,15 +59,12 @@ export interface Booking {
   clientName?: string
   amountPaid?: number | null
   endTime?: string
-  date: string // YYYY-MM-DD
-  time: string // HH:mm
+  date: string
+  time: string
   userId: string
   status: 'pending' | 'confirmed' | 'SCHEDULED' | 'CANCELLED' | 'COMPLETED'
 }
 
-/**
- * Mensagem de notificação no frontend
- */
 export interface ToastMessage {
   id: string
   tone: 'success' | 'error' | 'info' | 'warning' | 'loading'
@@ -98,30 +74,20 @@ export interface ToastMessage {
   actionPath?: string
 }
 
-/**
- * Rotas disponíveis no frontend
- */
 export type AppRoute =
-  // Public Routes
   | { name: 'landing' }
   | { name: 'public-barbershops'; search?: string }
   | { name: 'public-barbershop-details'; slug: string }
-  
-  // Auth Routes
   | { name: 'auth-login' }
   | { name: 'auth-register' }
   | { name: 'auth-forgot-password' }
   | { name: 'auth-professional-login' }
   | { name: 'auth-professional-register' }
   | { name: 'auth-barber-invite'; token?: string }
-  
-  // Customer Routes
   | { name: 'customer-explore' }
   | { name: 'customer-appointments' }
   | { name: 'customer-booking'; barbershopId: string; serviceId?: string }
   | { name: 'customer-profile' }
-  
-  // Professional Routes
   | { name: 'professional-dashboard' }
   | { name: 'professional-schedule' }
   | { name: 'professional-current' }
@@ -134,8 +100,6 @@ export type AppRoute =
   | { name: 'professional-history' }
   | { name: 'professional-availability-new' }
   | { name: 'professional-profile' }
-  
-  // Admin Routes
   | { name: 'admin-dashboard' }
   | { name: 'admin-barbershops' }
   | { name: 'admin-services'; barbershopId?: string }
@@ -156,8 +120,6 @@ export type AppRoute =
   | { name: 'admin-barbershop-section'; section: 'appointments' | 'working-hours' | 'customers' | 'settings' | 'reports' }
   | { name: 'booking-detail'; bookingId: string }
   | { name: 'auth-reset-password'; token?: string }
-  
-  // Legacy Routes
   | { name: 'home' }
   | { name: 'login' }
   | { name: 'register' }

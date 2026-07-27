@@ -45,8 +45,6 @@ export function ProfessionalDashboardPage({ user, navigate }: ProfessionalDashbo
   return (
     <div style={{ padding: '20px' }}>
       <h1>Dashboard Operacional</h1>
-
-      {/* Stats Grid */}
       <div
         style={{
           display: 'grid',
@@ -90,8 +88,6 @@ export function ProfessionalDashboardPage({ user, navigate }: ProfessionalDashbo
           </button>
         </div>
       </div>
-
-      {/* Today's Schedule */}
       <div>
         <h2 style={{ marginBottom: '20px' }}>Agenda de Hoje</h2>
         <div>
@@ -136,8 +132,6 @@ export function ProfessionalDashboardPage({ user, navigate }: ProfessionalDashbo
           )}
         </div>
       </div>
-
-      {/* Quick Links */}
       <div style={{ marginTop: '40px' }}>
         <h2 style={{ marginBottom: '20px' }}>Telas do barbeiro</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>

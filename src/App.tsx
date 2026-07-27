@@ -6,12 +6,10 @@ import { useAuth } from './context/useAuth'
 import type { AppRoute, ToastMessage } from './types/models'
 import { getDashboardPathForRole, getPathSegments, getQueryParams, navigateTo } from './utils/navigation'
 
-// Public Pages
 import { LandingPage } from './pages/public/LandingPage'
 import { BarbershopListPublicPage } from './pages/public/BarbershopListPublicPage'
 import { BarbershopDetailsPublicPage } from './pages/public/BarbershopDetailsPublicPage'
 
-// Auth Pages
 import { LoginPage } from './pages/auth/LoginPage'
 import { RegisterPage } from './pages/auth/RegisterPage'
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
@@ -20,18 +18,15 @@ import { ProfessionalLoginPage } from './pages/auth/ProfessionalLoginPage'
 import { ProfessionalRegisterPage } from './pages/auth/ProfessionalRegisterPage'
 import { BarberInvitePage } from './pages/auth/BarberInvitePage'
 
-// Customer Pages
 import { ExplorePage } from './pages/customer/explore/ExplorePage'
 import { AppointmentsPage } from './pages/customer/appointments/AppointmentsPage'
 import { BookingPage } from './pages/customer/booking/BookingPage'
 import { CustomerProfilePage } from './pages/customer/appointments/CustomerProfilePage'
 
-// Professional Pages
 import { ServicesPage } from './pages/professional/services/ServicesPage'
 import { AvailabilityPage } from './pages/professional/availability/AvailabilityPage'
 import { BlockingPage } from './pages/professional/blocking/BlockingPage'
 
-// Admin Pages
 import { ServicesManagePage } from './pages/admin/services/ServicesManagePage'
 import { TeamPage } from './pages/admin/team/TeamPage'
 import { SettingsPage } from './pages/admin/settings/SettingsPage'
@@ -46,7 +41,6 @@ import { AdminBarberHistoryPage } from './pages/admin/barbershop/AdminBarberHist
 import { ReportsPage } from './pages/admin/reports/ReportsPage'
 import { SuperAdminBarbershopsPage } from './pages/admin/SuperAdminBarbershopsPage'
 
-// Professional Pages (Additional)
 import { BarberAgendaPage } from './pages/professional/schedule/BarberAgendaPage'
 import { BarberReportsPage } from './pages/professional/reports/BarberReportsPage'
 import { BarberHistoryPage } from './pages/professional/history/BarberHistoryPage'
@@ -62,7 +56,6 @@ function parseRoute(): AppRoute {
 
   if (segments.length === 0) return { name: 'landing' }
 
-  // Auth routes
   if (segments[0] === 'auth') {
     if (segments[1] === 'login') return { name: 'auth-login' }
     if (segments[1] === 'register') return { name: 'auth-register' }
@@ -73,13 +66,11 @@ function parseRoute(): AppRoute {
     if (segments[1] === 'barber-invite') return { name: 'auth-barber-invite', token: params.get('token') ?? undefined }
   }
 
-  // Public routes
   if (segments[0] === 'public') {
     if (segments[1] === 'barbershops') return { name: 'public-barbershops', search: params.get('search') ?? undefined }
     if (segments[1] === 'barbershop' && segments[2]) return { name: 'public-barbershop-details', slug: segments[2] }
   }
 
-  // Customer routes
   if (segments[0] === 'customer') {
     if (segments[1] === 'explore') return { name: 'customer-explore' }
     if (segments[1] === 'appointments' && segments[2]) {
@@ -96,7 +87,6 @@ function parseRoute(): AppRoute {
     if (segments[1] === 'profile') return { name: 'customer-profile' }
   }
 
-  // Professional routes
   if (segments[0] === 'professional') {
     if (segments[1] === 'dashboard') return { name: 'professional-dashboard' }
     if (segments[1] === 'schedule') return { name: 'professional-schedule' }
@@ -112,7 +102,6 @@ function parseRoute(): AppRoute {
     if (segments[1] === 'profile') return { name: 'professional-profile' }
   }
 
-  // Admin routes
   if (segments[0] === 'admin') {
     if (segments[1] === 'dashboard' || !segments[1]) return { name: 'admin-dashboard' }
     if (segments[1] === 'barbershops') return { name: 'admin-barbershops' }
@@ -152,7 +141,6 @@ function parseRoute(): AppRoute {
     }
   }
 
-  // Redirect-compatible aliases
   if (segments[0] === 'login') return { name: 'auth-login' }
   if (segments[0] === 'register') return { name: 'auth-register' }
   if (segments[0] === 'barbershops') return { name: 'public-barbershops' }
@@ -222,7 +210,6 @@ function AppShell() {
       return <LandingPage navigate={navigateTo} />
     }
 
-    // Auth Routes
     if (route.name === 'auth-login') return <LoginPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-register') return <RegisterPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-forgot-password') return <ForgotPasswordPage navigate={navigateTo} notify={notify} />
@@ -245,7 +232,6 @@ function AppShell() {
       return <LandingPage navigate={navigateTo} />
     }
 
-    // Public Routes
     if (route.name === 'landing') return <LandingPage navigate={navigateTo} />
     if (route.name === 'public-barbershops') {
       return <BarbershopListPublicPage navigate={navigateTo} searchTerm={route.search} />
@@ -261,7 +247,6 @@ function AppShell() {
       )
     }
 
-    // Customer Routes (Protected)
     if (isCustomer) {
       if (route.name === 'customer-explore') return <ExplorePage navigate={navigateTo} />
       if (route.name === 'customer-appointments') return <AppointmentsPage navigate={navigateTo} notify={notify} />
@@ -277,7 +262,6 @@ function AppShell() {
       if (route.name === 'customer-profile') return <CustomerProfilePage user={user} navigate={navigateTo} notify={notify} />
     }
 
-    // Professional Routes (Protected)
     if (isBarber) {
       if (route.name === 'professional-dashboard') {
         navigateTo('/professional/agenda')
@@ -296,7 +280,6 @@ function AppShell() {
       if (route.name === 'professional-profile') return <BarberProfilePage navigate={navigateTo} notify={notify} />
     }
 
-    // Admin Routes (Protected)
     if (isAnyAdmin) {
       if (route.name === 'admin-dashboard') {
         if (isSuperAdmin) return <SuperADMDashboardPage navigate={navigateTo} notify={notify} />
@@ -369,7 +352,6 @@ function AppShell() {
       return <LandingPage navigate={navigateTo} />
     }
 
-    // Default
     return <LandingPage navigate={navigateTo} />
   }, [isAuthReady, isAuthenticated, isPartnerAuthenticated, partnerUser, user, route])
 

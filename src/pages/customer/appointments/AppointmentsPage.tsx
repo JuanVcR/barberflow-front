@@ -113,8 +113,6 @@ export function AppointmentsPage({ navigate, notify }: AppointmentsPageProps) {
           <span>+</span> Novo Agendamento
         </button>
       </div>
-
-      {/* Tabs */}
       <div className="appointments-tabs">
         <button
           className={`tab ${activeTab === 'upcoming' ? 'active' : ''}`}
@@ -129,8 +127,6 @@ export function AppointmentsPage({ navigate, notify }: AppointmentsPageProps) {
           Histórico ({historyAppointments.length})
         </button>
       </div>
-
-      {/* Appointments List */}
       <div className="appointments-list">
         {isLoading ? (
           <div className="empty-state-appointments">

@@ -70,7 +70,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
     return `${year}-${month}-${day}`
   }
 
-  // Generate dates for next 7 days
   const generateDates = () => {
     const dates = []
     for (let i = 0; i < 7; i++) {
@@ -111,7 +110,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
   }
 
   const handleConfirm = async () => {
-    // Validação antes de confirmar
     if (!selectedProfessional) {
       notify('error', 'Selecione um profissional')
       return
@@ -141,14 +139,12 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
       notify('success', 'Agendamento confirmado! Você receberá confirmação por email.')
       navigate('/customer/appointments')
     } catch (err) {
-      // Tratamento da mensagem retornada pela API
       let message = 'Erro ao confirmar agendamento'
       
       if (err instanceof Error) {
         message = err.message
       }
       
-      // Se erro específico da API
       if (message.includes('horário')) {
         notify('error', 'Este horário não está mais disponível. Escolha outro.')
       } else if (message.includes('profissional')) {
@@ -171,7 +167,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         <p className="booking-barbershop">{barbershop.name} • {barbershop.address}</p>
       </div>
 
-      {/* Progress Stepper */}
       <div className="booking-stepper">
         {['Serviço', 'Barbeiro', 'Horário', 'Confirmar'].map((label, idx) => {
           const steps: BookingStep[] = ['service', 'professional', 'datetime', 'review']
@@ -187,7 +182,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         })}
       </div>
 
-      {/* Step 1: Service Selection */}
       {currentStep === 'service' && (
         <div className="booking-step">
           <h2>Passo 1: Serviço</h2>
@@ -206,7 +200,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         </div>
       )}
 
-      {/* Step 2: Professional Selection */}
       {currentStep === 'professional' && (
         <div className="booking-step">
           <div className="booking-summary">
@@ -232,7 +225,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         </div>
       )}
 
-      {/* Step 3: Date and Time Selection */}
       {currentStep === 'datetime' && (
         <div className="booking-step">
           <div className="booking-summary">
@@ -243,7 +235,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
           
           <h2>Passo 3: Horário</h2>
           
-          {/* Calendar */}
           <div className="calendar-section">
             <h3>{new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</h3>
             <div className="calendar-dates">
@@ -266,7 +257,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
             </div>
           </div>
 
-          {/* Available Times */}
           <div className="times-section">
             <h3>HORÁRIOS DISPONÍVEIS</h3>
             <div className="times-grid">
@@ -285,7 +275,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         </div>
       )}
 
-      {/* Step 4: Review and Confirm */}
       {currentStep === 'review' && (
         <div className="booking-step">
           <h2>Passo 4: Confirmação</h2>
@@ -311,7 +300,6 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
         </div>
       )}
 
-      {/* Navigation Buttons */}
       <div className="booking-actions">
         <button
           className="secondary-button"

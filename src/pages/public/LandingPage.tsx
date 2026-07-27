@@ -19,15 +19,12 @@ export function LandingPage({ navigate }: LandingPageProps) {
 
   return (
     <div className="landing-page">
-      {/* Hero Section */}
       <section className="landing-hero">
         <div className="landing-hero-content">
           <h1>Sua Barbearia, Agora Online</h1>
           <p className="landing-hero-subtitle">
             Encontre as melhores barbearias perto de você e agende seu corte em segundos
           </p>
-
-          {/* Search Bar */}
           <div className="landing-search-container">
             <div className="landing-search-box">
               <SearchIcon className="icon-sm" />
@@ -54,8 +51,6 @@ export function LandingPage({ navigate }: LandingPageProps) {
               Buscar
             </a>
           </div>
-
-          {/* CTA Button */}
           <a
             href="#/public/barbershops"
             onClick={(event) => {

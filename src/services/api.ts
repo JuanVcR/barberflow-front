@@ -1,27 +1,8 @@
-/**
- * @file API Configuration and HTTP Client
- * @description Configura axios com interceptors de autenticação
- * 
- * Base URL: http://localhost:3000 (local) ou definida em VITE_API_URL
- * 
- * Todas as rotas protegidas usam:
- * - Authorization: Bearer TOKEN
- * - Content-Type: application/json
- * 
- * O access token fica apenas em memória. A renovação usa cookie HttpOnly.
- */
-
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 let authToken: string | null = null
 
-/**
- * Erro customizado para requisições da API
- * @class ApiError
- * @extends Error
- * @property {number} status - Status HTTP da resposta
- */
 export class ApiError extends Error {
   status: number
 
@@ -32,25 +13,14 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * Recupera o token JWT do localStorage
- * @returns {string | null} Token armazenado ou null
- */
 export function getAuthToken() {
   return authToken
 }
 
-/**
- * Armazena o token JWT no localStorage
- * @param {string} token - Token JWT recebido no login
- */
 export function setAuthToken(token: string) {
   authToken = token
 }
 
-/**
- * Remove o token JWT do localStorage (logout)
- */
 export function clearAuthToken() {
   authToken = null
   localStorage.removeItem('auth-token')
@@ -62,7 +32,6 @@ const apiClient = axios.create({
   withCredentials: true,
 })
 
-// Interceptor para adicionar token na requisição
 apiClient.interceptors.request.use((config) => {
   const token = getAuthToken()
 
@@ -73,7 +42,6 @@ apiClient.interceptors.request.use((config) => {
   return config
 })
 
-// Interceptor de resposta para tratar 401 (token expirado)
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -95,7 +63,6 @@ apiClient.interceptors.response.use(
         const newToken = response.data.token
         setAuthToken(newToken)
 
-        // Retenta a requisição original com novo token
         originalRequest.headers.Authorization = `Bearer ${newToken}`
         return apiClient(originalRequest)
       } catch (refreshError) {
@@ -125,38 +92,15 @@ function normalizeHeaders(headers?: HeadersInit) {
   return headers
 }
 
-/**
- * Função auxiliar para armazenar refresh token
- */
 export function setRefreshToken(token: string) {
   void token
   localStorage.removeItem('refresh-token')
 }
 
-/**
- * Função auxiliar para limpar refresh token
- */
 export function clearRefreshToken() {
   localStorage.removeItem('refresh-token')
 }
 
-/**
- * Realiza requisição HTTP autenticada para a API
- * Adiciona token Bearer automaticamente se disponível
- * 
- * @template T - Tipo de dados esperado na resposta
- * @param {string} path - Caminho do endpoint (ex: '/barbershops', '/auth/login')
- * @param {RequestInit} options - Opções de requisição (method, body, headers)
- * @returns {Promise<T>} Dados da resposta convertidos para tipo T
- * @throws {ApiError} Se a requisição falhar
- * 
- * @example
- * const shops = await apiRequest<Barbershop[]>('/barbershops')
- * const result = await apiRequest('/auth/login', {
- *   method: 'POST',
- *   body: JSON.stringify({ email, password })
- * })
- */
 export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   try {
     const headers = normalizeHeaders(options.headers) ?? {}

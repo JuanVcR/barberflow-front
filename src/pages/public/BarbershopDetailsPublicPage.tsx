@@ -73,12 +73,9 @@ export function BarbershopDetailsPublicPage({
       </button>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-        {/* Imagem */}
         <div>
           {barbershop.image && <img src={barbershop.image} alt={barbershop.name} />}
         </div>
-
-        {/* Detalhes */}
         <div>
           <h1>{barbershop.name}</h1>
           <p>{barbershop.address}</p>

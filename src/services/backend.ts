@@ -1,13 +1,3 @@
-/**
- * @file Backend API Service
- * @description Integrações com a API backend da barbearia
- * 
- * Endpoints disponíveis:
- * - Auth: login, register, refresh token, trocar senha, esqueci senha
- * - Barbearias: listar, detalhe por slug
- * - Agendamentos: criar, listar, cancelar, reagendar, atualizar status
- * - Availability: consultar horários disponíveis
- */
 
 import type { Barber, Barbershop, Booking, Service, User } from '../types/models'
 import coverClassic from '../assets/barbershops/cover-classic.webp'
@@ -21,7 +11,6 @@ import {
   setAuthToken,
 } from './api'
 
-/** Resposta da API ao registrar usuário - POST /api/auth/register */
 type ApiRegisterResponse = {
   id: string
   name: string
@@ -29,15 +18,6 @@ type ApiRegisterResponse = {
   phone: string
 }
 
-/**
- * Resposta da API ao fazer login - POST /api/auth/login
- * @property {string} token - JWT token para autenticação
- * @property {string} refreshToken - Token para renovar autenticação
- * @property {Object} account - Dados da conta autenticada
- * @property {string} account.id - ID do usuário
- * @property {string} account.email - Email do usuário
- * @property {string} account.role - Papel do usuário (CLIENT, BARBER, ADMIN)
- */
 type ApiLoginResponse = {
   token: string
   role?: string
@@ -60,7 +40,6 @@ type ApiCurrentAccount = {
   }
 }
 
-/** Referência de barbeiro dentro de um serviço */
 type ApiBarberRef = {
   id?: string
   name?: string
@@ -70,21 +49,14 @@ type ApiBarberRef = {
   }
 }
 
-/**
- * Serviço oferecido pela barbearia
- * GET /api/barbershops/:barbershopId/services
- */
 type ApiService = {
   id: string
   name: string
   price: number
-  duration: number // em minutos
+  duration: number
   barbers: ApiBarberRef[]
 }
 
-/**
- * Barbearia - GET /api/barbershops e GET /api/barbershops/:slug
- */
 type ApiBarbershop = {
   id: string
   name: string
@@ -133,16 +105,12 @@ function mapAdminBarbershop(shop: AdminBarbershop): AdminBarbershop {
   }
 }
 
-/**
- * Agendamento - GET /api/bookings/:bookingId e POST /api/bookings
- * Status possíveis: SCHEDULED | CANCELLED | COMPLETED
- */
 export type ApiBooking = {
   id: string
-  day: string // YYYY-MM-DD
-  startTime: string // HH:mm
-  endTime: string // HH:mm
-  totalDuration?: number // em minutos
+  day: string
+  startTime: string
+  endTime: string
+  totalDuration?: number
   status: 'SCHEDULED' | 'CANCELLED' | 'COMPLETED'
   clientId: string
   barberId: string
@@ -336,13 +304,6 @@ export function mapAccountRole(role?: string): User['role'] {
   return 'customer'
 }
 
-/**
- * Mapeia dados da API para modelo frontend
- * Transforma ApiBarbershop para Barbershop com dados locais
- * 
- * @param {ApiBarbershop} apiBarbershop - Dados brutos da API
- * @returns {Barbershop} Barbershop formatado para uso no frontend
- */
 export function mapApiBarbershop(apiBarbershop: ApiBarbershop): Barbershop {
   const services = apiBarbershop.services.map(mapService)
   const professionals = uniqueBarbers(apiBarbershop.services)
@@ -369,12 +330,6 @@ export function mapApiBarbershop(apiBarbershop: ApiBarbershop): Barbershop {
   }
 }
 
-/**
- * Mapeia agendamento da API para modelo frontend
- * 
- * @param {ApiBooking} apiBooking - Dados brutos do agendamento
- * @returns {Booking} Agendamento formatado para uso no frontend
- */
 export function mapApiBooking(apiBooking: ApiBooking): Booking {
   const firstService = apiBooking.services[0]?.service
 
@@ -402,25 +357,6 @@ export function mapApiBooking(apiBooking: ApiBooking): Booking {
   }
 }
 
-/**
- * Registra novo usuário (cliente)
- * POST /api/auth/register
- * 
- * @param {Object} payload - Dados do novo usuário
- * @param {string} payload.name - Nome completo
- * @param {string} payload.email - Email único
- * @param {string} payload.phone - Telefone com DDD
- * @param {string} payload.password - Senha
- * @returns {Promise<ApiRegisterResponse>} Dados do usuário criado
- * 
- * @example
- * const user = await registerUser({
- *   name: 'João Silva',
- *   email: 'joao@email.com',
- *   phone: '11999999999',
- *   password: '123456'
- * })
- */
 export async function registerUser(payload: {
   name: string
   email: string
@@ -433,23 +369,6 @@ export async function registerUser(payload: {
   })
 }
 
-/**
- * Faz login do usuário
- * POST /api/auth/login
- * 
- * @param {Object} payload - Credenciais
- * @param {string} payload.email - Email do usuário
- * @param {string} payload.password - Senha
- * @returns {Promise<ApiLoginResponse>} Token JWT e dados da conta
- * @throws {ApiError} Se email/password inválidos
- * 
- * @example
- * const response = await loginUser({
- *   email: 'joao@email.com',
- *   password: '123456'
- * })
- * // response.token é automaticamente salvo no localStorage
- */
 export async function loginUser(payload: { email: string; password: string }) {
   const result = await apiRequest<ApiLoginResponse>('/auth/login', {
     method: 'POST',
@@ -457,8 +376,6 @@ export async function loginUser(payload: { email: string; password: string }) {
   })
 
   setAuthToken(result.token)
-  
-  // Guardar refresh token se retornado pela API
   return result
 }
 
@@ -472,28 +389,11 @@ export async function fetchCurrentAccount() {
   return apiRequest<ApiCurrentAccount>('/auth/me')
 }
 
-/**
- * Lista todas as barbearias
- * GET /api/barbershops
- * 
- * @returns {Promise<Barbershop[]>} Array de barbearias
- * @example
- * const shops = await fetchBarbershops()
- */
 export async function fetchBarbershops() {
   const data = await apiRequest<ApiBarbershop[]>('/barbershops')
   return data.map(mapApiBarbershop)
 }
 
-/**
- * Busca barbearia por slug
- * GET /api/barbershops/:slug
- * 
- * @param {string} slug - Slug único da barbearia (ex: 'barbearia-central')
- * @returns {Promise<Barbershop>} Dados completos da barbearia com serviços
- * @example
- * const shop = await fetchBarbershopBySlug('barbearia-central')
- */
 export async function fetchBarbershopBySlug(slug: string) {
   const data = await apiRequest<ApiBarbershop>('/barbershops/' + slug)
   return mapApiBarbershop(data)
@@ -504,22 +404,6 @@ export async function fetchBarbershopById(id: string) {
   return shops.find((shop) => shop.id === id) ?? null
 }
 
-/**
- * Consulta horários disponíveis para agendamento
- * GET /api/availability?barberId=UUID&serviceId=UUID&day=YYYY-MM-DD
- * 
- * @param {Object} payload - Filtros de disponibilidade
- * @param {string} payload.barberId - ID do barbeiro
- * @param {string} payload.serviceId - ID do serviço
- * @param {string} payload.day - Data no formato YYYY-MM-DD
- * @returns {Promise<string[]>} Array de horários disponíveis (ex: ['09:00', '09:30', '10:00'])
- * @example
- * const times = await fetchAvailableTimes({
- *   barberId: 'uuid-123',
- *   serviceId: 'uuid-456',
- *   day: '2026-05-15'
- * })
- */
 export async function fetchAvailableTimes(payload: {
   barberId: string
   serviceId: string
@@ -529,30 +413,6 @@ export async function fetchAvailableTimes(payload: {
   return apiRequest<string[]>('/availability?' + query.toString())
 }
 
-/**
- * Cria novo agendamento (usuário autenticado)
- * POST /api/bookings
- * 
- * Requer token de autenticação no header Authorization
- * 
- * @param {Object} payload - Dados do agendamento
- * @param {string} payload.barberId - ID do barbeiro
- * @param {string} payload.serviceId - ID do serviço
- * @param {string} payload.barbershopId - ID da barbearia
- * @param {string} payload.day - Data no formato YYYY-MM-DD
- * @param {string} payload.time - Horário no formato HH:mm
- * @returns {Promise<Booking>} Agendamento criado
- * @throws {ApiError} Se não autenticado ou dados inválidos
- * 
- * @example
- * const booking = await createBooking({
- *   barberId: 'uuid-123',
- *   serviceId: 'uuid-456',
- *   barbershopId: 'uuid-789',
- *   day: '2026-05-15',
- *   time: '09:00'
- * })
- */
 export async function createBooking(payload: {
   barberId: string
   serviceId: string
@@ -574,25 +434,11 @@ export async function createBooking(payload: {
   return mapApiBooking(data)
 }
 
-/**
- * Lista agendamentos do cliente autenticado
- * GET /api/bookings
- * 
- * @returns {Promise<Booking[]>} Array de agendamentos do cliente
- */
 export async function getAppointments() {
   const data = await apiRequest<ApiBooking[]>('/bookings/me')
   return data.map(mapApiBooking)
 }
 
-/**
- * Cancela um agendamento existente
- * DELETE /api/bookings/:id
- * 
- * @param {string} bookingId - ID do agendamento a cancelar
- * @param {string} reason - Razão do cancelamento
- * @returns {Promise<Booking>} Agendamento cancelado
- */
 export async function cancelBooking(bookingId: string, reason?: string) {
   await apiRequest<void>('/bookings/' + bookingId, {
     method: 'DELETE',
@@ -639,13 +485,6 @@ export async function createQuickBooking(payload: {
   return mapApiBooking(data)
 }
 
-/**
- * Obter estatísticas do profissional para hoje
- * GET /api/professionals/:id/stats/today
- * 
- * @param {string} professionalId - ID do profissional
- * @returns {Promise<{appointments: number, revenue: number, avgRating: number}>} Stats do dia
- */
 export async function getProfessionalStats(professionalId: string) {
   void professionalId
   const data = await apiRequest<{
@@ -660,14 +499,6 @@ export async function getProfessionalStats(professionalId: string) {
   }
 }
 
-/**
- * Obter agendamentos do profissional para hoje
- * GET /api/professionals/:id/appointments?date=today
- * 
- * @param {string} professionalId - ID do profissional
- * @param {string} date - Data (default: today)
- * @returns {Promise<Booking[]>} Agendamentos do dia
- */
 export async function getProfessionalAppointments(professionalId: string, date = 'today') {
   void professionalId
   const day = date === 'today' ? new Date().toISOString().split('T')[0] : date
@@ -761,15 +592,6 @@ export async function fetchFavoriteBarbershops() {
   return apiRequest<FavoriteBarbershop[]>('/clients/me/barbershops')
 }
 
-/**
- * Login de profissional
- * POST /api/auth/professional-login
- * 
- * @param {Object} payload - Credenciais
- * @param {string} payload.email - Email do profissional
- * @param {string} payload.password - Senha
- * @returns {Promise<ApiLoginResponse>} Token e dados do profissional
- */
 export async function loginProfessional(payload: { email: string; password: string }) {
   const result = await apiRequest<ApiLoginResponse>('/auth/login', {
     method: 'POST',
@@ -1103,12 +925,6 @@ export async function registerBookingPayment(
   })
 }
 
-/**
- * Obter estatísticas do admin
- * GET /api/admin/stats
- * 
- * @returns {Promise<{professionals: number, appointments: number, revenue: number}>} Stats gerais
- */
 export async function getAdminStats() {
   const stats = await fetchAdminDashboard()
 
@@ -1119,12 +935,6 @@ export async function getAdminStats() {
   }
 }
 
-/**
- * Listar profissionais da unidade
- * GET /api/admin/team
- * 
- * @returns {Promise<Barber[]>} Lista de profissionais
- */
 export async function getTeam() {
   const shops = await apiRequest<Array<{ id: string }>>('/admin/barbershops')
   const firstShop = shops[0]
@@ -1136,12 +946,6 @@ export async function getTeam() {
   return apiRequest<Barber[]>('/admin/barbershops/' + firstShop.id + '/barbers')
 }
 
-/**
- * Listar relatórios
- * GET /api/admin/reports
- * 
- * @returns {Promise<{period: string, revenue: number, appointments: number}>} Relatórios
- */
 export async function getAdminReports() {
   const stats = await getAdminStats()
 
