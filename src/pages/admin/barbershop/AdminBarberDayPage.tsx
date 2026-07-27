@@ -37,6 +37,12 @@ function formatDay(day: string) {
   return dayToDate(day).toLocaleDateString('pt-BR')
 }
 
+function getBookingServices(booking: ApiBooking) {
+  return (booking.services ?? [])
+    .map((item) => item.service)
+    .filter((service): service is NonNullable<typeof service> => Boolean(service))
+}
+
 function getCalendarDays(monthDate: Date) {
   const firstDay = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1)
   const start = new Date(firstDay)
@@ -51,7 +57,7 @@ function getCalendarDays(monthDate: Date) {
 
 function getBookingValue(booking: ApiBooking) {
   if (booking.amountPaid != null) return booking.amountPaid
-  return booking.services.reduce((total, item) => total + (item.service.price ?? 0), 0)
+  return getBookingServices(booking).reduce((total, service) => total + (service.price ?? 0), 0)
 }
 
 function formatCurrency(value: number) {
@@ -217,7 +223,7 @@ export function AdminBarberDayPage({
                   <div className="admin-barber-table-row" key={booking.id}>
                     <strong>{booking.startTime}</strong>
                     <span>{booking.client?.name || 'Cliente'}</span>
-                    <span>{booking.services.map((item) => item.service.name).join(', ') || 'Serviço'}</span>
+                    <span>{getBookingServices(booking).map((service) => service.name).join(', ') || 'Serviço'}</span>
                     <strong>{formatCurrency(getBookingValue(booking))}</strong>
                     <span className={`admin-barber-status ${status.className}`}>{status.label}</span>
                     <button

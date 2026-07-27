@@ -115,16 +115,16 @@ export type ApiBooking = {
   clientId: string
   barberId: string
   barbershopId: string
-  barber: { id: string; name: string }
-  client?: { id?: string; name?: string; phone?: string }
-  barbershop: { id: string; name: string }
-  services: Array<{
-    service: {
+  barber?: { id: string; name: string } | null
+  client?: { id?: string; name?: string; phone?: string } | null
+  barbershop?: { id: string; name: string } | null
+  services?: Array<{
+    service?: {
       id: string
       name: string
       price?: number
       duration?: number
-    }
+    } | null
   }>
   cancellationReason?: string | null
   cancelledAt?: string | null
@@ -331,22 +331,26 @@ export function mapApiBarbershop(apiBarbershop: ApiBarbershop): Barbershop {
 }
 
 export function mapApiBooking(apiBooking: ApiBooking): Booking {
-  const firstService = apiBooking.services[0]?.service
+  const services = (apiBooking.services ?? [])
+    .map((item) => item.service)
+    .filter((service): service is NonNullable<typeof service> => Boolean(service))
+  const firstService = services[0]
+  const serviceName = services.map((service) => service.name).join(', ')
 
   return {
     id: apiBooking.id,
     barbershopId: apiBooking.barbershopId,
-    barbershopName: apiBooking.barbershop.name,
+    barbershopName: apiBooking.barbershop?.name ?? 'Barbearia',
     serviceId: firstService?.id ?? '',
-    serviceName: apiBooking.services.map((item) => item.service.name).join(', ') || 'Servico',
-    services: apiBooking.services.map(({ service }) => ({
+    serviceName: serviceName || 'Servico',
+    services: services.map((service) => ({
       id: service.id,
       name: service.name,
       price: service.price ?? 0,
       duration: service.duration ?? 0,
     })),
     barberId: apiBooking.barberId,
-    barberName: apiBooking.barber.name,
+    barberName: apiBooking.barber?.name ?? 'Barbeiro',
     clientName: apiBooking.client?.name,
     amountPaid: apiBooking.amountPaid,
     endTime: apiBooking.endTime,

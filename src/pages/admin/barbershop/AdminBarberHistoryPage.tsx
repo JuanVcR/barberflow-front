@@ -12,9 +12,15 @@ interface AdminBarberHistoryPageProps {
 
 type StatusFilter = 'ALL' | ApiBooking['status']
 
+function getBookingServices(booking: ApiBooking) {
+  return (booking.services ?? [])
+    .map((item) => item.service)
+    .filter((service): service is NonNullable<typeof service> => Boolean(service))
+}
+
 function getBookingValue(booking: ApiBooking) {
   if (booking.amountPaid != null) return booking.amountPaid
-  return booking.services.reduce((total, item) => total + (item.service.price ?? 0), 0)
+  return getBookingServices(booking).reduce((total, service) => total + (service.price ?? 0), 0)
 }
 
 function formatCurrency(value: number) {
@@ -61,7 +67,7 @@ export function AdminBarberHistoryPage({
   const mostUsedService = useMemo(() => {
     const counts = new Map<string, number>()
     bookings.forEach((booking) => {
-      booking.services.forEach(({ service }) => {
+      getBookingServices(booking).forEach((service) => {
         counts.set(service.name, (counts.get(service.name) ?? 0) + 1)
       })
     })
@@ -74,7 +80,7 @@ export function AdminBarberHistoryPage({
       const matchesStatus = statusFilter === 'ALL' || booking.status === statusFilter
       const matchesSearch = !term ||
         (booking.client?.name ?? '').toLowerCase().includes(term) ||
-        booking.services.some(({ service }) => service.name.toLowerCase().includes(term))
+        getBookingServices(booking).some((service) => service.name.toLowerCase().includes(term))
       return matchesStatus && matchesSearch
     })
   }, [bookings, search, statusFilter])
@@ -136,7 +142,7 @@ export function AdminBarberHistoryPage({
               <div className="admin-barber-table-row" key={booking.id}>
                 <span>{formatDate(booking.day)}</span>
                 <strong>{booking.client?.name || 'Cliente'}</strong>
-                <span>{booking.services.map((item) => item.service.name).join(', ') || 'Serviço'}</span>
+                <span>{getBookingServices(booking).map((service) => service.name).join(', ') || 'Serviço'}</span>
                 <strong>{formatCurrency(getBookingValue(booking))}</strong>
                 <span className={`admin-barber-status ${status.className}`}>{status.label}</span>
                 <span>—</span>
