@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import './styles/legacy-app.css'
+import './styles/theme-overrides.css'
+import './styles/pages/staff-pages.css'
+import './styles/pages/landing.css'
+import './styles/components-buttons.css'
+import './styles/responsive.css'
 import { Layout } from './components/Layout'
 import { AuthProvider } from './context/AuthProvider'
 import { useAuth } from './context/useAuth'
@@ -17,6 +23,8 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
 import { ProfessionalLoginPage } from './pages/auth/ProfessionalLoginPage'
 import { ProfessionalRegisterPage } from './pages/auth/ProfessionalRegisterPage'
 import { BarberInvitePage } from './pages/auth/BarberInvitePage'
+import { PartnerLoginPage } from './pages/PartnerLoginPage'
+import { CreateBarbershopPage } from './pages/CreateBarbershopPage'
 
 import { ExplorePage } from './pages/customer/explore/ExplorePage'
 import { AppointmentsPage } from './pages/customer/appointments/AppointmentsPage'
@@ -30,6 +38,7 @@ import { BlockingPage } from './pages/professional/blocking/BlockingPage'
 import { ServicesManagePage } from './pages/admin/services/ServicesManagePage'
 import { TeamPage } from './pages/admin/team/TeamPage'
 import { SettingsPage } from './pages/admin/settings/SettingsPage'
+import { SubscriptionPage } from './pages/admin/subscription/SubscriptionPage'
 import { SuperADMDashboardPage } from './pages/admin/SuperADMDashboardPage'
 import { ADMBarbershopDashboardPage } from './pages/admin/ADMBarbershopDashboardPage'
 import { SuperAdminPlansPage } from './pages/admin/SuperAdminPlansPage'
@@ -109,6 +118,7 @@ function parseRoute(): AppRoute {
     if (segments[1] === 'working-hours') return { name: 'admin-working-hours', barbershopId: params.get('barbershopId') ?? undefined }
     if (segments[1] === 'team') return { name: 'admin-team' }
     if (segments[1] === 'reports') return { name: 'admin-reports' }
+    if (segments[1] === 'plans' || segments[1] === 'subscription') return { name: 'admin-subscription' }
     if (segments[1] === 'settings') return { name: 'admin-settings' }
     if (segments[1] === 'super-admin') return { name: 'admin-super' }
     if (segments[1] === 'super' && ['barbershops', 'registrations', 'plans', 'financial-reports', 'users', 'settings'].includes(segments[2])) {
@@ -143,7 +153,7 @@ function parseRoute(): AppRoute {
 
   if (segments[0] === 'login') return { name: 'auth-login' }
   if (segments[0] === 'register') return { name: 'auth-register' }
-  if (segments[0] === 'barbershops') return { name: 'public-barbershops' }
+  if (segments[0] === 'barbershops') return { name: 'landing' }
   if (segments[0] === 'barbershop' && segments[1]) {
     return { name: 'public-barbershop-details', slug: segments[1] }
   }
@@ -156,11 +166,18 @@ function parseRoute(): AppRoute {
   }
   if (segments[0] === 'booking-detail' && segments[1]) return { name: 'booking-detail', bookingId: segments[1] }
   if (segments[0] === 'account') return { name: 'customer-profile' }
-  if (segments[0] === 'partner' && segments[1] === 'login') return { name: 'auth-professional-login' }
-  if (segments[0] === 'partner' && segments[1] === 'create') return { name: 'landing' }
+  if (segments[0] === 'partner' && segments[1] === 'login') return { name: 'partner-login' }
+  if (segments[0] === 'partner' && segments[1] === 'create') return { name: 'partner-create' }
   if (segments[0] === 'home') return { name: 'landing' }
 
   return { name: 'landing' }
+}
+
+function getLoginPathForProtectedRoute(route: AppRoute) {
+  if (route.name.startsWith('admin')) return '/partner/login'
+  if (route.name.startsWith('professional')) return '/auth/professional-login'
+  if (route.name.startsWith('customer') || route.name === 'booking-detail') return '/auth/login'
+  return ''
 }
 
 function AppShell() {
@@ -210,6 +227,22 @@ function AppShell() {
       return <LandingPage navigate={navigateTo} />
     }
 
+    const protectedLoginPath = getLoginPathForProtectedRoute(route)
+
+    if (isAuthReady && !isLogged && protectedLoginPath) {
+      navigateTo(protectedLoginPath)
+
+      if (protectedLoginPath === '/partner/login') {
+        return <PartnerLoginPage navigate={navigateTo} notify={notify} />
+      }
+
+      if (protectedLoginPath === '/auth/professional-login') {
+        return <ProfessionalLoginPage navigate={navigateTo} notify={notify} />
+      }
+
+      return <LoginPage navigate={navigateTo} notify={notify} />
+    }
+
     if (route.name === 'auth-login') return <LoginPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-register') return <RegisterPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-forgot-password') return <ForgotPasswordPage navigate={navigateTo} notify={notify} />
@@ -217,6 +250,16 @@ function AppShell() {
     if (route.name === 'auth-professional-login') return <ProfessionalLoginPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-professional-register') return <ProfessionalRegisterPage navigate={navigateTo} notify={notify} />
     if (route.name === 'auth-barber-invite') return <BarberInvitePage token={route.token} navigate={navigateTo} notify={notify} />
+    if (route.name === 'partner-login') return <PartnerLoginPage navigate={navigateTo} notify={notify} />
+    if (route.name === 'partner-create') {
+      return (
+        <CreateBarbershopPage
+          navigate={navigateTo}
+          notify={notify}
+          isPartnerAuthenticated={isPartnerAuthenticated}
+        />
+      )
+    }
 
     if (isLogged && route.name === 'landing') {
       return null
@@ -254,6 +297,7 @@ function AppShell() {
         return (
           <BookingPage
             barbershopId={route.barbershopId!}
+            serviceId={route.serviceId}
             navigate={navigateTo}
             notify={notify}
           />
@@ -288,6 +332,10 @@ function AppShell() {
       if (route.name === 'admin-services') return <ServicesManagePage barbershopId={route.barbershopId} navigate={navigateTo} notify={notify} />
       if (route.name === 'admin-team') return <TeamPage notify={notify} />
       if (route.name === 'admin-reports') return <ReportsPage />
+      if (route.name === 'admin-subscription') {
+        if (isSuperAdmin) return <SuperADMDashboardPage navigate={navigateTo} notify={notify} />
+        return <SubscriptionPage notify={notify} />
+      }
       if (route.name === 'admin-settings') return <SettingsPage navigate={navigateTo} notify={notify} />
       if (route.name === 'admin-super') {
         if (!isSuperAdmin) return <ADMBarbershopDashboardPage navigate={navigateTo} notify={notify} />

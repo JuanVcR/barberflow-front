@@ -61,14 +61,14 @@ export function BarbershopDetailsPublicPage({
     return (
       <div style={{ padding: '40px', textAlign: 'center' }}>
         <h2>Barbearia não encontrada</h2>
-        <button onClick={() => navigate('/public/barbershops')}>Voltar</button>
+        <button className="back-button" onClick={() => navigate('/public/barbershops')}>Voltar</button>
       </div>
     )
   }
 
   return (
     <div style={{ padding: '40px 20px' }}>
-      <button onClick={() => navigate('/public/barbershops')} style={{ marginBottom: '20px' }}>
+      <button className="back-button" onClick={() => navigate('/public/barbershops')}>
         ← Voltar
       </button>
 

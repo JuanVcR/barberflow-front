@@ -97,8 +97,8 @@ export function QuickBookingPage({ mode, navigate, notify }: Props) {
 
   return (
     <section className="quick-booking-page">
+      <button className="back-button" onClick={() => navigate(mode === 'admin' ? '/admin/appointments' : '/professional/agenda')}>Voltar</button>
       <header>
-        <button onClick={() => navigate(mode === 'admin' ? '/admin/appointments' : '/professional/agenda')}>Voltar</button>
         <div><h1>Cadastro rápido</h1><p>Cadastre o cliente e já reserve o atendimento.</p></div>
       </header>
       <form className="quick-booking-card" onSubmit={submit}>

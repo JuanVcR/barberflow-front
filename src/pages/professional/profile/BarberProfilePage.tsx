@@ -53,48 +53,55 @@ export function BarberProfilePage({ navigate, notify }: BarberProfilePageProps) 
     .map((part) => part[0])
     .join('')
     .toUpperCase()
+    || 'B'
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <button onClick={() => navigate('/professional/agenda')} style={{ marginBottom: 20 }}>
+    <div className="barber-profile-page">
+      <button className="barber-profile-back" onClick={() => navigate('/professional/agenda')}>
         Voltar
       </button>
 
-      <h1>Meu Perfil Profissional</h1>
+      <h1>Meu Perfil</h1>
 
-      <div style={{ textAlign: 'center', margin: '30px 0' }}>
-        <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#ddd', margin: '0 auto 15px', display: 'grid', placeItems: 'center', fontSize: 30 }}>
+      <div className="barber-profile-summary">
+        <div className="barber-profile-avatar">
           {initials}
         </div>
-        <strong>{profile.barbershop.name}</strong>
+        <strong>{profile.barbershop?.name ?? 'Barbearia'}</strong>
       </div>
 
-      <label style={{ display: 'block', marginBottom: 5, fontWeight: 'bold' }}>Nome</label>
-      <input
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        style={{ width: '100%', padding: 10, marginBottom: 15 }}
-      />
+      <section className="barber-profile-form">
+        <label>
+          Nome
+          <input
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </label>
 
-      <label style={{ display: 'block', marginBottom: 5, fontWeight: 'bold' }}>Telefone</label>
-      <input
-        value={phone}
-        onChange={(event) => setPhone(event.target.value)}
-        style={{ width: '100%', padding: 10, marginBottom: 20 }}
-      />
+        <label>
+          Telefone
+          <input
+            value={phone}
+            onChange={(event) => setPhone(event.target.value)}
+          />
+        </label>
 
-      <h2>Serviços vinculados</h2>
-      <div style={{ marginBottom: 20 }}>
-        {profile.services.length
-          ? profile.services.map((service) => (
-              <span key={service.id} style={{ display: 'inline-block', padding: '6px 12px', background: '#f2f2f2', borderRadius: 20, margin: '0 8px 8px 0' }}>
-                {service.name}
-              </span>
-            ))
-          : <p>Nenhum serviço vinculado.</p>}
-      </div>
+        <div className="barber-profile-services">
+          <h2>Serviços vinculados</h2>
+          <div>
+            {profile.services.length
+              ? profile.services.map((service) => (
+                  <span key={service.id}>
+                    {service.name}
+                  </span>
+                ))
+              : <p>Nenhum serviço vinculado.</p>}
+          </div>
+        </div>
+      </section>
 
-      <button onClick={handleSave} disabled={saving} style={{ width: '100%', padding: 12 }}>
+      <button className="barber-profile-save" onClick={handleSave} disabled={saving}>
         {saving ? 'Salvando...' : 'Salvar perfil'}
       </button>
     </div>

@@ -150,7 +150,7 @@ export function BookingDetailsPage({ bookingId, navigate, notify }: BookingDetai
       <h1>Detalhe do agendamento</h1>
 
       <section className="booking-detail-summary">
-        <div className="booking-detail-icon">⌂</div>
+        <div className="booking-detail-icon">BF</div>
         <div>
           <h2>{booking.barbershopName}</h2>
           <p>Serviço: {booking.serviceName}</p>

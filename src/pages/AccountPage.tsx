@@ -45,10 +45,11 @@ export function AccountPage({ navigate, notify, isAuthenticated }: AccountPagePr
     notify('success', 'Perfil atualizado com sucesso.')
   }
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     notify('info', 'Voc\u00ea saiu da conta.')
-    navigate('/')
+    navigate('/home')
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   return (

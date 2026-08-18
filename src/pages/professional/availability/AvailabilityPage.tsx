@@ -49,20 +49,31 @@ export function AvailabilityPage({ navigate, notify }: AvailabilityPageProps) {
   }
 
   return (
-    <div style={{ padding: 20, maxWidth: 700, margin: '0 auto' }}>
-      <button onClick={() => navigate('/professional/agenda')}>Voltar</button>
+    <div className="availability-page">
+      <button className="back-button" onClick={() => navigate('/professional/agenda')}>Voltar</button>
       <h1>Disponibilidade</h1>
-      {rows.map((row) => (
-        <div key={row.weekDay} style={{ display: 'grid', gridTemplateColumns: '130px 40px 1fr 1fr', gap: 10, padding: 12, alignItems: 'center' }}>
-          <strong>{days[row.weekDay]}</strong>
-          <input type="checkbox" checked={row.active} onChange={(event) => updateRow(row.weekDay, { active: event.target.checked })} />
-          <input type="time" disabled={!row.active} value={row.startTime} onChange={(event) => updateRow(row.weekDay, { startTime: event.target.value })} />
-          <input type="time" disabled={!row.active} value={row.endTime} onChange={(event) => updateRow(row.weekDay, { endTime: event.target.value })} />
-        </div>
-      ))}
-      <button onClick={save} disabled={saving} style={{ width: '100%', padding: 12, marginTop: 20 }}>
-        {saving ? 'Salvando...' : 'Salvar disponibilidade'}
-      </button>
+      <div className="availability-card">
+        {rows.map((row) => (
+          <div className="availability-row" key={row.weekDay}>
+            <label className="availability-switch">
+              <input type="checkbox" checked={row.active} onChange={(event) => updateRow(row.weekDay, { active: event.target.checked })} />
+              <span />
+            </label>
+            <strong>{days[row.weekDay]}</strong>
+            <label>
+              <span>Das</span>
+              <input type="time" disabled={!row.active} value={row.startTime} onChange={(event) => updateRow(row.weekDay, { startTime: event.target.value })} />
+            </label>
+            <label>
+              <span>às</span>
+              <input type="time" disabled={!row.active} value={row.endTime} onChange={(event) => updateRow(row.weekDay, { endTime: event.target.value })} />
+            </label>
+          </div>
+        ))}
+        <button className="availability-save" onClick={save} disabled={saving}>
+          {saving ? 'Salvando...' : 'Salvar disponibilidade'}
+        </button>
+      </div>
     </div>
   )
 }

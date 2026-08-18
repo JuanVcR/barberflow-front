@@ -142,10 +142,40 @@ export type AdminBarbershop = {
   latitude?: number | null
   longitude?: number | null
   plan?: string
+  subscriptionStatus?: 'ACTIVE' | 'CANCELLED'
+  subscriptionCancelledAt?: string | null
   setupCompleted?: boolean
   createdAt?: string
   logoUrl?: string | null
   coverUrl?: string | null
+}
+
+export type PlanPayment = {
+  id: string
+  providerPaymentId?: string | null
+  plan: 'FREE' | 'BASIC' | 'PRO'
+  amount: number
+  status: 'PENDING' | 'PAID' | 'EXPIRED' | 'CANCELLED' | 'FAILED'
+  qrCode?: string | null
+  qrCodeBase64?: string | null
+  ticketUrl?: string | null
+  expiresAt?: string | null
+}
+
+export type PlanPrice = {
+  id: string
+  plan: 'FREE' | 'BASIC' | 'PRO'
+  amount: number | null
+  pendingAmount?: number | null
+  pendingEffectiveAt?: string | null
+  updatedAt?: string
+}
+
+export type SuperAdminPlansSummary = {
+  prices: PlanPrice[]
+  barbershops: AdminBarbershop[]
+  priceEmailSent?: boolean
+  priceEmailScheduled?: boolean
 }
 
 export type WorkingHour = {
@@ -410,25 +440,43 @@ export async function fetchBarbershopById(id: string) {
 
 export async function fetchAvailableTimes(payload: {
   barberId: string
-  serviceId: string
+  serviceId?: string
+  serviceIds?: string[]
   day: string
 }) {
-  const query = new URLSearchParams(payload)
+  const query = new URLSearchParams({
+    barberId: payload.barberId,
+    day: payload.day,
+  })
+
+  if (payload.serviceIds?.length) {
+    query.set('serviceIds', payload.serviceIds.join(','))
+  } else if (payload.serviceId) {
+    query.set('serviceId', payload.serviceId)
+  }
+
   return apiRequest<string[]>('/availability?' + query.toString())
 }
 
 export async function createBooking(payload: {
   barberId: string
-  serviceId: string
+  serviceId?: string
+  serviceIds?: string[]
   barbershopId: string
   day: string
   time: string
 }) {
+  const serviceIds = payload.serviceIds?.length
+    ? payload.serviceIds
+    : payload.serviceId
+      ? [payload.serviceId]
+      : []
+
   const data = await apiRequest<ApiBooking>('/bookings', {
     method: 'POST',
     body: JSON.stringify({
       barberId: payload.barberId,
-      serviceIds: [payload.serviceId],
+      serviceIds,
       barbershopId: payload.barbershopId,
       day: payload.day,
       startTime: payload.time,
@@ -660,6 +708,36 @@ export async function fetchAdminUsers() {
   return apiRequest<AdminUserRow[]>('/admin/users')
 }
 
+export async function fetchPlanPrices() {
+  return apiRequest<PlanPrice[]>('/admin/plans/prices')
+}
+
+export async function fetchSuperAdminPlans() {
+  const data = await apiRequest<SuperAdminPlansSummary>('/admin/plans')
+  return {
+    prices: data.prices,
+    barbershops: data.barbershops.map(mapAdminBarbershop),
+    priceEmailSent: data.priceEmailSent,
+    priceEmailScheduled: data.priceEmailScheduled,
+  }
+}
+
+export async function updatePlanPrices(
+  prices: Array<{ plan: 'FREE' | 'BASIC' | 'PRO'; amount: number | null }>,
+) {
+  const data = await apiRequest<SuperAdminPlansSummary>('/admin/plans/prices', {
+    method: 'PATCH',
+    body: JSON.stringify({ prices }),
+  })
+
+  return {
+    prices: data.prices,
+    barbershops: data.barbershops.map(mapAdminBarbershop),
+    priceEmailSent: data.priceEmailSent,
+    priceEmailScheduled: data.priceEmailScheduled,
+  }
+}
+
 export async function createAdminBarbershop(payload: {
   name: string
   slug: string
@@ -673,6 +751,23 @@ export async function createAdminBarbershop(payload: {
   }
 }) {
   return apiRequest<AdminBarbershop>('/admin/barbershops', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function registerPartnerBarbershop(payload: {
+  name: string
+  slug: string
+  cnpj?: string
+  address: string
+  phoneOwner: string
+  admin: {
+    email: string
+    password: string
+  }
+}) {
+  return apiRequest<AdminBarbershop>('/barbershops/partner-signup', {
     method: 'POST',
     body: JSON.stringify(payload),
   })
@@ -694,6 +789,25 @@ export async function updateAdminBarbershop(
     method: 'PATCH',
     body: JSON.stringify(payload),
   })
+  return mapAdminBarbershop(data)
+}
+
+export async function createPlanPayment(
+  barbershopId: string,
+  plan: 'FREE' | 'BASIC' | 'PRO',
+) {
+  return apiRequest<PlanPayment>('/admin/barbershops/' + barbershopId + '/plan-payments', {
+    method: 'POST',
+    body: JSON.stringify({ plan }),
+  })
+}
+
+export async function cancelBarbershopSubscription(barbershopId: string) {
+  const data = await apiRequest<AdminBarbershop>(
+    '/admin/barbershops/' + barbershopId + '/subscription/cancel',
+    { method: 'PATCH' },
+  )
+
   return mapAdminBarbershop(data)
 }
 

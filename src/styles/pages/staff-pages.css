@@ -1,0 +1,1258 @@
+/* Pagina: Agenda semanal do barbeiro/admin */
+.staff-week-page,
+.quick-booking-page {
+  width: min(1060px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 30px 0 64px;
+}
+
+/* Pagina: Agenda semanal - cabecalho */
+.staff-week-header,
+.quick-booking-page > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+/* Pagina: Agenda semanal - titulo */
+.staff-week-header h1,
+.quick-booking-page h1 {
+  margin: 3px 0 1px;
+  font-size: clamp(2rem, 3.2vw, 2.65rem);
+  line-height: 0.95;
+  color: var(--text-strong);
+}
+
+/* Pagina: Agenda semanal - subtitulo */
+.staff-week-header p,
+.quick-booking-page p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* Pagina: Agenda semanal - modo de acesso acima do titulo */
+.staff-week-header > div > span {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Pagina: Agenda semanal - botao principal */
+.staff-week-header .primary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 22px;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: var(--text-strong);
+  box-shadow: 0 10px 18px rgba(122, 91, 0, 0.24);
+  font-weight: 800;
+}
+
+/* Pagina: Agenda semanal - sinal do botao principal */
+.staff-week-header .primary-button span {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Pagina: Agenda semanal - barra de navegacao da semana */
+.staff-week-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 0 auto 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Pagina: Agenda semanal - intervalo de datas */
+.staff-week-toolbar div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid #d8dadd;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 6px 14px rgba(17, 17, 17, 0.08);
+  color: var(--text-strong);
+}
+
+/* Pagina: Agenda semanal - navegacao da semana */
+.staff-week-toolbar nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+/* Pagina: Agenda semanal - botoes da toolbar e acoes */
+.staff-week-toolbar button,
+.quick-booking-page > header > button,
+.staff-week-actions button {
+  min-width: 150px;
+  min-height: 40px;
+  padding: 7px 11px;
+  border: 1px solid #1f1f1f;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Pagina: Agenda semanal - cards de resumo */
+.staff-week-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0 16px;
+}
+
+/* Pagina: Agenda semanal - card individual de resumo */
+.staff-week-stats article {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 82px;
+  padding: 15px 16px 16px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 13px 24px rgba(17, 17, 17, 0.14);
+  overflow: hidden;
+}
+
+/* Pagina: Agenda semanal - label dos cards de resumo */
+.staff-week-stats span {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+/* Pagina: Agenda semanal - numeros dos cards de resumo */
+.staff-week-stats strong {
+  font-size: 1.85rem;
+  line-height: 1;
+  color: var(--text-strong);
+}
+
+/* Pagina: Agenda semanal - grade dos dias da semana */
+.staff-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(155px, 1fr));
+  gap: 9px;
+  overflow-x: auto;
+  padding: 0 0 18px;
+}
+
+/* Pagina: Agenda semanal - coluna de um dia */
+.staff-week-day {
+  min-height: 220px;
+  padding: 12px 10px 18px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-top: 5px solid #ffe285;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 13px 24px rgba(17, 17, 17, 0.13);
+}
+
+/* Pagina: Agenda semanal - cabecalho de cada dia */
+.staff-week-day > header {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+/* Pagina: Agenda semanal - nome do dia da semana */
+.staff-week-day > header span {
+  color: var(--text-strong);
+  font-size: 1.02rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+/* Pagina: Agenda semanal - textos menores do dia/agendamento */
+.staff-week-day > header small,
+.staff-week-booking small {
+  color: var(--text-muted);
+}
+
+/* Pagina: Agenda semanal - card de um agendamento */
+.staff-week-booking {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #f1d36c;
+  border-radius: 7px;
+  background: #fffaf0;
+}
+
+/* Pagina: Agenda semanal - informacoes principais do agendamento */
+.staff-week-booking > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+/* Pagina: Agenda semanal - texto do servico no agendamento */
+.staff-week-booking span {
+  font-size: 0.76rem;
+}
+
+/* Pagina: Agenda semanal - etiqueta de status */
+.staff-week-status {
+  width: fit-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #fff2ae;
+  font-size: 0.65rem !important;
+}
+
+/* Pagina: Agenda semanal - status concluido */
+.staff-week-status.completed {
+  background: #d6f8e7;
+  color: #087847;
+}
+
+/* Pagina: Agenda semanal - status cancelado */
+.staff-week-status.cancelled {
+  background: #ffe0e0;
+  color: #b42323;
+}
+
+/* Pagina: Agenda semanal - botoes dentro do agendamento */
+.staff-week-actions {
+  display: flex;
+  gap: 5px;
+}
+
+/* Pagina: Agenda semanal - botao individual do agendamento */
+.staff-week-actions button {
+  min-width: 0;
+  flex: 1;
+  padding: 6px;
+  font-size: 0.7rem;
+}
+
+/* Pagina: Agenda semanal - botao cancelar */
+.staff-week-actions .danger {
+  border-color: #efb5b5;
+  color: #b42323;
+}
+
+/* Pagina: Agenda semanal - mensagem quando o dia nao tem atendimento */
+.staff-week-empty {
+  color: #8a9096;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+/* Pagina: Disponibilidade do barbeiro */
+.availability-page {
+  width: min(720px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 42px 0 72px;
+}
+
+/* Pagina: Disponibilidade - titulo */
+.availability-page h1 {
+  margin: 0 0 18px;
+  font-size: clamp(3rem, 5.8vw, 4.6rem);
+  line-height: 0.98;
+  color: var(--text-strong);
+  font-weight: 500;
+}
+
+/* Pagina: Disponibilidade - card principal */
+.availability-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(17, 17, 17, 0.09);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 32px rgba(92, 76, 20, 0.16);
+  backdrop-filter: blur(2px);
+}
+
+/* Pagina: Disponibilidade - linha de dia */
+.availability-row {
+  display: grid;
+  grid-template-columns: 48px minmax(120px, 1fr) minmax(170px, 1.1fr) minmax(170px, 1.1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 14px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 6px 13px rgba(17, 17, 17, 0.08);
+}
+
+/* Pagina: Disponibilidade - nome do dia */
+.availability-row strong {
+  color: var(--text-strong);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Pagina: Disponibilidade - grupo de horario */
+.availability-row label:not(.availability-switch) {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+/* Pagina: Disponibilidade - input de hora */
+.availability-row input[type='time'] {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #d8dadd;
+  border-radius: 7px;
+  background: #f8f8f4;
+  color: var(--text-strong);
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+/* Pagina: Disponibilidade - input desabilitado */
+.availability-row input[type='time']:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+/* Pagina: Disponibilidade - switch */
+.availability-switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  cursor: pointer;
+}
+
+/* Pagina: Disponibilidade - checkbox nativo escondido */
+.availability-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Pagina: Disponibilidade - trilho do switch */
+.availability-switch span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  border-radius: 999px;
+  background: #d8d8d2;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* Pagina: Disponibilidade - bolinha do switch */
+.availability-switch span::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(17, 17, 17, 0.28);
+  transition: transform 0.2s;
+}
+
+/* Pagina: Disponibilidade - switch ativo */
+.availability-switch input:checked + span {
+  border-color: var(--accent);
+  background: #6c6c62;
+}
+
+/* Pagina: Disponibilidade - bolinha ativa */
+.availability-switch input:checked + span::after {
+  transform: translateX(18px);
+  background: var(--accent);
+}
+
+/* Pagina: Disponibilidade - botao salvar */
+.availability-save {
+  min-height: 52px;
+  margin-top: 6px;
+  border: 1px solid #d9a800;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffd95c, #d9a800);
+  color: var(--text-strong);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(122, 91, 0, 0.2);
+}
+
+/* Pagina: Disponibilidade - botao salvar desabilitado */
+.availability-save:disabled {
+  opacity: 0.68;
+  cursor: wait;
+}
+
+.quick-booking-page {
+  max-width: 920px;
+}
+
+.quick-booking-page > header {
+  justify-content: flex-start;
+}
+
+.quick-booking-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid #e0e2e5;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.quick-booking-card label {
+  display: grid;
+  gap: 7px;
+  color: #252525;
+  font-weight: 700;
+}
+
+.quick-booking-card input,
+.quick-booking-card select {
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid #d6d9dd;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+}
+
+.quick-booking-card small {
+  color: #858b92;
+  font-weight: 400;
+}
+
+.quick-booking-card .wide {
+  grid-column: 1 / -1;
+}
+
+.role-main .ops-card-icon,
+.role-main .ops-panel-icon {
+  display: none;
+}
+
+.admin-booking-link-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 22px;
+  padding: 18px 20px;
+  border: 1px solid #f2bf00;
+  border-radius: 8px;
+  background: rgba(255, 244, 204, 0.92);
+  box-shadow: 0 12px 26px rgba(181, 138, 0, 0.12);
+}
+
+.admin-booking-link-card span {
+  color: #b58a00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.admin-booking-link-card p {
+  max-width: 680px;
+  margin-top: 6px;
+  overflow: hidden;
+  color: #5f4b00;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.admin-booking-link-card button {
+  flex: 0 0 auto;
+  min-height: 42px;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: #111;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .admin-booking-link-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-booking-link-card p {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+/* Pagina: Planos da barbearia */
+.subscription-page {
+  width: min(1060px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 30px 0 64px;
+}
+
+.subscription-header {
+  margin-bottom: 22px;
+}
+
+.subscription-header span {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.subscription-header h1 {
+  margin: 3px 0 1px;
+  font-size: clamp(2rem, 3.2vw, 2.65rem);
+  line-height: 0.95;
+}
+
+.subscription-header p {
+  color: var(--text-muted);
+}
+
+.subscription-panel,
+.subscription-current,
+.subscription-card {
+  border: 1px solid #e5e5df;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.06);
+}
+
+.subscription-panel {
+  padding: 24px;
+  color: var(--text-muted);
+}
+
+.subscription-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 20px 22px;
+}
+
+.subscription-current span,
+.subscription-card > .subscription-badge {
+  color: #b58a00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.subscription-current h2 {
+  margin-top: 4px;
+  font-size: 1.7rem;
+}
+
+.subscription-current p {
+  margin-top: 3px;
+  color: var(--text-muted);
+}
+
+.subscription-current-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.subscription-current-actions strong {
+  color: #b58a00;
+  font-size: 1.35rem;
+  text-align: right;
+}
+
+.subscription-current-actions button {
+  min-height: 42px;
+  border: 1px solid #d6d9dd;
+  border-radius: 7px;
+  padding: 0 16px;
+  background: #fff;
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.subscription-current-actions button:hover:not(:disabled) {
+  border-color: #f2bf00;
+}
+
+.subscription-current-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.subscription-payment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 18px 24px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid #f2bf00;
+  border-radius: 8px;
+  background: rgba(255, 250, 232, 0.96);
+  box-shadow: 0 12px 28px rgba(122, 91, 0, 0.12);
+}
+
+.subscription-payment span {
+  color: #b58a00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.subscription-payment h2 {
+  margin-top: 4px;
+  font-size: 1.55rem;
+}
+
+.subscription-payment p {
+  margin-top: 6px;
+  color: var(--text-muted);
+}
+
+.subscription-payment img {
+  width: 180px;
+  height: 180px;
+  padding: 10px;
+  border: 1px solid #e5e5df;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.subscription-payment label {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 8px;
+  color: #5f6873;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.subscription-payment textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #d6d9dd;
+  border-radius: 8px;
+  padding: 12px;
+  color: #111;
+  font: inherit;
+}
+
+.subscription-payment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  gap: 10px;
+}
+
+.subscription-payment-actions button,
+.subscription-payment-actions a {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.subscription-payment-actions .ghost {
+  border-color: #d6d9dd;
+  background: #fff;
+}
+
+.subscription-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.subscription-card {
+  position: relative;
+  display: flex;
+  min-height: 420px;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.subscription-card.active {
+  border-color: #f2bf00;
+  box-shadow: 0 14px 30px rgba(122, 91, 0, 0.14);
+}
+
+.subscription-card h2 {
+  margin-top: 18px;
+  font-size: 1.35rem;
+}
+
+.subscription-card strong {
+  margin-top: 8px;
+  color: #b58a00;
+  font-size: 1.45rem;
+}
+
+.subscription-card p {
+  min-height: 68px;
+  margin-top: 12px;
+  color: var(--text-muted);
+}
+
+.subscription-card ul {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.subscription-card li {
+  color: #555d66;
+  font-size: 0.92rem;
+}
+
+.subscription-card li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: #16834b;
+  vertical-align: middle;
+}
+
+.subscription-card button {
+  min-height: 44px;
+  margin-top: auto;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.subscription-card button.ghost {
+  border-color: #1f1f1f;
+  background: #ffffff;
+}
+
+.subscription-card button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+@media (max-width: 860px) {
+  .subscription-current {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .subscription-current-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .subscription-current-actions strong {
+    text-align: left;
+  }
+
+  .subscription-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-payment {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-payment img {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* Pagina: Super Admin Planos */
+.super-plans-page {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 28px 0 64px;
+}
+
+.super-plans-shell {
+  padding: 24px;
+  border: 1px solid #e8e1d2;
+  border-radius: 8px;
+  background: rgba(255, 252, 244, 0.96);
+  box-shadow: 0 16px 34px rgba(17, 17, 17, 0.08);
+}
+
+.super-plans-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.super-plans-header span,
+.super-price-panel > div > span,
+.super-plans-table-title span {
+  color: #b58a00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.super-plans-header h1 {
+  margin-top: 4px;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+}
+
+.super-plans-header p,
+.super-price-panel p {
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+
+.super-plans-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.super-plans-stats article,
+.super-price-panel,
+.super-plans-table-card {
+  border: 1px solid #e4dccb;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.super-plans-stats article {
+  display: grid;
+  gap: 8px;
+  min-height: 120px;
+  padding: 18px;
+}
+
+.super-plans-stats span {
+  color: #6f7680;
+  font-weight: 700;
+}
+
+.super-plans-stats strong {
+  color: #0f0f0f;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.super-plans-stats small {
+  color: #6f7680;
+}
+
+.super-plans-stats em {
+  color: #b58a00;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.super-price-panel {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 22px;
+  padding: 20px;
+}
+
+.super-price-panel h2,
+.super-plans-table-title h2 {
+  margin-top: 2px;
+  font-size: 1.35rem;
+}
+
+.super-price-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.super-price-grid label {
+  display: grid;
+  gap: 8px;
+  color: #6f7680;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.super-price-grid input {
+  min-height: 44px;
+  border: 1px solid #d6d9dd;
+  border-radius: 7px;
+  padding: 0 12px;
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+}
+
+.super-price-grid input:disabled {
+  color: #777;
+  background: #f6f3ea;
+}
+
+.super-price-pending {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.super-price-pending span {
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #fff4cc;
+  color: #8a6700;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.super-price-panel > button {
+  justify-self: start;
+  min-height: 44px;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: #111;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.super-price-panel > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.super-plans-table-card {
+  padding: 20px;
+}
+
+.super-plans-table-title {
+  margin-bottom: 12px;
+}
+
+.super-plans-table {
+  overflow-x: auto;
+}
+
+.super-plans-row {
+  display: grid;
+  grid-template-columns: 1.5fr 0.9fr 0.8fr 1.2fr 0.8fr;
+  gap: 12px;
+  align-items: center;
+  min-width: 780px;
+  padding: 13px 0;
+  border-top: 1px solid #eee7d8;
+}
+
+.super-plans-row.head {
+  border-top: 0;
+  color: #6f7680;
+  font-size: 0.78rem;
+}
+
+.super-plans-row select {
+  min-height: 38px;
+  border: 1px solid #e4dccb;
+  border-radius: 7px;
+  padding: 0 10px;
+  background: #fffaf0;
+  color: #111;
+  font-weight: 700;
+}
+
+.super-plan-status {
+  justify-self: start;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.super-plan-status.active {
+  background: #e6f7e9;
+  color: #167a36;
+}
+
+.super-plan-status.pending {
+  background: #fff4cc;
+  color: #8a6700;
+}
+
+.super-plans-row button {
+  min-height: 38px;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: #111;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.super-plans-row button.outline {
+  border-color: #f2c3c3;
+  background: #fff;
+  color: #a62e2e;
+}
+
+.super-plans-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (max-width: 860px) {
+  .super-plans-page {
+    width: min(100% - 24px, 1100px);
+  }
+
+  .super-plans-shell {
+    padding: 18px;
+  }
+
+  .super-plans-stats,
+  .super-price-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Pagina: Super Admin Barbearias */
+.super-shops-page {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 28px 0 64px;
+}
+
+.super-shops-shell {
+  padding: 24px;
+  border: 1px solid #e8e1d2;
+  border-radius: 8px;
+  background: rgba(255, 252, 244, 0.96);
+  box-shadow: 0 16px 34px rgba(17, 17, 17, 0.08);
+}
+
+.super-shops-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.super-shops-header span,
+.super-shops-card-header span {
+  color: #b58a00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.super-shops-header h1 {
+  margin-top: 4px;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+}
+
+.super-shops-header p {
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+
+.super-shops-header button {
+  min-height: 44px;
+  border: 1px solid #f2bf00;
+  border-radius: 7px;
+  padding: 0 20px;
+  background: linear-gradient(180deg, #ffd95c, var(--accent));
+  color: #111;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.super-shops-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.super-shops-stats article,
+.super-shops-card {
+  border: 1px solid #e4dccb;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.super-shops-stats article {
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  padding: 18px;
+}
+
+.super-shops-stats span {
+  color: #6f7680;
+  font-weight: 700;
+}
+
+.super-shops-stats strong {
+  color: #0f0f0f;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.super-shops-stats small {
+  color: #6f7680;
+}
+
+.super-shops-card {
+  padding: 20px 22px;
+}
+
+.super-shops-card-header {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(180px, 1fr);
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.super-shops-card-header h2 {
+  margin-top: 2px;
+  max-width: 210px;
+  font-size: 1.35rem;
+}
+
+.super-shops-card-header select {
+  min-height: 42px;
+  border: 1px solid #e4dccb;
+  border-radius: 7px;
+  padding: 0 12px;
+  background: #fffaf0;
+  color: #111;
+  font-weight: 700;
+}
+
+.super-shops-table {
+  overflow-x: auto;
+}
+
+.super-shops-row {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr 0.9fr 1.4fr 0.9fr;
+  gap: 12px;
+  align-items: center;
+  min-width: 760px;
+  padding: 14px 0;
+  border-top: 1px solid #eee7d8;
+}
+
+.super-shops-row.head {
+  border-top: 0;
+  color: #6f7680;
+  font-size: 0.78rem;
+}
+
+.super-shops-row > strong {
+  color: #111;
+  font-weight: 800;
+}
+
+.super-shops-row > span {
+  color: #6f7680;
+}
+
+.super-shops-plan,
+.super-shops-status {
+  justify-self: start;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.super-shops-plan {
+  background: #f2f0ea;
+  color: #6d6659;
+}
+
+.super-shops-status.active {
+  background: #e6f7e9;
+  color: #167a36;
+}
+
+.super-shops-status.pending {
+  background: #fff4cc;
+  color: #8a6700;
+}
+
+@media (max-width: 980px) {
+  .super-shops-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .super-shops-page {
+    width: min(100% - 24px, 1100px);
+  }
+
+  .super-shops-shell {
+    padding: 18px;
+  }
+
+  .super-shops-header {
+    flex-direction: column;
+  }
+
+  .super-shops-card-header,
+  .super-shops-stats {
+    grid-template-columns: 1fr;
+  }
+}

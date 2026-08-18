@@ -160,7 +160,7 @@ export function CustomerProfilePage({ navigate, notify }: CustomerProfilePagePro
             <div className="muted">Você será desconectado da sua conta.</div>
           </div>
           <div>
-            <button className="logout-button" onClick={() => { logout(); navigate('/') }}>Sair</button>
+            <button className="logout-button" onClick={async () => { await logout(); navigate('/home'); window.scrollTo({ top: 0, behavior: 'auto' }) }}>Sair</button>
           </div>
         </div>
       </div>

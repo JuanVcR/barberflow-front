@@ -31,7 +31,7 @@ export function BarberHistoryPage({ navigate, notify }: BarberHistoryPageProps) 
 
   return (
     <div style={{ padding: 20, maxWidth: 1000, margin: '0 auto' }}>
-      <button onClick={() => navigate('/professional/agenda')}>Voltar</button>
+      <button className="back-button" onClick={() => navigate('/professional/agenda')}>Voltar</button>
       <h1>Histórico de Atendimentos</h1>
 
       <div className="ops-stat-grid">

@@ -46,7 +46,7 @@ export function BlockingPage({ navigate, notify }: BlockingPageProps) {
 
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>
-      <button onClick={() => navigate('/professional/agenda')}>Voltar</button>
+      <button className="back-button" onClick={() => navigate('/professional/agenda')}>Voltar</button>
       <h1>Bloqueios</h1>
       <div style={{ display: 'grid', gap: 10, padding: 20, background: '#f5f5f5' }}>
         <input type="date" value={form.day} onChange={(event) => setForm({ ...form, day: event.target.value })} />

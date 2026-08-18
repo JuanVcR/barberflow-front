@@ -83,6 +83,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
       : false
   const dashboardPath = getDashboardPathForRole(activeUser?.role, activeUser?.accountRole)
   const currentPath = window.location.hash.replace(/^#/, '') || '/'
+  const isVisitor = !isAuthenticated && !isPartnerAuthenticated
   const dashboardLabel =
     accountRole === 'SUPER_ADMIN'
       ? 'Super ADM'
@@ -109,6 +110,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
             { label: 'Barbeiros', path: '/admin/barber-management', icon: UsersIcon, active: ['admin-barber-management', 'admin-barber-day', 'admin-barber-history'].includes(currentRoute) },
             { label: 'Convidar', path: '/admin/barber-invites', icon: MailIcon, active: currentRoute === 'admin-barber-invites' },
             { label: 'Serviços', path: '/admin/service-management', icon: ScissorsIcon, active: currentRoute === 'admin-service-management' },
+            { label: 'Planos', path: '/admin/plans', icon: ClipboardIcon, active: currentRoute === 'admin-subscription' },
             { label: 'Configurações', path: '/admin/settings', icon: SettingsIcon, active: currentRoute === 'admin-settings' },
           ]
         : accountRole === 'CLIENT' || activeUser?.role === 'customer'
@@ -125,9 +127,10 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
             { label: 'Perfil', path: '/professional/profile', icon: UserIcon, active: currentRoute === 'professional-profile' },
           ]
 
-  const handleLogout = () => {
-    logout()
-    navigate('/')
+  const handleLogout = async () => {
+    await logout()
+    navigate('/home')
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const goTo = (path: string) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -138,6 +141,18 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
   const goToOnTouch = (path: string) => (event: TouchEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     navigate(path)
+  }
+
+  const scrollToLandingSection = (sectionId: string) => {
+    const scroll = () => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+
+    if (currentRoute !== 'landing' && currentRoute !== 'home') {
+      navigate('/')
+      window.setTimeout(scroll, 120)
+      return
+    }
+
+    scroll()
   }
 
   if (currentRoute === 'auth-barber-invite') {
@@ -151,11 +166,10 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
 
   if (hasRoleShell) {
     return (
-      <div className="role-app-shell" style={{ background: '#ffffff', color: '#111111' }}>
+      <div className="role-app-shell">
         <aside
           className="role-sidebar"
           aria-label="Navegação do painel"
-          style={{ background: '#ffffff', color: '#111111', borderColor: '#eeeeee' }}
         >
           <button className="role-brand" onClick={() => navigate(dashboardPath)}>
             {accountRole === 'SUPER_ADMIN' ? <ShieldIcon className="icon-sm" /> : <ScissorsIcon className="icon-sm" />}
@@ -190,7 +204,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
           </button>
         </aside>
 
-        <main className="role-main" style={{ background: '#ffffff', color: '#111111' }}>
+        <main className="role-main">
           <div className="page-transition" key={currentPath}>{children}</div>
         </main>
 
@@ -200,7 +214,7 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
   }
 
   return (
-    <div className="app-shell">
+    <div className={'app-shell ' + (currentRoute === 'landing' || currentRoute === 'home' ? 'public-landing-shell' : '')}>
       <header className="site-header">
         <div className="shell container header-row">
           <a className="brand" href="#/" onClick={goTo('/')} onTouchEnd={goToOnTouch('/')}>
@@ -209,23 +223,36 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
           </a>
 
           <nav className="desktop-nav" aria-label="Primary">
-            <a
-              className={'nav-link ' + (currentRoute === 'home' ? 'active' : '')}
-              href="#/"
-              onClick={goTo('/')}
-              onTouchEnd={goToOnTouch('/')}
-            >
-              <HomeIcon className="icon-sm" />
-              {'In\u00edcio'}
-            </a>
-            <a
-              className={'nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
-              href="#/barbershops"
-              onClick={goTo('/barbershops')}
-              onTouchEnd={goToOnTouch('/barbershops')}
-            >
-              {'Barbearias'}
-            </a>
+            {isVisitor ? (
+              <>
+                <button className="nav-link active" onClick={() => scrollToLandingSection('inicio')}>{'Início'}</button>
+                <button className="nav-link" onClick={() => scrollToLandingSection('como-funciona')}>{'Como funciona?'}</button>
+                <button className="nav-link" onClick={() => scrollToLandingSection('funcionalidades')}>{'Funcionalidades'}</button>
+                <button className="nav-link" onClick={() => scrollToLandingSection('planos')}>{'Planos'}</button>
+                <button className="nav-link" onClick={() => scrollToLandingSection('duvidas')}>{'Dúvidas'}</button>
+                <button className="nav-link" onClick={() => scrollToLandingSection('contato')}>{'Contato'}</button>
+              </>
+            ) : (
+              <>
+                <a
+                  className={'nav-link ' + (currentRoute === 'home' ? 'active' : '')}
+                  href="#/"
+                  onClick={goTo('/')}
+                  onTouchEnd={goToOnTouch('/')}
+                >
+                  <HomeIcon className="icon-sm" />
+                  {'In\u00edcio'}
+                </a>
+                <a
+                  className={'nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
+                  href="#/barbershops"
+                  onClick={goTo('/barbershops')}
+                  onTouchEnd={goToOnTouch('/barbershops')}
+                >
+                  {'Barbearias'}
+                </a>
+              </>
+            )}
             {activeUser && (
               <a
                 className={'nav-link ' + (currentRoute === 'account' ? 'active' : '')}
@@ -277,9 +304,9 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
                 </a>
                 <a
                   className="primary-button"
-                  href="#/register"
-                  onClick={goTo('/register')}
-                  onTouchEnd={goToOnTouch('/register')}
+                  href="#/partner/create"
+                  onClick={goTo('/partner/create')}
+                  onTouchEnd={goToOnTouch('/partner/create')}
                 >
                   {'Criar conta'}
                 </a>
@@ -289,24 +316,33 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
         </div>
 
         <div className="shell mobile-nav" aria-label="Mobile navigation">
-          <a
-            className={'mobile-nav-link ' + (currentRoute === 'home' ? 'active' : '')}
-            href="#/"
-            onClick={goTo('/')}
-            onTouchEnd={goToOnTouch('/')}
-          >
-            <HomeIcon className="icon-sm" />
-            <span>{'In\u00edcio'}</span>
-          </a>
-          <a
-            className={'mobile-nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
-            href="#/barbershops"
-            onClick={goTo('/barbershops')}
-            onTouchEnd={goToOnTouch('/barbershops')}
-          >
-            <ScissorsIcon className="icon-sm" />
-            <span>{'Barbearias'}</span>
-          </a>
+          {isVisitor ? (
+            <>
+              <button className="mobile-nav-link active" onClick={() => scrollToLandingSection('inicio')}><HomeIcon className="icon-sm" /><span>{'Início'}</span></button>
+              <button className="mobile-nav-link" onClick={() => scrollToLandingSection('funcionalidades')}><ScissorsIcon className="icon-sm" /><span>{'Funções'}</span></button>
+            </>
+          ) : (
+            <>
+              <a
+                className={'mobile-nav-link ' + (currentRoute === 'home' ? 'active' : '')}
+                href="#/"
+                onClick={goTo('/')}
+                onTouchEnd={goToOnTouch('/')}
+              >
+                <HomeIcon className="icon-sm" />
+                <span>{'In\u00edcio'}</span>
+              </a>
+              <a
+                className={'mobile-nav-link ' + (currentRoute === 'barbershops' ? 'active' : '')}
+                href="#/barbershops"
+                onClick={goTo('/barbershops')}
+                onTouchEnd={goToOnTouch('/barbershops')}
+              >
+                <ScissorsIcon className="icon-sm" />
+                <span>{'Barbearias'}</span>
+              </a>
+            </>
+          )}
           <a
             className={'mobile-nav-link ' + (currentRoute === 'account' ? 'active' : '')}
             href={'#' + (activeUser ? dashboardPath : '/login')}
@@ -323,25 +359,9 @@ export function Layout({ children, currentRoute, navigate, toasts, dismissToast 
 
       <footer className="site-footer">
         <div className="shell container footer-grid">
-          <div>
-            <h3>{'Sobre'}</h3>
-            <ul>
-              <li>{'Quem somos'}</li>
-              <li>{'Nossa hist\u00f3ria'}</li>
-              <li>{'Trabalhe conosco'}</li>
-            </ul>
-          </div>
-          <div>
-            <h3>{'Links r\u00e1pidos'}</h3>
-            <ul>
-              <li>
-                <button onClick={() => navigate('/barbershops')}>{'Barbearias'}</button>
-              </li>
-              <li>
-                <button onClick={() => navigate('/partner/login')}>{'\u00c1rea do parceiro'}</button>
-              </li>
-              <li>{'FAQ'}</li>
-            </ul>
+          <div className="footer-brand">
+            <h3>{'BarberFlow'}</h3>
+            <p>{'Agendamento online e gestão simples para barbearias.'}</p>
           </div>
           <div>
             <h3>{'Contato'}</h3>

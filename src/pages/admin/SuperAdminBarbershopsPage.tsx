@@ -45,50 +45,49 @@ export function SuperAdminBarbershopsPage({
   const proPlan = barbershops.filter((barbershop) => barbershop.plan === 'PRO').length
 
   return (
-    <section className="ops-page ops-page-gold">
-      <div className="ops-workspace">
-        <header className="ops-hero ops-hero-gold">
+    <section className="super-shops-page">
+      <div className="super-shops-shell">
+        <header className="super-shops-header">
           <div>
-            <span className="ops-kicker">Super ADM</span>
+            <span>Super ADM</span>
             <h1>Barbearias</h1>
             <p>Unidades cadastradas na plataforma.</p>
           </div>
-          <button className="ops-action dark" onClick={() => navigate('/admin/dashboard')}>
-            Voltar
+          <button onClick={() => navigate('/admin/dashboard')}>
+            ← Voltar
           </button>
         </header>
 
-        <div className="ops-stat-grid">
-          <article className="ops-stat-card accent-gold">
+        <div className="super-shops-stats">
+          <article>
             <span>Total</span>
             <strong>{loading ? '-' : barbershops.length}</strong>
             <small>Barbearias cadastradas</small>
           </article>
-          <article className="ops-stat-card accent-gold">
+          <article>
             <span>Ativas</span>
             <strong>{loading ? '-' : active}</strong>
             <small>Configuração concluída</small>
           </article>
-          <article className="ops-stat-card accent-gold">
+          <article>
             <span>Pendentes</span>
             <strong>{loading ? '-' : pending}</strong>
             <small>Aguardando configuração</small>
           </article>
-          <article className="ops-stat-card accent-gold">
+          <article>
             <span>Plano Pro</span>
             <strong>{loading ? '-' : proPlan}</strong>
             <small>Unidades no plano PRO</small>
           </article>
         </div>
 
-        <section className="ops-panel">
-          <div className="ops-panel-header">
+        <section className="super-shops-card">
+          <div className="super-shops-card-header">
             <div>
-              <span className="ops-kicker">Lista</span>
+              <span>Lista</span>
               <h2>Barbearias cadastradas</h2>
             </div>
             <select
-              className="ops-select"
               value={filter}
               onChange={(event) => setFilter(event.target.value as typeof filter)}
             >
@@ -98,8 +97,8 @@ export function SuperAdminBarbershopsPage({
             </select>
           </div>
 
-          <div className="ops-table ops-table-five">
-            <div className="ops-table-row">
+          <div className="super-shops-table">
+            <div className="super-shops-row head">
               <strong>Nome</strong>
               <span>Plano</span>
               <span>Status</span>
@@ -107,10 +106,10 @@ export function SuperAdminBarbershopsPage({
               <span>Cadastro</span>
             </div>
             {visibleBarbershops.map((barbershop) => (
-              <div className="ops-table-row" key={barbershop.id}>
+              <div className="super-shops-row" key={barbershop.id}>
                 <strong>{barbershop.name}</strong>
-                <span>{barbershop.plan ?? 'FREE'}</span>
-                <span className={'ops-badge ' + (barbershop.setupCompleted ? 'ok' : 'warn')}>
+                <span className="super-shops-plan">{barbershop.plan ?? 'FREE'}</span>
+                <span className={'super-shops-status ' + (barbershop.setupCompleted ? 'active' : 'pending')}>
                   {barbershop.setupCompleted ? 'Ativa' : 'Pendente'}
                 </span>
                 <span>{barbershop.slug}</span>
@@ -118,7 +117,7 @@ export function SuperAdminBarbershopsPage({
               </div>
             ))}
             {!loading && visibleBarbershops.length === 0 ? (
-              <div className="ops-table-row">
+              <div className="super-shops-row">
                 <strong>Nenhuma barbearia encontrada</strong>
                 <span>-</span><span>-</span><span>-</span><span>-</span>
               </div>

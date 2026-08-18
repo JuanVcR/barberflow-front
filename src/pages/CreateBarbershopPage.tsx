@@ -1,6 +1,11 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon, StoreIcon } from '../components/Icons'
-import { createAdminBarbershop, updateBarbershopLocation } from '../services/backend'
+import { useAuth } from '../context/useAuth'
+import {
+  createAdminBarbershop,
+  registerPartnerBarbershop,
+  updateBarbershopLocation,
+} from '../services/backend'
 
 interface CreateBarbershopPageProps {
   navigate: (path: string) => void
@@ -9,17 +14,22 @@ interface CreateBarbershopPageProps {
 }
 
 export function CreateBarbershopPage({ navigate, notify, isPartnerAuthenticated }: CreateBarbershopPageProps) {
-  const [formData, setFormData] = useState({ name: '', description: '', address: '', phone: '', email: '', startTime: '09:00', endTime: '18:00' })
+  const { loginPartner } = useAuth()
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    cnpj: '',
+    address: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    startTime: '09:00',
+    endTime: '18:00',
+  })
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null)
   const [isLocating, setIsLocating] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  useEffect(() => {
-    if (!isPartnerAuthenticated) {
-      notify('info', 'Faça login como parceiro antes de cadastrar uma barbearia.')
-      navigate('/partner/login')
-    }
-  }, [isPartnerAuthenticated, navigate, notify])
 
   const updateField = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((current) => ({ ...current, [event.target.name]: event.target.value }))
@@ -49,7 +59,7 @@ export function CreateBarbershopPage({ navigate, notify, isPartnerAuthenticated 
           longitude: coords.longitude,
         })
         setIsLocating(false)
-        notify('success', 'Localizacao capturada. Ela sera salva ao concluir o cadastro.')
+        notify('success', 'Localizacao capturada. Preencha o endereco com rua e numero.')
       },
       (error) => {
         setIsLocating(false)
@@ -65,6 +75,12 @@ export function CreateBarbershopPage({ navigate, notify, isPartnerAuthenticated 
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    if (!isPartnerAuthenticated && formData.password !== formData.confirmPassword) {
+      notify('error', 'As senhas precisam ser iguais.')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -76,18 +92,35 @@ export function CreateBarbershopPage({ navigate, notify, isPartnerAuthenticated 
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')
 
-      const barbershop = await createAdminBarbershop({
-        name: formData.name,
-        slug,
-        address: formData.address,
-        phoneOwner: formData.phone,
-      })
+      const barbershop = isPartnerAuthenticated
+        ? await createAdminBarbershop({
+            name: formData.name,
+            slug,
+            cnpj: formData.cnpj || undefined,
+            address: formData.address,
+            phoneOwner: formData.phone,
+          })
+        : await registerPartnerBarbershop({
+            name: formData.name,
+            slug,
+            cnpj: formData.cnpj || undefined,
+            address: formData.address,
+            phoneOwner: formData.phone,
+            admin: {
+              email: formData.email,
+              password: formData.password,
+            },
+          })
+
+      if (!isPartnerAuthenticated) {
+        await loginPartner(formData.email, formData.password)
+      }
 
       if (location) {
         await updateBarbershopLocation(barbershop.id, location)
       }
 
-      notify('success', 'Barbearia cadastrada com sucesso.')
+      notify('success', isPartnerAuthenticated ? 'Barbearia cadastrada com sucesso.' : 'Cadastro criado com sucesso.')
       navigate('/admin/barbershop-dashboard')
     } catch (error) {
       notify('error', error instanceof Error ? error.message : 'Nao foi possivel cadastrar a barbearia.')
@@ -109,12 +142,13 @@ export function CreateBarbershopPage({ navigate, notify, isPartnerAuthenticated 
           <div className="form-block">
             <h2>{'Informações Básicas'}</h2>
             <label><span>{'Nome da Barbearia'}</span><input name="name" value={formData.name} onChange={updateField} required /></label>
+            <label><span>{'CNPJ'}</span><input name="cnpj" value={formData.cnpj} onChange={updateField} placeholder="00.000.000/0000-00" /></label>
             <label><span>{'Descrição'}</span><textarea name="description" rows={5} value={formData.description} onChange={updateField} required /></label>
           </div>
 
           <div className="form-block">
             <h2>{'Localização e Contato'}</h2>
-            <label><span><MapPinIcon className="icon-xs" />{' Endereço'}</span><input name="address" value={formData.address} onChange={updateField} required /></label>
+            <label><span><MapPinIcon className="icon-xs" />{' Endereço'}</span><input name="address" value={formData.address} onChange={updateField} placeholder="Rua, número, bairro e cidade" required /></label>
             <button className="outline-button" type="button" onClick={handleUseLocation} disabled={isLocating || isSubmitting}>
               <MapPinIcon className="icon-xs" />
               {isLocating ? ' Obtendo localizacao...' : location ? ' Localizacao capturada' : ' Usar minha localizacao'}
@@ -124,6 +158,17 @@ export function CreateBarbershopPage({ navigate, notify, isPartnerAuthenticated 
               <label><span><MailIcon className="icon-xs" />{' Email'}</span><input type="email" name="email" value={formData.email} onChange={updateField} required /></label>
             </div>
           </div>
+
+          {!isPartnerAuthenticated && (
+            <div className="form-block">
+              <h2>{'Acesso do parceiro'}</h2>
+              <div className="two-columns">
+                <label><span>{'Senha'}</span><input type="password" name="password" value={formData.password} onChange={updateField} required minLength={8} /></label>
+                <label><span>{'Confirmar senha'}</span><input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={updateField} required minLength={8} /></label>
+              </div>
+              <p className="muted-text">{'Use maiúscula, minúscula, número e símbolo.'}</p>
+            </div>
+          )}
 
           <div className="form-block">
             <h2><ClockIcon className="icon-sm" />{' Horário de Funcionamento'}</h2>

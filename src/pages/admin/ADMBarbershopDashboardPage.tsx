@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { CalendarIcon, ScissorsIcon } from '../../components/Icons'
 import {
   fetchAdminBarbershopDashboard,
   fetchAdminBarbershops,
@@ -105,6 +104,20 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
   }
 
   const barbershopName = dashboard?.barbershop.name ?? 'Dashboard'
+  const bookingLink = dashboard?.barbershop.slug
+    ? `${window.location.origin}/#/public/barbershop/${dashboard.barbershop.slug}`
+    : ''
+
+  const copyBookingLink = async () => {
+    if (!bookingLink) return
+
+    try {
+      await navigator.clipboard.writeText(bookingLink)
+      notify('success', 'Link de agendamento copiado')
+    } catch {
+      notify('error', 'Nao foi possivel copiar o link')
+    }
+  }
 
   return (
     <section className="ops-page ops-page-gold">
@@ -119,7 +132,6 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
         <div className="ops-stat-grid">
           <article className="ops-stat-card accent-gold">
             <span>Agendamentos hoje</span>
-            <CalendarIcon className="ops-card-icon" />
             <strong>{loading ? '-' : dashboard?.todayBookings ?? 0}</strong>
             <small>Registrados para hoje</small>
           </article>
@@ -130,17 +142,27 @@ export function ADMBarbershopDashboardPage({ navigate, notify }: ADMBarbershopDa
           </article>
           <article className="ops-stat-card accent-gold">
             <span>Barbeiros ativos</span>
-            <ScissorsIcon className="ops-card-icon" />
             <strong>{loading ? '-' : dashboard?.barbers.length ?? 0}</strong>
             <small>Cadastrados</small>
           </article>
           <article className="ops-stat-card accent-gold">
             <span>Serviços cadastrados</span>
-            <ScissorsIcon className="ops-card-icon" />
             <strong>{loading ? '-' : dashboard?.services.length ?? 0}</strong>
             <small>{dashboard?.totalBookings ?? 0} agendamentos no total</small>
           </article>
         </div>
+
+        {bookingLink ? (
+          <section className="admin-booking-link-card">
+            <div>
+              <span>Link de agendamento</span>
+              <p>{bookingLink}</p>
+            </div>
+            <button type="button" onClick={() => void copyBookingLink()}>
+              Copiar link
+            </button>
+          </section>
+        ) : null}
 
         <div className="ops-two-columns wide-left">
           <section className="ops-panel dashboard-list-panel">

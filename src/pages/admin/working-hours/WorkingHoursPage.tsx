@@ -56,7 +56,7 @@ export function WorkingHoursPage({ barbershopId, navigate, notify }: WorkingHour
 
   return (
     <div style={{ padding: 24, maxWidth: 820, margin: '0 auto' }}>
-      <button onClick={() => navigate('/admin/dashboard')}>Voltar</button>
+      <button className="back-button" onClick={() => navigate('/admin/dashboard')}>Voltar</button>
       <h1>Horarios de funcionamento</h1>
 
       <select value={selectedShop} onChange={(e) => setSelectedShop(e.target.value)} style={{ margin: '16px 0', padding: 10 }}>

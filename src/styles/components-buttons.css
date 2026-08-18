@@ -1,0 +1,39 @@
+/* Padrao global para botoes de voltar */
+.back-button,
+.booking-detail-back,
+.service-back-button,
+.settings-back-button,
+.barber-profile-back,
+.booking-actions .secondary-button {
+  min-width: 104px !important;
+  min-height: 42px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 18px !important;
+  width: fit-content !important;
+  margin: 0 0 16px !important;
+  background: var(--accent) !important;
+  background-image: none !important;
+  border: 1px solid var(--accent) !important;
+  border-radius: 8px !important;
+  color: var(--text-strong) !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.booking-actions .secondary-button {
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.back-button:hover,
+.booking-detail-back:hover,
+.service-back-button:hover,
+.settings-back-button:hover,
+.barber-profile-back:hover,
+.booking-actions .secondary-button:hover {
+  filter: brightness(1.03);
+  transform: none !important;
+}

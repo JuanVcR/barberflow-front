@@ -1,0 +1,518 @@
+/* Ajustes finais de responsividade */
+html,
+body,
+#root {
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 1180px) {
+  .shell,
+  .marketing-wrap {
+    width: min(100% - 32px, 1040px);
+  }
+
+  .role-main .ops-workspace,
+  .role-main .ops-workspace.compact-list-page,
+  .adm-dashboard-workspace,
+  .dashboard-content,
+  .settings-page,
+  .registration-page,
+  .services-price-page,
+  .staff-week-page,
+  .quick-booking-page,
+  .barber-management-page,
+  .admin-barber-detail-page,
+  .subscription-page,
+  .super-plans-page,
+  .super-shops-page {
+    width: min(100% - 36px, 1040px) !important;
+  }
+
+  .adm-dashboard-cards,
+  .dashboard-cards,
+  .super-shops-stats,
+  .role-main .ops-stat-grid,
+  .ops-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .staff-week-grid {
+    grid-template-columns: repeat(4, minmax(160px, 1fr)) !important;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+  }
+
+  .header-row {
+    min-height: auto;
+    padding: 12px 0;
+  }
+
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-nav {
+    display: flex !important;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 0 12px;
+    scrollbar-width: none;
+  }
+
+  .mobile-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-nav-link {
+    flex: 0 0 auto;
+    min-height: 42px;
+    white-space: nowrap;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .header-actions .ghost-button,
+  .header-actions .primary-button {
+    min-height: 44px;
+    padding-inline: 16px;
+  }
+
+  .role-app-shell {
+    display: block !important;
+    min-height: 100vh;
+  }
+
+  .role-sidebar {
+    position: sticky !important;
+    top: 0;
+    z-index: 70;
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    min-height: auto !important;
+    padding: 10px 12px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #eeeeee !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #111111 !important;
+  }
+
+  .role-brand {
+    margin: 0 !important;
+    white-space: nowrap;
+  }
+
+  .role-access {
+    display: none !important;
+  }
+
+  .role-nav {
+    display: flex !important;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 8px;
+    scrollbar-width: none;
+  }
+
+  .role-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .role-nav-link {
+    flex: 0 0 auto;
+    min-height: 40px;
+    border-radius: 8px;
+    padding: 0 12px !important;
+    white-space: nowrap;
+  }
+
+  .role-logout {
+    min-height: 40px;
+    margin: 0 !important;
+    border-top: 0 !important;
+    padding: 0 8px !important;
+  }
+
+  .role-main {
+    min-height: calc(100vh - 61px);
+  }
+
+  .marketing-hero {
+    padding: 6.2rem 0 5rem;
+  }
+
+  .marketing-hero-grid,
+  .marketing-how-grid,
+  .marketing-faq-grid,
+  .marketing-final {
+    grid-template-columns: 1fr !important;
+  }
+
+  .marketing-hero-copy,
+  .marketing-how-grid > div:first-child,
+  .marketing-faq-grid > div:first-child,
+  .marketing-final {
+    text-align: center;
+  }
+
+  .marketing-actions {
+    justify-content: center;
+  }
+
+  .marketing-mockup {
+    width: min(620px, 100%);
+    margin: 32px auto 0;
+  }
+
+  .marketing-feature-grid,
+  .marketing-plan-grid,
+  .subscription-grid,
+  .super-plans-summary,
+  .super-shops-card-header {
+    grid-template-columns: 1fr !important;
+  }
+
+  .subscription-current,
+  .super-shops-header,
+  .staff-week-header,
+  .quick-booking-page > header,
+  .admin-barber-detail-header {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .subscription-current-actions {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .subscription-current-actions strong {
+    text-align: left;
+  }
+
+  .subscription-current-actions button,
+  .subscription-card button,
+  .super-shops-header button,
+  .quick-booking-page > header button {
+    width: 100%;
+  }
+
+  .booking-stepper,
+  .booking-service-summary {
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .staff-week-toolbar {
+    width: min(100%, 360px);
+  }
+
+  .staff-week-toolbar div {
+    min-height: 30px;
+    padding: 0 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(17, 17, 17, 0.06);
+    font-size: 0.9rem;
+  }
+
+  .staff-week-toolbar nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    gap: 6px;
+  }
+
+  .staff-week-toolbar button {
+    width: 100%;
+    min-width: 0;
+    min-height: 34px;
+    padding: 6px 8px;
+    background: #ffffff;
+    font-size: 0.78rem;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 700px) {
+  body.light-yellow-theme,
+  body.light-yellow-theme #root,
+  body.light-yellow-theme #root .app-shell,
+  body.light-yellow-theme #root .role-app-shell,
+  body.light-yellow-theme #root .role-main,
+  body.light-yellow-theme #root .app-shell .landing-page,
+  body.light-yellow-theme #root .app-shell .landing-hero,
+  body.light-yellow-theme #root .app-shell .login-page-container,
+  body.light-yellow-theme #root .app-shell .register-page-container {
+    background-color: #fbfaf6 !important;
+    background-image:
+      radial-gradient(circle at 50% -120px, rgba(250, 198, 10, 0.18), transparent 330px) !important;
+    background-position: center top !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  .shell,
+  .marketing-wrap {
+    width: min(100% - 24px, 640px);
+  }
+
+  h1,
+  .marketing-hero h1,
+  .marketing-title h2,
+  .marketing-how-grid h2,
+  .marketing-faq-grid h2,
+  .marketing-final h2,
+  .role-main .ops-hero h1,
+  .staff-week-header h1,
+  .quick-booking-page h1,
+  .admin-barber-detail-header h1,
+  .subscription-header h1,
+  .super-plans-header h1,
+  .super-shops-header h1 {
+    font-size: clamp(2rem, 10vw, 2.75rem) !important;
+    line-height: 1.04 !important;
+  }
+
+  .role-sidebar {
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .role-brand span {
+    display: inline;
+  }
+
+  .role-nav {
+    grid-column: 1 / -1;
+    order: 3;
+    padding: 2px 0 0;
+  }
+
+  .role-logout span {
+    display: none;
+  }
+
+  .role-main .ops-workspace,
+  .role-main .ops-workspace.compact-list-page,
+  .adm-dashboard-workspace,
+  .dashboard-content,
+  .settings-page,
+  .registration-page,
+  .services-price-page,
+  .staff-week-page,
+  .quick-booking-page,
+  .barber-management-page,
+  .admin-barber-detail-page,
+  .subscription-page,
+  .super-plans-page,
+  .super-shops-page {
+    width: min(100% - 24px, 640px) !important;
+    padding-top: 22px !important;
+    padding-bottom: 48px !important;
+  }
+
+  .adm-dashboard-cards,
+  .dashboard-cards,
+  .super-shops-stats,
+  .role-main .ops-stat-grid,
+  .ops-stat-grid,
+  .staff-week-stats,
+  .registration-summary,
+  .settings-content,
+  .settings-images,
+  .service-form-grid,
+  .booking-detail-grid,
+  .booking-detail-payment-grid,
+  .quick-booking-card,
+  .info-grid,
+  .booking-grid,
+  .details-info-grid,
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .staff-week-grid {
+    grid-template-columns: 1fr !important;
+    overflow: visible;
+  }
+
+  .staff-week-day {
+    min-height: auto !important;
+  }
+
+  .subscription-payment {
+    grid-template-columns: 1fr !important;
+  }
+
+  .subscription-payment img {
+    width: 160px;
+    height: 160px;
+  }
+
+  .marketing-actions,
+  .subscription-payment-actions,
+  .service-form-actions,
+  .appointment-actions,
+  .staff-week-actions,
+  .barber-overview-actions,
+  .admin-barber-day-toolbar,
+  .admin-barber-history-toolbar {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .marketing-button,
+  .marketing-link-button,
+  .subscription-payment-actions button,
+  .subscription-payment-actions a,
+  .service-form-actions button,
+  .appointment-actions button,
+  .staff-week-actions button,
+  .barber-overview-actions button,
+  .admin-barber-day-toolbar button,
+  .admin-barber-history-toolbar button {
+    width: 100%;
+  }
+
+  .ops-table-row,
+  .ops-table-five .ops-table-row,
+  .services-price-row,
+  .super-users-table > *,
+  .dashboard-item,
+  .registration-list-item,
+  .admin-barber-table-row,
+  .admin-barber-day-table .admin-barber-table-row,
+  .admin-barber-history-table .admin-barber-table-row,
+  .barber-overview-card,
+  .dashboard-appointment-row,
+  .dashboard-client-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ops-table-row.header,
+  .services-price-row.header,
+  .admin-barber-table-row.header {
+    display: none !important;
+  }
+
+  .marketing-mockup {
+    height: 360px;
+  }
+
+  .marketing-desktop {
+    right: -120px;
+    transform: scale(0.72) rotateY(-5deg);
+    transform-origin: left top;
+  }
+
+  .marketing-phone {
+    right: -8px;
+    transform: scale(0.72) rotate(3deg);
+    transform-origin: right bottom;
+  }
+
+  .toast-stack {
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .shell,
+  .marketing-wrap {
+    width: min(100% - 20px, 440px);
+  }
+
+  .header-row {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 10px;
+  }
+
+  .header-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .header-actions .ghost-button,
+  .header-actions .primary-button {
+    width: 100%;
+  }
+
+  .role-nav-link span {
+    max-width: 132px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .marketing-hero {
+    padding: 4.8rem 0 3.6rem;
+  }
+
+  .marketing-hero h1 {
+    font-size: clamp(2.25rem, 13vw, 3rem) !important;
+  }
+
+  .marketing-hero-copy > p {
+    font-size: 0.95rem;
+  }
+
+  .marketing-mockup {
+    height: 310px;
+  }
+
+  .marketing-desktop {
+    right: -170px;
+    transform: scale(0.62) rotateY(-5deg);
+  }
+
+  .marketing-phone {
+    right: -24px;
+    transform: scale(0.62) rotate(3deg);
+  }
+
+  .marketing-section,
+  .marketing-how,
+  .marketing-pricing,
+  .marketing-faq,
+  .marketing-final {
+    padding-block: 3.4rem !important;
+  }
+
+  .subscription-card,
+  .super-plans-shell,
+  .super-shops-shell,
+  .settings-form-card,
+  .service-form-panel,
+  .quick-booking-card,
+  .booking-detail-card {
+    padding: 16px !important;
+  }
+}

@@ -48,7 +48,7 @@ export function LoginPage({ navigate, notify, onLoginSuccess }: LoginPageProps) 
     <div className="login-page-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>Entrar - <span className="login-subtitle-text">Cliente</span></h1>
+          <h1>Entrar</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">

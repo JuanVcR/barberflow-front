@@ -106,6 +106,7 @@ export type AppRoute =
   | { name: 'admin-working-hours'; barbershopId?: string }
   | { name: 'admin-team' }
   | { name: 'admin-reports' }
+  | { name: 'admin-subscription' }
   | { name: 'admin-settings' }
   | { name: 'admin-super' }
   | { name: 'admin-super-section'; section: 'barbershops' | 'registrations' | 'plans' | 'financial-reports' | 'users' | 'settings' }

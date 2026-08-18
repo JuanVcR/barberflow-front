@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { CalendarIcon } from '../../components/Icons'
 import { cancelBooking, fetchAdminBarbershops, fetchWeeklyBookings } from '../../services/backend'
 import type { Booking, ToastMessage } from '../../types/models'
 
@@ -93,24 +92,27 @@ export function StaffWeekAgendaPage({ mode, navigate, notify }: Props) {
         <div>
           <span>{mode === 'admin' ? 'ADM da barbearia' : 'Barbeiro'}</span>
           <h1>Agenda semanal</h1>
-          <p>Veja e gerencie todos os atendimentos da semana.</p>
+          <p>Veja e gerencie todos os atendimentos desta semana com facilidade.</p>
         </div>
         <button className="primary-button" onClick={() => navigate(mode === 'admin' ? '/admin/quick-booking' : '/professional/quick-booking')}>
+          <span>+</span>
           Cadastrar cliente
         </button>
       </header>
 
       <div className="staff-week-toolbar">
-        <button onClick={() => setStartDay(moveWeek(startDay, -1))}>Semana anterior</button>
-        <div><CalendarIcon /><strong>{fromDay(days[0]).toLocaleDateString('pt-BR')} a {fromDay(days[6]).toLocaleDateString('pt-BR')}</strong></div>
-        <button onClick={() => setStartDay(moveWeek(startDay, 1))}>Próxima semana</button>
-        <button onClick={() => setStartDay(weekStart())}>Hoje</button>
+        <div><strong>{fromDay(days[0]).toLocaleDateString('pt-BR')} - {fromDay(days[6]).toLocaleDateString('pt-BR')}</strong></div>
+        <nav>
+          <button onClick={() => setStartDay(moveWeek(startDay, -1))}>Semana Anterior</button>
+          <button onClick={() => setStartDay(moveWeek(startDay, 1))}>Próxima Semana</button>
+          <button onClick={() => setStartDay(weekStart())}>Hoje</button>
+        </nav>
       </div>
 
       <div className="staff-week-stats">
-        <article><span>Agendamentos</span><strong>{active.length}</strong></article>
-        <article><span>Concluídos</span><strong>{bookings.filter((item) => item.status === 'COMPLETED').length}</strong></article>
-        <article><span>Receita prevista</span><strong>{currency(active.reduce((sum, item) => sum + bookingValue(item), 0))}</strong></article>
+        <article><span>Total Agendamentos</span><strong>{active.length}</strong></article>
+        <article><span>Atendimentos Concluídos</span><strong>{bookings.filter((item) => item.status === 'COMPLETED').length}</strong></article>
+        <article><span>Receita Prevista</span><strong>{currency(active.reduce((sum, item) => sum + bookingValue(item), 0))}</strong></article>
       </div>
 
       <div className="staff-week-grid">

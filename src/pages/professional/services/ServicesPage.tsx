@@ -18,7 +18,7 @@ export function ServicesPage({ navigate, notify }: ServicesPageProps) {
 
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>
-      <button onClick={() => navigate('/professional/agenda')}>Voltar</button>
+      <button className="back-button" onClick={() => navigate('/professional/agenda')}>Voltar</button>
       <h1>Meus Serviços</h1>
       {services.map((service) => (
         <div key={service.id} style={{ padding: 15, borderBottom: '1px solid #ddd' }}>

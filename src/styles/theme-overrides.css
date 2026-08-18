@@ -1,0 +1,131 @@
+/* BarberFlow background supplied for all app windows */
+body.light-yellow-theme,
+body.light-yellow-theme #root,
+body.light-yellow-theme #root .app-shell,
+body.light-yellow-theme #root .role-app-shell,
+body.light-yellow-theme #root .role-main,
+body.light-yellow-theme #root .app-shell .landing-page,
+body.light-yellow-theme #root .app-shell .landing-hero,
+body.light-yellow-theme #root .app-shell .login-page-container,
+body.light-yellow-theme #root .app-shell .register-page-container {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background-color: #fafaf8 !important;
+  background-image:
+    repeating-linear-gradient(
+      170deg,
+      transparent 0,
+      transparent 38px,
+      rgba(220, 38, 38, 0.06) 38px,
+      rgba(220, 38, 38, 0.06) 60px,
+      transparent 60px,
+      transparent 90px,
+      rgba(0, 0, 0, 0.025) 90px,
+      rgba(0, 0, 0, 0.025) 110px
+    ),
+    repeating-linear-gradient(
+      -170deg,
+      transparent 0,
+      transparent 38px,
+      rgba(220, 38, 38, 0.06) 38px,
+      rgba(220, 38, 38, 0.06) 60px,
+      transparent 60px,
+      transparent 90px,
+      rgba(0, 0, 0, 0.025) 90px,
+      rgba(0, 0, 0, 0.025) 110px
+    ),
+    radial-gradient(
+      ellipse 900px 700px at 50% -180px,
+      rgba(234, 179, 8, 0.22) 0%,
+      rgba(234, 179, 8, 0.06) 40%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 700px 400px at 50% calc(100% + 100px),
+      rgba(234, 179, 8, 0.12) 0%,
+      transparent 65%
+    ) !important;
+  background-position:
+    -80px 0,
+    calc(100% + 80px) 0,
+    center top,
+    center bottom !important;
+  background-size:
+    340px 100%,
+    340px 100%,
+    100% 100%,
+    100% 100% !important;
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    no-repeat !important;
+  color: #171717 !important;
+}
+
+body.light-yellow-theme #root .role-sidebar {
+  background: rgba(255, 255, 255, 0.94) !important;
+  color: #111111 !important;
+  border-color: #eeeeee !important;
+}
+
+body.light-yellow-theme #root .role-main .page-transition {
+  position: relative;
+  z-index: 1;
+}
+
+body.light-yellow-theme #root .app-shell .landing-hero {
+  background-attachment: scroll !important;
+}
+
+body.light-yellow-theme #root .app-shell .landing-hero::before,
+body.light-yellow-theme #root .app-shell .landing-hero::after {
+  display: none;
+}
+
+body.light-yellow-theme #root .app-shell .landing-hero-content,
+body.light-yellow-theme #root .app-shell .login-card,
+body.light-yellow-theme #root .app-shell .register-card {
+  position: relative;
+  z-index: 1;
+}
+
+body.light-yellow-theme #root .app-shell .landing-hero-content h1,
+body.light-yellow-theme #root .app-shell .landing-hero-subtitle {
+  color: #171717 !important;
+}
+
+body.light-yellow-theme #root .app-shell .login-card,
+body.light-yellow-theme #root .app-shell .register-card {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  background-image: none !important;
+  border: 1px solid rgba(17, 17, 17, 0.12) !important;
+  box-shadow: 0 20px 55px rgba(17, 17, 17, 0.12) !important;
+  backdrop-filter: blur(12px);
+}
+
+body.light-yellow-theme #root .app-shell .login-card h1,
+body.light-yellow-theme #root .app-shell .register-card h1,
+body.light-yellow-theme #root .app-shell .login-card label,
+body.light-yellow-theme #root .app-shell .register-card label {
+  color: #171717 !important;
+}
+
+body.light-yellow-theme #root .app-shell .form-input-wrapper input {
+  padding: 0.8rem 0.9rem !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d8d8d8 !important;
+  color: #171717 !important;
+}
+
+body.light-yellow-theme #root .app-shell .form-input-wrapper input::placeholder {
+  color: #8a8f98 !important;
+}
+
+body.light-yellow-theme #root .app-shell .login-footer p,
+body.light-yellow-theme #root .app-shell .register-footer p,
+body.light-yellow-theme #root .app-shell .checkbox-group label,
+body.light-yellow-theme #root .app-shell .forgot-link {
+  color: #666d75 !important;
+}

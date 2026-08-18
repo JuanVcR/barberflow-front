@@ -30,7 +30,7 @@ export function BarberReportsPage({ navigate, notify }: BarberReportsPageProps) 
 
   return (
     <div style={{ padding: 20, maxWidth: 1000, margin: '0 auto' }}>
-      <button onClick={() => navigate('/professional/agenda')}>Voltar</button>
+      <button className="back-button" onClick={() => navigate('/professional/agenda')}>Voltar</button>
       <h1>Relatórios</h1>
       <div className="ops-stat-grid">
         <article className="ops-stat-card"><span>Agendamentos</span><strong>{stats.appointments}</strong><small>Total registrado</small></article>

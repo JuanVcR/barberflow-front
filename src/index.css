@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
 
+@font-face {
+  font-family: 'Gotham Medium';
+  src:
+    local('Gotham Medium'),
+    local('Gotham-Medium'),
+    local('GothamMedium'),
+    local('Gotham HTF Medium');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   font-family:
     'Open Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -25,6 +37,7 @@
   --warning: #f3cc35;
   --danger: #ff4545;
   --shadow-soft: none;
+  --title-font: 'Gotham Medium', 'Gotham', 'Open Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 * {
@@ -61,6 +74,7 @@ h2,
 h3 {
   margin: 0;
   color: var(--text-strong);
+  font-family: var(--title-font);
   line-height: 1.05;
 }
 

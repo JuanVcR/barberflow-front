@@ -4,21 +4,50 @@ import { fetchBarbershopById, createBooking, fetchAvailableTimes } from '../../.
 
 type BookingStep = 'service' | 'professional' | 'datetime' | 'review'
 
+function timeToMinutes(time: string) {
+  const [hours, minutes] = time.split(':').map(Number)
+  return hours * 60 + minutes
+}
+
+function spaceTimesByDuration(times: string[], duration: number) {
+  if (duration <= 0) return times
+
+  let lastSelected: number | null = null
+
+  return [...times]
+    .sort((a, b) => timeToMinutes(a) - timeToMinutes(b))
+    .filter((time) => {
+      const current = timeToMinutes(time)
+
+      if (lastSelected === null || current - lastSelected >= duration) {
+        lastSelected = current
+        return true
+      }
+
+      return false
+    })
+}
+
 interface BookingPageProps {
   barbershopId: string
+  serviceId?: string
   navigate: (path: string) => void
   notify: (tone: ToastMessage['tone'], text: string) => void
 }
 
-export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps) {
+export function BookingPage({ barbershopId, serviceId, navigate, notify }: BookingPageProps) {
   const [currentStep, setCurrentStep] = useState<BookingStep>('service')
-  const [selectedService, setSelectedService] = useState<string | null>(null)
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>(serviceId ? [serviceId] : [])
   const [selectedProfessional, setSelectedProfessional] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [barbershop, setBarbershop] = useState<Barbershop | null>(null)
   const [availableTimes, setAvailableTimes] = useState<string[]>([])
+  const selectedServices = barbershop?.services.filter((service) => selectedServiceIds.includes(service.id)) ?? []
+  const selectedServiceNames = selectedServices.map((service) => service.name).join(', ')
+  const selectedTotalPrice = selectedServices.reduce((total, service) => total + service.price, 0)
+  const selectedTotalDuration = selectedServices.reduce((total, service) => total + service.duration, 0)
 
   useEffect(() => {
     fetchBarbershopById(barbershopId)
@@ -28,20 +57,20 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
   }, [barbershopId, notify])
 
   useEffect(() => {
-    if (selectedProfessional && selectedService && selectedDate) {
+    if (selectedProfessional && selectedServiceIds.length && selectedDate) {
       setSelectedTime('')
       fetchAvailableTimes({
         barberId: selectedProfessional,
-        serviceId: selectedService,
+        serviceIds: selectedServiceIds,
         day: selectedDate,
       })
-        .then(setAvailableTimes)
+        .then((times) => setAvailableTimes(spaceTimesByDuration(times, selectedTotalDuration)))
         .catch((error) => {
           setAvailableTimes([])
           notify('error', error instanceof Error ? error.message : 'Erro ao consultar horários')
         })
     }
-  }, [selectedProfessional, selectedService, selectedDate, notify])
+  }, [selectedProfessional, selectedServiceIds, selectedDate, selectedTotalDuration, notify])
 
   if (loading) return <div className="booking-page"><p>Carregando...</p></div>
   if (!barbershop) return <div className="booking-page"><p>Barbearia não encontrada</p></div>
@@ -49,14 +78,19 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
   const services = barbershop.services
   const professionals = barbershop.professionals
 
-  const selectedServiceObj = services.find((s) => s.id === selectedService)
   const selectedProfObj = professionals.find((p: Barber) => p.id === selectedProfessional)
-  const availableProfessionals = selectedServiceObj?.barberIds?.length
-    ? professionals.filter((professional) => selectedServiceObj.barberIds?.includes(professional.id))
+  const availableProfessionals = selectedServiceIds.length
+    ? professionals.filter((professional) =>
+        selectedServices.every((service) => service.barberIds?.includes(professional.id)),
+      )
     : []
 
   const selectService = (serviceId: string) => {
-    setSelectedService(serviceId)
+    setSelectedServiceIds((current) =>
+      current.includes(serviceId)
+        ? current.filter((id) => id !== serviceId)
+        : [...current, serviceId],
+    )
     setSelectedProfessional(null)
     setSelectedDate('')
     setSelectedTime('')
@@ -81,8 +115,8 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
   }
 
   const handleNext = () => {
-    if (currentStep === 'service' && !selectedService) {
-      notify('error', 'Selecione um serviço')
+    if (currentStep === 'service' && selectedServiceIds.length === 0) {
+      notify('error', 'Selecione ao menos um serviço')
       return
     }
     if (currentStep === 'professional' && !selectedProfessional) {
@@ -114,8 +148,8 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
       notify('error', 'Selecione um profissional')
       return
     }
-    if (!selectedService) {
-      notify('error', 'Selecione um serviço')
+    if (selectedServiceIds.length === 0) {
+      notify('error', 'Selecione ao menos um serviço')
       return
     }
     if (!selectedDate) {
@@ -131,7 +165,7 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
       setLoading(true)
       await createBooking({
         barberId: selectedProfessional,
-        serviceId: selectedService,
+        serviceIds: selectedServiceIds,
         barbershopId: barbershop!.id,
         day: selectedDate,
         time: selectedTime,
@@ -185,11 +219,12 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
       {currentStep === 'service' && (
         <div className="booking-step">
           <h2>Passo 1: Serviço</h2>
+          <p className="booking-step-hint">Você pode selecionar mais de um serviço no mesmo agendamento.</p>
           <div className="service-options">
             {services.map((service) => (
               <button
                 key={service.id}
-                className={`service-option ${selectedService === service.id ? 'selected' : ''}`}
+                className={`service-option ${selectedServiceIds.includes(service.id) ? 'selected' : ''}`}
                 onClick={() => selectService(service.id)}
               >
                 <div className="service-name">{service.name}</div>
@@ -197,14 +232,20 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
               </button>
             ))}
           </div>
+          {selectedServices.length ? (
+            <div className="booking-total">
+              <strong>{selectedServices.length} serviço(s) selecionado(s)</strong>
+              <span>R$ {selectedTotalPrice} • {selectedTotalDuration} min</span>
+            </div>
+          ) : null}
         </div>
       )}
 
       {currentStep === 'professional' && (
         <div className="booking-step">
           <div className="booking-summary">
-            <strong>{selectedServiceObj?.name}</strong>
-            <span>{selectedServiceObj?.price && `R$ ${selectedServiceObj.price}`}</span>
+            <strong>{selectedServiceNames}</strong>
+            <span>R$ {selectedTotalPrice} • {selectedTotalDuration} min</span>
           </div>
           <h2>Passo 2: Barbeiro</h2>
           <div className="professional-options">
@@ -218,8 +259,8 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
                 <div>{prof.name}</div>
               </button>
             ))}
-            {selectedService && availableProfessionals.length === 0 ? (
-              <p>Nenhum barbeiro atende este serviço.</p>
+            {selectedServiceIds.length > 0 && availableProfessionals.length === 0 ? (
+              <p>Nenhum barbeiro atende todos os serviços selecionados.</p>
             ) : null}
           </div>
         </div>
@@ -228,8 +269,8 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
       {currentStep === 'datetime' && (
         <div className="booking-step">
           <div className="booking-summary">
-            <strong>{selectedServiceObj?.name}</strong>
-            <span>{selectedServiceObj?.price && `R$ ${selectedServiceObj.price}`}</span>
+            <strong>{selectedServiceNames}</strong>
+            <span>R$ {selectedTotalPrice} • {selectedTotalDuration} min</span>
             <strong>{selectedProfObj?.name}</strong>
           </div>
           
@@ -280,13 +321,17 @@ export function BookingPage({ barbershopId, navigate, notify }: BookingPageProps
           <h2>Passo 4: Confirmação</h2>
           <div className="booking-review">
             <div className="review-item">
-              <label>Serviço selecionado</label>
-              <strong>{selectedServiceObj?.name}</strong>
+              <label>Serviços selecionados</label>
+              <strong>{selectedServiceNames}</strong>
             </div>
             <div className="review-item">
               <label>Barbeiro</label>
               <strong>{selectedProfObj?.name}</strong>
-              <span className="price">{selectedServiceObj?.price && `R$ ${selectedServiceObj.price}`}</span>
+              <span className="price">R$ {selectedTotalPrice}</span>
+            </div>
+            <div className="review-item">
+              <label>Duração total</label>
+              <strong>{selectedTotalDuration} min</strong>
             </div>
             <div className="review-item">
               <label>Data</label>
